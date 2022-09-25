@@ -1,28 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import {
-    AppBar
-} from "@mui/material";
 import MessageArea from "./components/message-area";
 import './App.css';
+import CustomTextArea from "./components/custom-text-area";
+import MessageBox from "./components/message-box";
 
 
 function App() {
-    const DUMMY_DATA = [
-        {
-            senderId: "perborgen",
-            text: "who'll win?"
-        },
-        {
-            senderId: "janedoe",
-            text: "who'll win?"
-        }
-    ]
-    
-    
   return (
       <div className="App">
-          <MessageArea></MessageArea>
+          <div className="chat-container">
+              <MessageArea>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+                  <MessageBox></MessageBox>
+              </MessageArea>
+              <CustomTextArea></CustomTextArea>
+          </div>
       </div>
   );
 }

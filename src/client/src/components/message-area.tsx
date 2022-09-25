@@ -1,14 +1,15 @@
-﻿import React from 'react';
+﻿import React, {ReactNode} from 'react';
 import '../App.css';
 
-class MessageArea extends React.Component {
-   render() {
-       return (
-           <div className="message-area-container">
-               
-           </div>
-       );
-   }
+interface Props {
+    children?: ReactNode
 }
+
+const MessageArea = ({children, ...props}: Props) => (
+               <div className={"message-area-container"}>
+                   {children}
+               </div>
+       );
+
 
 export default MessageArea;
