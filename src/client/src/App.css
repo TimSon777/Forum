@@ -2,11 +2,18 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: white;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 #root {
   
 }
+
 div::-webkit-scrollbar {
   width: 10px;
 }
@@ -22,12 +29,10 @@ div::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #020D45, #C3FFFB);
 }
 
-
 .App {
   width: 1400px;
   height: 100%;
   background-color: aqua;
-  border: 2px solid red;
   
   background-image: url('wallpaperflare.com_wallpaper.jpg');
   background-position: center;
@@ -40,14 +45,25 @@ div::-webkit-scrollbar-thumb {
   padding: 0 2rem 2rem;
 }
 
+.forum-header {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 42px;
+  line-height: 48px;
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
 .message-area-container {
   margin: 0 auto;
   
-  border: 2px solid #ffffff;
+  border: 1px solid #ffffff;
   padding: 2rem;
   
   width: 650px;
-  max-height: 404px;
+  min-height: 400px;
+  max-height: 600px;
 
   background: rgba(217, 217, 217, 0.09);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -67,8 +83,8 @@ div::-webkit-scrollbar-thumb {
   border-radius: 10px;
 }
 
-.custom-text-area {
-  width: 432px;
+.custom-text-area-form {
+  width: 470px;
   height: 91px;
 
   margin: 2rem auto 0;
@@ -81,15 +97,36 @@ div::-webkit-scrollbar-thumb {
   border-radius: 5px;
 }
 
+.custom-text-area {
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  background: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.custom-text-area:hover {
+  cursor: pointer;
+}
+
+.custom-text-area:focus-visible {
+  background: #bbd3cf;
+  border-radius: 5px;
+  outline: none;
+}
+
 .chat-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   width: 800px;
   height: 727px;
 
   background: linear-gradient(180.55deg, rgba(2, 13, 69, 0.48) 5.92%, rgba(217, 217, 217, 0) 99.54%);
+  
+  padding-top: 3rem;
 }
 
 .message-box-container {
@@ -103,15 +140,39 @@ div::-webkit-scrollbar-thumb {
   border-radius: 5px;
   
   width: 90%;
-  margin: 0 auto;
-  
-  margin-top: 1rem;
+  margin: 1rem auto 0;
+}
+
+.message-box-container:hover {
+  cursor: pointer;
 }
 
 .message-box-text-container {
-  
+  width: 100%;
+  max-height: 150px;
+  overflow: hidden;
 }
 
-.message-box-image-container {
+.message-box-text {
+  padding: 5px;
+  width: 100%;
+  max-height: 150px;
+  overflow: auto;
+  word-wrap: break-word;
+}
+
+
+.message-box-user-name {
+  border-bottom: 2px solid #C3FFFB;
+  width: fit-content;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.message-box-text::-webkit-scrollbar {
+  width: 0;
+}
+
+.message-box-image {
   border-bottom: 4px solid #C3FFFB;
 }

@@ -9,15 +9,8 @@ function App() {
   return (
       <div className="App">
           <div className="chat-container">
+              <h1 className={"forum-header"}>FORUM</h1>
               <MessageArea>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
                   <MessageBox></MessageBox>
                   <MessageBox></MessageBox>
                   <MessageBox></MessageBox>
