@@ -1,9 +1,16 @@
 ﻿namespace Chat.Core.Data
 
 open System
+open Chat.Core.Exception
 
-type Message(User: User, Text: string) =
+type Message(user: User, text: string) =
+    
+    do if text.Length > 30 then raiseValidationException()
+    
+    member val User = user
+    member val Text = text
+    
     override this.ToString() =
-        User.ToString()
+        this.User.ToString()
             + Environment.NewLine
-            + "Message: " + Text
+            + "Message: " + this.Text

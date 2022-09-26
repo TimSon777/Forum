@@ -1,5 +1,4 @@
 ﻿using Chat.Infrastructure.BackgroundServices;
-using Chat.Infrastructure.Chanels;
 using Chat.Infrastructure.Channels;
 using Chat.Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
@@ -41,8 +40,8 @@ public static class HostedServicesConfiguration
             }
         }
 
-        var chanel = new MessageProcessorChanel(connection);
-        services.AddSingleton<IMessageProcessorChanel>(chanel);
+        var chanel = new MessageProcessorChannel(connection);
+        services.AddSingleton<IMessageProcessorChannel>(chanel);
 
         services.AddHostedService<MessageConsumer>();
 

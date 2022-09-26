@@ -1,14 +1,18 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Chat.Infrastructure.Chanels;
-using Chat.Infrastructure.Data;
+using Chat.DAL.Abstractions;
+using Chat.DAL.Abstractions.Chat;
+using Chat.Infrastructure.Channels;
 using Chat.Infrastructure.Mapping;
 using Chat.Infrastructure.Settings;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Exception = Chat.Core.Exception;
+using GetMessageItem = Chat.Infrastructure.Data.GetMessageItem;
 
 namespace Chat.Infrastructure.BackgroundServices;
 
@@ -17,13 +21,15 @@ public class MessageConsumer : BackgroundService
     private readonly IModel _chanel;
     private readonly ILogger<MessageConsumer> _logger;
     private readonly ConsumerSettings _consumerSettings;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public MessageConsumer(IMessageProcessorChanel messageProcessorChanel, 
+    public MessageConsumer(IMessageProcessorChannel messageProcessorChannel, 
         ILogger<MessageConsumer> logger, 
-        IOptions<ConsumerSettings> consumerSettingsOptions)
+        IOptions<ConsumerSettings> consumerSettingsOptions, IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
-        _chanel = messageProcessorChanel.Channel;
+        _serviceScopeFactory = serviceScopeFactory;
+        _chanel = messageProcessorChannel.Channel;
         _consumerSettings = consumerSettingsOptions.Value;
     }
 
@@ -31,13 +37,29 @@ public class MessageConsumer : BackgroundService
     {
         try
         {
-            var messageItem = Encoding.UTF8.GetFromJson<GetMessageItem>(args.Body);
-            var message = messageItem.ToMessage();
-            _logger.LogInformation("Message: {message}", message);
+            var message = Encoding.UTF8
+                .GetFromJson<GetMessageItem>(args.Body)
+                .ToMessage();
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            
+            var addMessageItem = message.ToAddMessageItem();
+            var isOk = await scope.ServiceProvider
+                .GetRequiredService<IChatRepository>()
+                .AddMessageAsync(addMessageItem);
+            
+            if (!isOk)
+            {
+                _logger.LogInformation("Message was not saved in the database: {message}", message);
+            }
         }
         catch (JsonException)
         {
             _logger.LogWarning("Wrong json format");
+        }
+        catch (Exception.ValidationException)
+        {
+            _logger.LogWarning("Validation exception");
         }
     }
 

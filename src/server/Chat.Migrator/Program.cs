@@ -12,7 +12,7 @@ builder.AddJsonFile("appsettings.json");
 builder.AddEnvironmentVariables();
 
 var configurationRoot = builder.Build();
-var connection = configurationRoot.GetConnectionString("ChatDatabaseConnectionString");
+var connection = configurationRoot.GetConnectionString("CHAT_DATABASE_CONNECTION");
 
 using var serviceProvider = new ServiceCollection()
     .AddFluentMigratorCore()

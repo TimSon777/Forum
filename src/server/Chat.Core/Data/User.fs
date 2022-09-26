@@ -1,13 +1,16 @@
 ﻿namespace Chat.Core.Data
 
 open System
+open Chat.Core.Exception
 
 type User =
     
-    val PersonName : string
+    val Name : string
     
     new(iPv4: int, port: int) =
-        { PersonName = String.Join(":", iPv4, port) }
+        if iPv4 < 0 || port < 0 || port > 65535 then
+            raiseValidationException()
+        { Name = String.Join(":", iPv4, port) }
         
     override this.ToString() =
-        "User name: " + this.PersonName
+        "User name: " + this.Name

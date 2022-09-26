@@ -1,13 +1,12 @@
-using Chat.Infrastructure.Chanels;
 using RabbitMQ.Client;
 
 namespace Chat.Infrastructure.Channels;
 
-public class MessageProcessorChanel : IMessageProcessorChanel
+public class MessageProcessorChannel : IMessageProcessorChannel
 {
     public IModel Channel { get; }
 
-    public MessageProcessorChanel(IConnection connection)
+    public MessageProcessorChannel(IConnection connection)
     {
         Channel = connection.CreateModel();
     }
