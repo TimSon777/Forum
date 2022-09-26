@@ -3,4 +3,4 @@
 exception ValidationException
 
 let raiseValidationException() =
-    raise ValidationException |> ignore
+    ValidationException |> raise |> ignore
