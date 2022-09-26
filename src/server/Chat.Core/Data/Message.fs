@@ -5,7 +5,7 @@ open Chat.Core.Exception
 
 type Message(user: User, text: string) =
     
-    do if text.Length > 30 then raiseValidationException()
+    do if text.Length > 500 then raiseValidationException()
     
     member val User = user
     member val Text = text
