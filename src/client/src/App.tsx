@@ -11,9 +11,14 @@ function App() {
           <div className="chat-container">
               <h1 className={"forum-header"}>FORUM</h1>
               <MessageArea>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
-                  <MessageBox></MessageBox>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
+                  <MessageBox/>
               </MessageArea>
               <CustomTextArea></CustomTextArea>
           </div>

@@ -1,12 +1,11 @@
 ﻿import React from 'react';
 import '../App.css';
 
-class MessageBox extends React.Component {
-    render() {
+const MessageBox = () => {
         return (
             <div className={"message-box-container"}>
                 <div className={"message-box-image-container"}>
-                    <img className={"message-box-image"} src="https://i.pinimg.com/564x/65/6c/e7/656ce70e02adb9b43b278b4c8374d56e.jpg" alt={"Photo"}
+                    <img className={"message-box-image"} src="../logo.svg" alt={"Photo"}
                     width={"64px"} height={"64px"}/>
                 </div>
                 
@@ -20,7 +19,6 @@ class MessageBox extends React.Component {
                 </div>
             </div>
         );
-    }
 }
 
 export default MessageBox;

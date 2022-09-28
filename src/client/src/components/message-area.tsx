@@ -11,5 +11,4 @@ const MessageArea = ({children, ...props}: Props) => (
                </div>
        );
 
-
 export default MessageArea;

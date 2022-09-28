@@ -30,7 +30,6 @@ div::-webkit-scrollbar-thumb {
 }
 
 .App {
-  width: 1400px;
   height: 100%;
   background-color: aqua;
   
