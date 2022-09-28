@@ -62,7 +62,7 @@ public class MessageConsumer : BackgroundService
         }
     }
 
-    private Task OnShutdownEventArgs(object sender, ShutdownEventArgs @event)
+    private Task OnShutdownAsync(object sender, ShutdownEventArgs @event)
     {
         _logger.LogWarning("Consumer was stopped");
         return Task.CompletedTask;
@@ -89,7 +89,7 @@ public class MessageConsumer : BackgroundService
         var consumer = new AsyncEventingBasicConsumer(channel);
         
         consumer.Received += OnReceivedAsync;
-        consumer.Shutdown += OnShutdownEventArgs;
+        consumer.Shutdown += OnShutdownAsync;
 
         channel.BasicConsume(_consumerSettings.QueueName, true, consumer);
 
@@ -100,7 +100,7 @@ public class MessageConsumer : BackgroundService
         catch (TaskCanceledException)
         {
             consumer.Received -= OnReceivedAsync;
-            consumer.Shutdown -= OnShutdownEventArgs;
+            consumer.Shutdown -= OnShutdownAsync;
         }
     }
 }
