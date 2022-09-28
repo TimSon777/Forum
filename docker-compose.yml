@@ -61,7 +61,8 @@ services:
     depends_on:
       - broker
     ports:
-      - "3000:3000"
+      - "3000:80"
+      - "3001:443"
         
   db:
     image: ${DB_IMAGE}
