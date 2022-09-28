@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Migrator", "src\server
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.DAL.Abstractions", "src\server\Chat.DAL.Abstractions\Chat.DAL.Abstractions.csproj", "{9D372E07-3E28-4909-91E7-ED4FB2869059}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.DAL.Implementations", "src\server\Chat.DAL.Implementations\Chat.DAL.Implementations.csproj", "{81753A54-490B-4638-B9BC-5267BB9DA4A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.SharedKernel", "src\server\Chat.SharedKernel\Chat.SharedKernel.csproj", "{A31663E7-2F74-4EF2-8841-D79E839C5CE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,13 @@ Global
 		{9D372E07-3E28-4909-91E7-ED4FB2869059}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D372E07-3E28-4909-91E7-ED4FB2869059}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D372E07-3E28-4909-91E7-ED4FB2869059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81753A54-490B-4638-B9BC-5267BB9DA4A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81753A54-490B-4638-B9BC-5267BB9DA4A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81753A54-490B-4638-B9BC-5267BB9DA4A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81753A54-490B-4638-B9BC-5267BB9DA4A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A31663E7-2F74-4EF2-8841-D79E839C5CE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A31663E7-2F74-4EF2-8841-D79E839C5CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A31663E7-2F74-4EF2-8841-D79E839C5CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A31663E7-2F74-4EF2-8841-D79E839C5CE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

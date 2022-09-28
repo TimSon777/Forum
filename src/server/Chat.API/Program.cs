@@ -1,4 +1,3 @@
-using Chat.DAL.Abstractions;
 using Chat.DAL.Abstractions.Chat;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
-services.AddMessageConsumer(configuration, 10);
+var logger = new LoggerFactory().CreateLogger<Program>();
+
+services.AddMessageConsumer(configuration, logger, 10);
 services.AddDatabase(configuration);
 services.AddRepositories();
 

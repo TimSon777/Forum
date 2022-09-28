@@ -4,7 +4,7 @@ using Chat.DAL.Abstractions.Chat;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
-namespace Chat.Infrastructure.Database.Repositories;
+namespace Chat.DAL.Implementations.Database.Repositories;
 
 public class ChatRepository : IChatRepository
 {

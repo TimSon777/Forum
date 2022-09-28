@@ -2,6 +2,7 @@
 using Chat.Infrastructure.Channels;
 using Chat.Infrastructure.Settings;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
@@ -10,7 +11,9 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class HostedServicesConfiguration
 {
-    public static IServiceCollection AddMessageConsumer(this IServiceCollection services, IConfiguration configuration,
+    public static IServiceCollection AddMessageConsumer(this IServiceCollection services, 
+        IConfiguration configuration,
+        ILogger logger,
         int retry)
     {
         var settings = configuration.Get<BrokerConnectionSettings>(BrokerConnectionSettings.Position);
@@ -26,6 +29,7 @@ public static class HostedServicesConfiguration
 
         for (var i = 0; i < retry; i++)
         {
+            logger.LogInformation("Try connect to broker. Attempt {attempt}", i);
             try
             {
                 connection = connectionFactory.CreateConnection();
@@ -37,6 +41,8 @@ public static class HostedServicesConfiguration
                 {
                     throw;
                 }
+                
+                logger.LogWarning("Connect to broker was failed");
             }
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Chat.Infrastructure.Database;
+﻿namespace Chat.DAL.Implementations.Database;
 
 public static class Naming
 {

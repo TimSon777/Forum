@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Chat.DAL.Abstractions;
 using Chat.DAL.Abstractions.Chat;
 using Chat.Infrastructure.Channels;
 using Chat.Infrastructure.Mapping;

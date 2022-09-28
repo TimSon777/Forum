@@ -1,4 +1,4 @@
-﻿using Chat.Infrastructure.Database;
+﻿using Chat.DAL.Implementations.Database;
 using FluentMigrator;
 
 namespace Chat.Migrator.Migrations;

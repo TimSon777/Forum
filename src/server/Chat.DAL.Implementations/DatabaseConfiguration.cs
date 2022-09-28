@@ -1,7 +1,6 @@
 ﻿using System.Data;
-using Chat.DAL.Abstractions;
 using Chat.DAL.Abstractions.Chat;
-using Chat.Infrastructure.Database.Repositories;
+using Chat.DAL.Implementations.Database.Repositories;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
@@ -12,7 +11,7 @@ public static class DatabaseConfiguration
 {
     public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
     {
-        var connection = configuration.GetConnectionString("CHAT_DATABASE_CONNECTION");
+        var connection = configuration.GetConnectionStringWithUpperCase("CHAT_DATABASE_CONNECTION");
         services.AddScoped<IDbConnection>(_ => new NpgsqlConnection(connection));
         return services;
     }
