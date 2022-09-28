@@ -48,7 +48,11 @@ public class ChatRepository : IChatRepository
                         + $" ON u.{Naming.User.PrimaryKey} = m.{Naming.Message.ForeignKeyUser}" 
                         + $" ORDER BY m.{Naming.Message.PrimaryKey} DESC LIMIT {count}";
 
-            return await _connection.QueryAsync<GetMessageItem>(query);
+            return await _connection.QueryAsync<GetMessageItem, GetUserItem, GetMessageItem>(query, (m, u) =>
+            { 
+                m.User = u;
+                return m;
+            });
         }
         catch (DbException ex)
         {
