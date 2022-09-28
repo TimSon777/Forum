@@ -14,12 +14,4 @@ public static class IConfigurationExtensions
         
         return obj;
     }
-
-    public static string GetConnectionStringWithUpperCase(this IConfiguration configuration, string name)
-    {
-        Guard.Against.Null(configuration);
-        Guard.Against.Null(name);
-        
-        return configuration.GetRequiredSection("CONNECTION_STRINGS")[name]!;
-    }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Chat.DAL.Abstractions.Chat;
-using Chat.Infrastructure.Channels;
 using Chat.Infrastructure.Mapping;
 using Chat.Infrastructure.Settings;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,19 +16,20 @@ namespace Chat.Infrastructure.BackgroundServices;
 
 public class MessageConsumer : BackgroundService
 {
-    private readonly IModel _chanel;
     private readonly ILogger<MessageConsumer> _logger;
     private readonly ConsumerSettings _consumerSettings;
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly BrokerConnectionSettings _brokerConnectionSettings;
 
-    public MessageConsumer(IMessageProcessorChannel messageProcessorChannel, 
-        ILogger<MessageConsumer> logger, 
-        IOptions<ConsumerSettings> consumerSettingsOptions, IServiceScopeFactory serviceScopeFactory)
+    public MessageConsumer(ILogger<MessageConsumer> logger, 
+        IOptions<ConsumerSettings> consumerSettingsOptions, 
+        IOptions<BrokerConnectionSettings> brokerConnectionSettings,
+        IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
-        _chanel = messageProcessorChannel.Channel;
         _consumerSettings = consumerSettingsOptions.Value;
+        _brokerConnectionSettings = brokerConnectionSettings.Value;
     }
 
     private async Task OnReceivedAsync(object _, BasicDeliverEventArgs args)
@@ -62,17 +62,45 @@ public class MessageConsumer : BackgroundService
         }
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    private Task OnShutdownEventArgs(object sender, ShutdownEventArgs @event)
     {
-        _chanel.ExchangeDeclare(_consumerSettings.ExchangeName, _consumerSettings.ExchangeType, true);
-        _chanel.QueueDeclare(_consumerSettings.QueueName, autoDelete: false);
-        _chanel.QueueBind(_consumerSettings.QueueName, _consumerSettings.ExchangeName, _consumerSettings.RoutingKey);
+        _logger.LogWarning("Consumer was stopped");
+        return Task.CompletedTask;
+    }
+    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        var factory = new ConnectionFactory
+        {
+            Password = _brokerConnectionSettings.Password,
+            HostName = _brokerConnectionSettings.Host,
+            UserName = _brokerConnectionSettings.UserName,
+            DispatchConsumersAsync = true
+        };
+
+        using var connection = factory.CreateConnection();
         
-        var consumer = new AsyncEventingBasicConsumer(_chanel);
+        using var channel = connection.CreateModel();
+        
+        channel.ExchangeDeclare(_consumerSettings.ExchangeName, _consumerSettings.ExchangeType, true);
+        channel.QueueDeclare(_consumerSettings.QueueName, autoDelete: false);
+        channel.QueueBind(_consumerSettings.QueueName, _consumerSettings.ExchangeName, _consumerSettings.RoutingKey);
+        
+        var consumer = new AsyncEventingBasicConsumer(channel);
         
         consumer.Received += OnReceivedAsync;
-        _chanel.BasicConsume(_consumerSettings.QueueName, true, consumer);
-        
-        return Task.CompletedTask;
+        consumer.Shutdown += OnShutdownEventArgs;
+
+        channel.BasicConsume(_consumerSettings.QueueName, true, consumer);
+
+        try
+        {
+            await Task.Delay(-1, stoppingToken);
+        }
+        catch (TaskCanceledException)
+        {
+            consumer.Received -= OnReceivedAsync;
+            consumer.Shutdown -= OnShutdownEventArgs;
+        }
     }
 }

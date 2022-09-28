@@ -7,8 +7,8 @@ var configuration = builder.Configuration;
 
 var logger = new LoggerFactory().CreateLogger<Program>();
 
-services.AddMessageConsumer(configuration, logger, 10);
-services.AddDatabase(configuration);
+services.AddDatabase(configuration, logger);
+services.AddMessageConsumer(configuration);
 services.AddRepositories();
 
 var app = builder.Build();
