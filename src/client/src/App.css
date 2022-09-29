@@ -94,6 +94,9 @@ div::-webkit-scrollbar-thumb {
   /* Note: backdrop-filter has minimal browser support */
 
   border-radius: 5px;
+
+  display: flex;
+  gap: 1rem;
 }
 
 .custom-text-area {
@@ -160,7 +163,6 @@ div::-webkit-scrollbar-thumb {
   word-wrap: break-word;
 }
 
-
 .message-box-user-name {
   border-bottom: 2px solid #C3FFFB;
   width: fit-content;
@@ -174,4 +176,14 @@ div::-webkit-scrollbar-thumb {
 
 .message-box-image {
   border-bottom: 4px solid #C3FFFB;
+}
+
+.send-button {
+  margin-top: 1rem;
+  padding: 5px 10px;
+  color: white;
+  background: transparent;
+  font-size: 14px;
+  border-color: white;
+  cursor: pointer;
 }

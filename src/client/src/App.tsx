@@ -20,7 +20,7 @@ function App() {
                   <MessageBox/>
                   <MessageBox/>
               </MessageArea>
-              <CustomTextArea></CustomTextArea>
+              <CustomTextArea/>
           </div>
       </div>
   );

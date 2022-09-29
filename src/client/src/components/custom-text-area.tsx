@@ -1,12 +1,21 @@
-﻿import React from 'react';
+﻿import React, {useState} from 'react';
 import '../App.css';
+import CustomButton from "./CustomButton";
+import CustomInput from "./CustomInput";
 
 
-//class CustomTextArea extends React.Component<{}, { value: string }> {
 const CustomTextArea = () => {
-        return (
+
+    const [message, setMessage] = useState({text: ''})
+
+    const addNewPost = (e: any) => {
+        e.preventDefault()
+        setMessage({text: ''})
+    }
+
+    return (
             <form className="custom-text-area-form" >
-                    <textarea className="custom-text-area"/>
+                    <CustomInput type={"text"}></CustomInput>
             </form>
         );
 }
