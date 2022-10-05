@@ -1,11 +1,15 @@
-import React from 'react';
-import MessageArea from "./components/message-area";
+import React, {useEffect} from 'react';
+import MessageArea, {setUpSignalRConnection} from "./components/message-area";
 import './App.css';
 import CustomTextArea from "./components/custom-text-area";
 import MessageBox from "./components/message-box";
 
-
 function App() {
+   
+    //useEffect(() => {
+        setUpSignalRConnection();
+   // }, []);
+    
   return (
       <div className="App">
           <div className="chat-container">
