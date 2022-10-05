@@ -23,6 +23,7 @@ app.MapGet("/history/{count}",
         await context.Response.WriteAsJsonAsync(messages);
     });
 
+app.UseRouting();
 app.UseEndpoints(endpointsBuilder =>
 {
     endpointsBuilder.MapHub<MessageHub>("/forum");
