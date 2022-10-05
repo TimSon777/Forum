@@ -13,6 +13,7 @@ services.AddDatabase(configuration, logger);
 services.AddRepositories();
 services.AddMessageHandlers();
 services.AddSignalR();
+services.AddCors();
 
 var app = builder.Build();
 
@@ -22,6 +23,18 @@ app.MapGet("/history/{count}",
         var messages = await chatRepository.GetMessagesAsync(count);
         await context.Response.WriteAsJsonAsync(messages);
     });
+
+app.UseCors(options =>
+{
+    var frontOrigin = configuration["ORIGIN:FRONT"] 
+                      ?? throw new AggregateException(); 
+    
+    options
+        .AllowCredentials()
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .WithOrigins(frontOrigin);
+});
 
 app.UseRouting();
 app.UseEndpoints(endpointsBuilder =>
