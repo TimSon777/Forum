@@ -8,14 +8,19 @@ public static class MassTransitConfiguration
 {
     public static IServiceCollection AddMessageHandlers(this IServiceCollection services)
     {
-        var consumer = typeof(MessageSaverConsumer);
-        
         services.AddMassTransit(configurator =>
         {
-            configurator.AddConsumer(consumer);
-            configurator.UsingInMemory();
+            configurator.AddConsumer<MessageSaverConsumer>();
+            configurator.UsingInMemory((ctx, inMemoryConfigurator) =>
+            {
+                inMemoryConfigurator.ReceiveEndpoint(new TemporaryEndpointDefinition(),
+                    endpointConfigurator =>
+                    {
+                        endpointConfigurator.ConfigureConsumer<MessageSaverConsumer>(ctx);
+                    });
+            });
         });
-
+        
         return services;
     }
 }

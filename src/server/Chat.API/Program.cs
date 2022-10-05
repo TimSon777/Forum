@@ -14,7 +14,7 @@ services.AddRepositories();
 services.AddMessageHandlers();
 services.AddSignalR();
 services.AddCors();
-
+services.AddFluentValidators();
 var app = builder.Build();
 
 app.MapGet("/history/{count}",

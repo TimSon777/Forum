@@ -9,8 +9,8 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.0.123" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
       <PackageReference Include="MassTransit" Version="8.0.6" />
-      <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.0-rc.1.22427.2" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="7.0.0-rc.1.22427.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-rc.1.22426.10" />

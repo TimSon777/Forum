@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using Chat.DAL.Abstractions.Chat;
+using Chat.DAL.Abstractions.Chat.Data;
 using Dapper;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ public class ChatRepository : IChatRepository
         _logger = logger;
     }
 
-    public async Task<bool> AddMessageAsync(AddMessageItem messageItem)
+    public async Task<bool> AddMessageAsync(AddMessageStorageItem messageStorageItem)
     {
         try
         {
@@ -30,7 +31,7 @@ public class ChatRepository : IChatRepository
 
             const string query = userAddQuery + messageAddQuery;
 
-            await _connection.ExecuteAsync(query, new { userName = messageItem.User.Name, text = messageItem.Text });
+            await _connection.ExecuteAsync(query, new { userName = messageStorageItem.User.Name, text = messageStorageItem.Text });
             return true;
         }
         catch (DbException ex)
@@ -40,7 +41,7 @@ public class ChatRepository : IChatRepository
         }
     }
     
-    public async Task<IEnumerable<GetMessageItem>?> GetMessagesAsync(int count)
+    public async Task<IEnumerable<GetMessageItemStorage>?> GetMessagesAsync(int count)
     {
         try
         {
@@ -48,7 +49,7 @@ public class ChatRepository : IChatRepository
                         + $" ON u.{Naming.User.PrimaryKey} = m.{Naming.Message.ForeignKeyUser}" 
                         + $" ORDER BY m.{Naming.Message.PrimaryKey} DESC LIMIT {count}";
 
-            return await _connection.QueryAsync<GetMessageItem, GetUserItem, GetMessageItem>(query, (m, u) =>
+            return await _connection.QueryAsync<GetMessageItemStorage, GetUserItemStorage, GetMessageItemStorage>(query, (m, u) =>
             { 
                 m.User = u;
                 return m;

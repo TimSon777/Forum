@@ -1,15 +1,16 @@
 ﻿using System.Text.Json;
-using Chat.Core.Data;
 using Chat.DAL.Abstractions.Chat;
 using Chat.Infrastructure.Mapping;
+using Chat.Infrastructure.MessageHandlers.Data;
+using FluentValidation;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using Exception = Chat.Core.Exception;
 
 namespace Chat.Infrastructure.MessageHandlers;
 
 // ReSharper disable once UnusedType.Global
-public class MessageSaverConsumer : IConsumer<Message>
+// ReSharper disable once ClassNeverInstantiated.Global
+public class MessageSaverConsumer : IConsumer<GetMessageConsumerItem>
 {
     private readonly IChatRepository _chatRepository;
     private readonly ILogger<MessageSaverConsumer> _logger;
@@ -20,14 +21,15 @@ public class MessageSaverConsumer : IConsumer<Message>
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<Message> context)
+    public async Task Consume(ConsumeContext<GetMessageConsumerItem> context)
     {
-        var message = context.Message;
-        var addMessageItem = message.ToAddMessageItem();
+        var message = context
+            .Message
+            .ToAddMessageStorageItem();
 
         try
         {
-            var isOk = await _chatRepository.AddMessageAsync(addMessageItem);
+            var isOk = await _chatRepository.AddMessageAsync(message);
             if (!isOk)
             {
                 _logger.LogInformation("Message was not saved in the database: {message}", message);
@@ -37,7 +39,7 @@ public class MessageSaverConsumer : IConsumer<Message>
         {
             _logger.LogWarning("Wrong json format");
         }
-        catch (Exception.ValidationException)
+        catch (ValidationException)
         {
             _logger.LogWarning("Validation exception");
         }

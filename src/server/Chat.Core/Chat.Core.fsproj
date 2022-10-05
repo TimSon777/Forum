@@ -6,12 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="ValidationException.fs" />
-        <Compile Include="Data\User.fs" />
-        <Compile Include="Data\Message.fs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Chat.DAL.Abstractions\Chat.DAL.Abstractions.csproj" />
     </ItemGroup>
 

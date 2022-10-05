@@ -1,7 +1,9 @@
-﻿namespace Chat.DAL.Abstractions.Chat;
+﻿using Chat.DAL.Abstractions.Chat.Data;
+
+namespace Chat.DAL.Abstractions.Chat;
 
 public interface IChatRepository
 {
-    Task<bool> AddMessageAsync(AddMessageItem messageItem);
-    Task<IEnumerable<GetMessageItem>?> GetMessagesAsync(int count);
+    Task<bool> AddMessageAsync(AddMessageStorageItem messageStorageItem);
+    Task<IEnumerable<GetMessageItemStorage>?> GetMessagesAsync(int count);
 }

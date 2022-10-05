@@ -1,7 +1,7 @@
-﻿namespace Chat.Infrastructure.Data;
+﻿namespace Chat.Infrastructure.MessageHandlers.Data;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class GetMessageItem
+public class GetMessageHubItem
 {
     // ReSharper disable once InconsistentNaming
     public int IPv4 { get; set; } = default;

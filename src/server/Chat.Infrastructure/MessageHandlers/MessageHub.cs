@@ -1,5 +1,6 @@
-﻿using Chat.Infrastructure.Data;
-using Chat.Infrastructure.Mapping;
+﻿using Chat.Infrastructure.Mapping;
+using Chat.Infrastructure.MessageHandlers.Data;
+using FluentValidation;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 
@@ -10,10 +11,12 @@ public class MessageHub : Hub
     private readonly IBus _bus;
     private const string GroupName = "Forum";
     private const string ReceiveMessageMethod = "ReceiveMessage";
-    
-    public MessageHub(IBus bus)
+    private readonly IValidator<GetMessageHubItem> _validator;
+
+    public MessageHub(IBus bus, IValidator<GetMessageHubItem> validator)
     {
         _bus = bus;
+        _validator = validator;
     }
 
     public override Task OnConnectedAsync()
@@ -29,10 +32,14 @@ public class MessageHub : Hub
     }
 
     // ReSharper disable once UnusedMember.Global
-    public async Task SendMessageAsync(GetMessageItem messageItem)
+    public async Task SendMessageAsync(GetMessageHubItem messageHubItem)
     {
-        var message = messageItem.ToMessage(); 
+        var validationResult = await _validator.ValidateAsync(messageHubItem);
+
+        validationResult.EnsureSuccess();
         
+        var message = messageHubItem.ToGetMessageConsumerItem();
+
         var publishTask = _bus.Publish(message);
         
         var sendTask = Clients
