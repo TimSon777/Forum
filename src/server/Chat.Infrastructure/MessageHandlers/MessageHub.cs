@@ -9,7 +9,7 @@ public class MessageHub : Hub
 {
     private readonly IBus _bus;
     private const string GroupName = "Forum";
-    private const string ReceiveMessageMethod = "ReceiveMessageAsync";
+    private const string ReceiveMessageMethod = "ReceiveMessage";
     
     public MessageHub(IBus bus)
     {
