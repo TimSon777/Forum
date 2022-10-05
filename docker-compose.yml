@@ -17,13 +17,13 @@ services:
       - "8080:80"
       - "8081:443"
     environment:
-      - BROKER_CONNECTION_SETTINGS__HOST=broker
-      - BROKER_CONNECTION_SETTINGS__USER_NAME=${BROKER_USER_NAME}
-      - BROKER_CONNECTION_SETTINGS__PASSWORD=${BROKER_PASSWORD}
-      - POSTGRESQL_SETTINGS__HOST=db
-      - POSTGRESQL_SETTINGS__USER_NAME=${DB_USER_NAME}
-      - POSTGRESQL_SETTINGS__PASSWORD=${DB_PASSWORD}
-      - POSTGRESQL_SETTINGS__DATABASE_NAME=${DB_NAME}
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+      POSTGRESQL_SETTINGS__HOST: db
+      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
+      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
+      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
   
   migrator:
     restart: on-failure
@@ -34,23 +34,23 @@ services:
     depends_on:
       - db
     environment:
-      - POSTGRESQL_SETTINGS__HOST=db
-      - POSTGRESQL_SETTINGS__USER_NAME=${DB_USER_NAME}
-      - POSTGRESQL_SETTINGS__PASSWORD=${DB_PASSWORD}
-      - POSTGRESQL_SETTINGS__DATABASE_NAME=${DB_NAME}
+      POSTGRESQL_SETTINGS__HOST: db
+      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
+      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
+      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
       
-  broker:
-    image: ${RABBITMQ_IMAGE}
-    container_name: broker
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=${BROKER_USER_NAME}
-      - RABBITMQ_DEFAULT_PASS=${BROKER_PASSWORD}
-    volumes:
-      - ~/broker/data:/var/lib/rabbitmq
-      - ~/broker/logs:/var/log/rabbitmq
+#  broker:
+#    image: ${RABBITMQ_IMAGE}
+#    container_name: broker
+#    ports:
+#      - "15672:15672"
+#      - "5672:5672"
+#    environment:
+#      RABBITMQ_DEFAULT_USER: ${BROKER_USER_NAME}
+#      RABBITMQ_DEFAULT_PASS: ${BROKER_PASSWORD}
+#    volumes:
+#      - ~/broker/data:/var/lib/rabbitmq
+#      - ~/broker/logs:/var/log/rabbitmq
   
   web-front:
     restart: always
