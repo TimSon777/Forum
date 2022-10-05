@@ -1,7 +1,44 @@
 ﻿import React from 'react';
 import '../App.css';
+import {HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 
-const MessageBox = () => {
+interface GetMessageItem {
+    Name: string;
+    Text: string;
+}
+
+interface SendMessageItem {
+    IPv4: number;
+    Port: number;
+    Text: string;
+}
+
+export const setUpSignalRConnection = async () => {
+    const connection = new HubConnectionBuilder()
+        .withUrl('http://localhost:5091/forum')
+        .build();
+
+    try {
+        await connection.start().then(async () => {
+            connection.on('ReceiveMessage', (message: GetMessageItem) => {
+                console.log(message.Text + " " + message.Name)
+            });
+
+            const sendMessageItem: SendMessageItem = {IPv4: 114, Text: "Some text", Port: 3534}
+
+            if (connection.state === HubConnectionState.Connected) {
+                await connection.invoke('SendMessageAsync', sendMessageItem);
+            }
+        });
+
+    } catch (err) {
+        console.log(err);
+    }
+
+    return connection;
+}
+
+const MessageBox = (props: any) => {
         return (
             <div className={"message-box-container"}>
                 <div className={"message-box-image-container"}>
@@ -10,11 +47,11 @@ const MessageBox = () => {
                 </div>
                 
                 <div className={"message-box-text-container"}>
-                    <div className={"message-box-user-name"}> 
-                        Timur privet
+                    <div className={"message-box-user-name"}>
+                        {props.message.Name}
                     </div>
                     <div className={"message-box-text"}>
-                        Кто за зож
+                        {props.message.Text}
                     </div>
                 </div>
             </div>
