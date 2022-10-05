@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 
 import './App.css';
 import CustomTextArea from "./components/custom-text-area";
-import MessageBox, {setUpSignalRConnection} from "./components/message-box";
+import MessageBox, {configureConnection} from "./components/message-box";
 import MessageArea from "./components/message-area";
 import axios from "axios";
-
 
 
 function App() {
@@ -13,14 +12,15 @@ function App() {
         {Id: 1, Name: 'Name', Text: 'text texr text text'}
     ])
 
-    async function fetchMessages(count: number) {
-        const response = await axios.get("http://localhost:5091/history/10");
+    async function fetchMessages() {
+        const response = await axios.get('http://localhost:5091/history/20');
         console.log(response.data);
         setMessages(response.data)
     }
 
     //useEffect(() => {
-        setUpSignalRConnection();
+     //   configureConnection(setMessages);
+    configureConnection();
    // }, []);
 
     

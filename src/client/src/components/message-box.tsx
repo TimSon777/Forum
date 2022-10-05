@@ -3,17 +3,18 @@ import '../App.css';
 import {HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 
 interface GetMessageItem {
-    Name: string;
-    Text: string;
+    name: string;
+    text: string;
 }
 
 interface SendMessageItem {
-    IPv4: number;
-    Port: number;
-    Text: string;
+    iPv4: number;
+    port: number;
+    text: string;
 }
 
-export const setUpSignalRConnection = async () => {
+//export const configureConnection = async (setMessage: (fc: () => void) => void) => {
+export const configureConnection = async () => {
     const connection = new HubConnectionBuilder()
         .withUrl('http://localhost:5091/forum')
         .build();
@@ -21,10 +22,11 @@ export const setUpSignalRConnection = async () => {
     try {
         await connection.start().then(async () => {
             connection.on('ReceiveMessage', (message: GetMessageItem) => {
-                console.log(message.Text + " " + message.Name)
+               console.log(message.text + " " + message.name);
+              // setMessage(message);
             });
 
-            const sendMessageItem: SendMessageItem = {IPv4: 114, Text: "Some text", Port: 3534}
+            const sendMessageItem: SendMessageItem = {iPv4: 114, text: "Some text", port: 3534}
 
             if (connection.state === HubConnectionState.Connected) {
                 await connection.invoke('SendMessageAsync', sendMessageItem);
