@@ -1,38 +1,34 @@
-﻿import React, {useEffect, useState} from 'react';
+﻿import React, {FormEvent, useEffect, useState} from 'react';
 import '../App.css';
 import CustomInput from "./CustomInput";
-import {configureConnection, SendMessageItem} from "./message-box";
+import {SendMessageItem} from "./message-box";
 import {HubConnection} from "@microsoft/signalr";
 
+interface Props {
+    connection: HubConnection;
+}
 
-const CustomTextArea = () => {
-    let connection: HubConnection;
+const CustomTextArea = ({connection}: Props) => {
     
     const [message, setMessage] = useState({text: ''});
 
-    const onFormSubmit = async (e: HTMLFormElement) => {
+    const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const sendMessageItem: SendMessageItem = {iPv4: 114, text: "Text from connection", port: 3534}
-        connection.invoke('SendMessageAsync', sendMessageItem)
-            .then(r => console.log(r)) 
-                .catch(e => console.log(e)) ;
+        console.log("Here");
         
+        const sendMessageItem: SendMessageItem = {iPv4: 114, text: message.text, port: 3534}
+        
+        await connection.invoke('SendMessageAsync', sendMessageItem);
+        setMessage({text: ''});
     }
     
-    useEffect(() => {
-        const cnct = async () => {
-            connection = await configureConnection();
-            console.log(connection)
-        }
-        
-        cnct();
-        console.log(connection);
-       
-    }, [])
-    
     return (
-            <form className="custom-text-area-form" onSubmit={e => onFormSubmit} >
-                    <CustomInput type={"text"}></CustomInput>
+            <form className="custom-text-area-form" onSubmit={onFormSubmit} >
+                    <CustomInput 
+                        value={message.text}
+                        type={"text"}
+                        onChange={(e: any) => setMessage({text: e.target.value})}
+                        ></CustomInput>
             </form>
         );
 }

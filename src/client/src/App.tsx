@@ -2,22 +2,57 @@ import React, {useEffect, useState} from 'react';
 
 import './App.css';
 import CustomTextArea from "./components/custom-text-area";
-import MessageBox, {configureConnection} from "./components/message-box";
+import MessageBox, {GetMessageItem, SendMessageItem} from "./components/message-box";
 import MessageArea from "./components/message-area";
 import axios from "axios";
+import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 
 
 function App() {
-    const [messages, setMessages] = useState([
-        {Id: 1, Name: 'Name', Text: 'text texr text text'},
-        {Id: 2, Name: 'Name', Text: 'text texr text text'},
-        {Id: 3, Name: 'Name', Text: 'text texr text text'},
-        {Id: 4, Name: 'Name', Text: 'text texr text text'},
-        {Id: 5, Name: 'Name', Text: 'text texr text text'},
-        {Id: 6, Name: 'Name', Text: 'text texr text text'},
-        {Id: 7, Name: 'Name', Text: 'text texr text text'},
-        {Id: 8, Name: 'Name', Text: 'text texr text text'}
-    ])
+    const [messages, setMessages] = useState<GetMessageItem[]>([]);
+    const [connection, setConnection] = useState<HubConnection>();
+
+    useEffect(() => {
+        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/history/20')
+            .then(value => {
+            setMessages(value.data);
+        });
+    }, []);
+    
+    const configureConnection = async () => {
+        console.log('here')
+        const connection = new HubConnectionBuilder()
+            .withUrl(process.env.REACT_APP_ORIGIN_API + '/forum')
+            .build();
+
+        console.log(connection);
+
+        try {
+            await connection.start().then(async () => {
+                connection.on('ReceiveMessage', (message: GetMessageItem) => {
+                    console.log(message.text);
+                    
+                    setMessages((st) => [...st, message]);
+                });
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+        return connection;
+    }
+    
+    useEffect(() => {
+        const cnct = async () => {
+            setConnection(await configureConnection());
+            console.log(connection)
+        }
+
+        cnct();
+        console.log(connection);
+
+    }, [])
+    
 
      function fetchMessages() {
         const response = axios.get(process.env.REACT_APP_ORIGIN_API + '/history/20').then(value => {
@@ -26,11 +61,9 @@ function App() {
         })
             .catch(err => console.log(err));
     }
-
-    //useEffect(() => {
-     //   configureConnection(setMessages);
-   // configureConnection();
-   // }, []);
+    
+    if (!connection)
+        return <div>Loading...</div>
     
   return (
       <div className="App">
@@ -38,10 +71,10 @@ function App() {
               <h1 className={"forum-header"}>FORUM</h1>
               <MessageArea>
                   {messages.map(message =>
-                      <MessageBox message={message} key={message.Id}></MessageBox>
+                      <MessageBox message={message}></MessageBox>
                   )}
               </MessageArea>
-              <CustomTextArea/>
+              <CustomTextArea connection={connection}/>
           </div>
       </div>
   );
