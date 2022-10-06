@@ -1,10 +1,16 @@
-﻿import React from 'react';
+﻿import React, {useEffect, useState} from 'react';
 import '../App.css';
 import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 import {log} from "util";
+import axios from "axios";
+import exp from "constants";
+
+export interface GetUserItem {
+    name: string;
+}
 
 export interface GetMessageItem {
-    name: string;
+    user: GetUserItem;
     text: string;
 }
 
@@ -18,8 +24,6 @@ interface Props {
     addMessage: (m: SendMessageItem) => void;
 }
 
-//export const configureConnection = async (setMessage: (fc: () => void) => void) => {
-
 
 
 const MessageBox = (props: any) => {
@@ -32,7 +36,7 @@ const MessageBox = (props: any) => {
                 
                 <div className={"message-box-text-container"}>
                     <div className={"message-box-user-name"}>
-                        {props.message.port}
+                        {props.message.user.name}
                     </div>
                     <div className={"message-box-text"}>
                         {props.message.text}

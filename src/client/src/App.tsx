@@ -11,7 +11,7 @@ import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsof
 function App() {
     const [messages, setMessages] = useState<GetMessageItem[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
-
+    
     useEffect(() => {
         axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/history/20')
             .then(value => {
@@ -31,6 +31,7 @@ function App() {
             await connection.start().then(async () => {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
                     console.log(message.text);
+                    console.log(message.user.name);
                     
                     setMessages((st) => [...st, message]);
                 });
@@ -52,15 +53,6 @@ function App() {
         console.log(connection);
 
     }, [])
-    
-
-     function fetchMessages() {
-        const response = axios.get(process.env.REACT_APP_ORIGIN_API + '/history/20').then(value => {
-            console.log(value.data);
-            setMessages(value.data);
-        })
-            .catch(err => console.log(err));
-    }
     
     if (!connection)
         return <div>Loading...</div>
