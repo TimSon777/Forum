@@ -45,9 +45,10 @@ public class ChatRepository : IChatRepository
     {
         try
         {
-            var query = $"SELECT * FROM {Naming.Message.TableName} m JOIN {Naming.User.TableName} u" 
+            var query = $"SELECT * FROM (SELECT * FROM {Naming.Message.TableName} m JOIN {Naming.User.TableName} u" 
                         + $" ON u.{Naming.User.PrimaryKey} = m.{Naming.Message.ForeignKeyUser}" 
-                        + $" ORDER BY m.{Naming.Message.PrimaryKey} DESC LIMIT {count}";
+                        + $" ORDER BY m.{Naming.Message.PrimaryKey} DESC LIMIT {count}) AS sub"
+                        + $" ORDER BY {Naming.Message.PrimaryKey}";
 
             return await _connection.QueryAsync<GetMessageItemStorage, GetUserItemStorage, GetMessageItemStorage>(query, (m, u) =>
             { 
