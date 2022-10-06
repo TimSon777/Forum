@@ -19,7 +19,7 @@ export interface SendMessageItem {
 export const configureConnection = async () => {
     console.log('here')
     const connection = new HubConnectionBuilder()
-        .withUrl('http://localhost:5091/forum')
+        .withUrl(process.env.REACT_APP_ORIGIN_API + '/forum')
         .build();
 
     console.log(connection);

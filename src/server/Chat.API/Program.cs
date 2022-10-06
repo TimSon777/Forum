@@ -17,13 +17,6 @@ services.AddCors();
 services.AddFluentValidators();
 var app = builder.Build();
 
-app.MapGet("/history/{count}",
-    async (HttpContext context, IChatRepository chatRepository, int count) =>
-    {
-        var messages = await chatRepository.GetMessagesAsync(count);
-        await context.Response.WriteAsJsonAsync(messages);
-    });
-
 app.UseCors(options =>
 {
     var frontOrigin = configuration["ORIGIN:FRONT"] 
@@ -36,10 +29,14 @@ app.UseCors(options =>
         .WithOrigins(frontOrigin);
 });
 
+app.MapGet("/history/{count}",
+    async (HttpContext context, IChatRepository chatRepository, int count) =>
+    {
+        var messages = await chatRepository.GetMessagesAsync(count);
+        await context.Response.WriteAsJsonAsync(messages);
+    });
+
 app.UseRouting();
-app.UseEndpoints(endpointsBuilder =>
-{
-    endpointsBuilder.MapHub<MessageHub>("/forum");
-});
+app.MapHub<MessageHub>("/forum");
 
 app.Run();

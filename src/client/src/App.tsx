@@ -20,7 +20,7 @@ function App() {
     ])
 
      function fetchMessages() {
-        const response = axios.get('http://localhost:5091/history/20').then(value => {
+        const response = axios.get(process.env.REACT_APP_ORIGIN_API + '/history/20').then(value => {
             console.log(value.data);
             setMessages(value.data);
         })
