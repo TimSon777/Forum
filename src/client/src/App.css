@@ -114,7 +114,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .custom-text-area:focus-visible {
-  background: #bbd3cf;
+  background: #838d8c;
   border-radius: 5px;
   outline: none;
 }
