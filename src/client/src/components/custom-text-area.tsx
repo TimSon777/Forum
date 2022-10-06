@@ -18,7 +18,7 @@ const CustomTextArea = ({connection}: Props) => {
         axios.get<Ip>('https://geolocation-db.com/json/')
             .then(value => {
                 const ipInArr = value.data.IPv4.split(".").map(x => parseInt(x));
-                setIp(ipInArr[0] * 256 * 256 + ipInArr[1] * 256 * 256 + ipInArr[2] * 256 + ipInArr[3]);
+                setIp(ipInArr[0] * 256 * 256 * 256 + ipInArr[1] * 256 * 256 + ipInArr[2] * 256 + ipInArr[3]);
                 setLoaded(true);
                 console.log("IP", ip, value.data.IPv4)
             })
