@@ -1,24 +1,29 @@
 ﻿import React from 'react';
 import '../App.css';
 import {HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
+import {log} from "util";
 
 interface GetMessageItem {
     name: string;
     text: string;
 }
 
-interface SendMessageItem {
+export interface SendMessageItem {
     iPv4: number;
     port: number;
     text: string;
 }
 
 //export const configureConnection = async (setMessage: (fc: () => void) => void) => {
+
 export const configureConnection = async () => {
+    console.log('here')
     const connection = new HubConnectionBuilder()
         .withUrl('http://localhost:5091/forum')
         .build();
 
+    console.log(connection);
+    
     try {
         await connection.start().then(async () => {
             connection.on('ReceiveMessage', (message: GetMessageItem) => {
@@ -29,6 +34,7 @@ export const configureConnection = async () => {
             const sendMessageItem: SendMessageItem = {iPv4: 114, text: "Some text", port: 3534}
 
             if (connection.state === HubConnectionState.Connected) {
+                console.log(connection.state);
                 await connection.invoke('SendMessageAsync', sendMessageItem);
             }
         });
@@ -36,7 +42,6 @@ export const configureConnection = async () => {
     } catch (err) {
         console.log(err);
     }
-
     return connection;
 }
 

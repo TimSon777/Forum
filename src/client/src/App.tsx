@@ -9,20 +9,28 @@ import axios from "axios";
 
 function App() {
     const [messages, setMessages] = useState([
-        {Id: 1, Name: 'Name', Text: 'text texr text text'}
+        {Id: 1, Name: 'Name', Text: 'text texr text text'},
+        {Id: 2, Name: 'Name', Text: 'text texr text text'},
+        {Id: 3, Name: 'Name', Text: 'text texr text text'},
+        {Id: 4, Name: 'Name', Text: 'text texr text text'},
+        {Id: 5, Name: 'Name', Text: 'text texr text text'},
+        {Id: 6, Name: 'Name', Text: 'text texr text text'},
+        {Id: 7, Name: 'Name', Text: 'text texr text text'},
+        {Id: 8, Name: 'Name', Text: 'text texr text text'}
     ])
 
-    async function fetchMessages() {
-        const response = await axios.get('http://localhost:5091/history/20');
-        console.log(response.data);
-        setMessages(response.data)
+     function fetchMessages() {
+        const response = axios.get('http://localhost:5091/history/20').then(value => {
+            console.log(value.data);
+            setMessages(value.data);
+        })
+            .catch(err => console.log(err));
     }
 
     //useEffect(() => {
      //   configureConnection(setMessages);
-    configureConnection();
+   // configureConnection();
    // }, []);
-
     
   return (
       <div className="App">
