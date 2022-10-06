@@ -9,7 +9,6 @@ namespace Chat.Infrastructure.MessageHandlers;
 public class MessageHub : Hub
 {
     private readonly IBus _bus;
-    private const string GroupName = "Forum";
     private const string ReceiveMessageMethod = "ReceiveMessage";
     private readonly IValidator<GetMessageHubItem> _validator;
 
@@ -17,18 +16,6 @@ public class MessageHub : Hub
     {
         _bus = bus;
         _validator = validator;
-    }
-
-    public override Task OnConnectedAsync()
-    {
-        Groups.AddToGroupAsync(Context.ConnectionId, GroupName);
-        return base.OnConnectedAsync();
-    }
-
-    public override Task OnDisconnectedAsync(Exception? exception)
-    {
-        Groups.RemoveFromGroupAsync(Context.ConnectionId, GroupName);
-        return base.OnDisconnectedAsync(exception);
     }
 
     // ReSharper disable once UnusedMember.Global
@@ -42,8 +29,7 @@ public class MessageHub : Hub
 
         var publishTask = _bus.Publish(message);
         
-        var sendTask = Clients
-            .Group(GroupName)
+        var sendTask = Clients.All
             .SendAsync(ReceiveMessageMethod, message);
 
         await Task.WhenAll(publishTask, sendTask);
