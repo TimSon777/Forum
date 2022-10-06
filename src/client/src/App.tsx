@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-
 import './App.css';
 import CustomTextArea from "./components/custom-text-area";
-import MessageBox, {GetMessageItem, SendMessageItem} from "./components/message-box";
+import MessageBox, {GetMessageItem} from "./components/message-box";
 import MessageArea from "./components/message-area";
 import axios from "axios";
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 
 
 function App() {
@@ -51,7 +50,6 @@ function App() {
 
         cnct();
         console.log(connection);
-
     }, [])
     
     if (!connection)

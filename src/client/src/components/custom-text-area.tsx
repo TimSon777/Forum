@@ -1,6 +1,6 @@
 ﻿import React, {FormEvent, useEffect, useState} from 'react';
 import '../App.css';
-import CustomInput from "./CustomInput";
+import CustomInput from "./custom-input";
 import {SendMessageItem} from "./message-box";
 import {HubConnection} from "@microsoft/signalr";
 import axios from "axios";
@@ -8,12 +8,14 @@ import axios from "axios";
 interface Props {
     connection: HubConnection;
 }
+
 interface Ip {
     IPv4: string;
 }
 const CustomTextArea = ({connection}: Props) => {
     let [ip, setIp] = useState(1);
     let [isLoaded, setLoaded] = useState(false);
+    
     useEffect(() => {
         axios.get<Ip>('https://geolocation-db.com/json/')
             .then(value => {
@@ -28,10 +30,8 @@ const CustomTextArea = ({connection}: Props) => {
 
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Here");
         console.log(ip)
         const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, port: 3534}
-        
         await connection.invoke('SendMessageAsync', sendMessageItem);
         setMessage({text: ''});
     }

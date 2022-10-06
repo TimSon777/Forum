@@ -1,9 +1,5 @@
-﻿import React, {useEffect, useState} from 'react';
+﻿import React from 'react';
 import '../App.css';
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
-import {log} from "util";
-import axios from "axios";
-import exp from "constants";
 
 export interface GetUserItem {
     name: string;
@@ -19,12 +15,6 @@ export interface SendMessageItem {
     port: number;
     text: string;
 }
-
-interface Props {
-    addMessage: (m: SendMessageItem) => void;
-}
-
-
 
 const MessageBox = (props: any) => {
         return (

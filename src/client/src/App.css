@@ -11,7 +11,6 @@
 }
 
 #root {
-  
 }
 
 div::-webkit-scrollbar {
@@ -62,12 +61,10 @@ div::-webkit-scrollbar-thumb {
   
   width: 650px;
   min-height: 400px;
-  max-height: 600px;
+  max-height: 450px;
 
   background: rgba(217, 217, 217, 0.09);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  /*backdrop-filter: blur(1.5px);*/
-  /* Note: backdrop-filter has minimal browser support */
 
   border-radius: 10px;
 
@@ -91,8 +88,6 @@ div::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, rgba(120, 255, 158, 0.1) 39.88%, rgba(0, 0, 0, 0) 100%), rgba(217, 217, 217, 0.4);
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(2px);
-  /* Note: backdrop-filter has minimal browser support */
-
   border-radius: 5px;
 
   display: flex;
@@ -137,8 +132,6 @@ div::-webkit-scrollbar-thumb {
 
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(2px);
-  /* Note: backdrop-filter has minimal browser support */
-
   border-radius: 5px;
   
   width: 90%;
