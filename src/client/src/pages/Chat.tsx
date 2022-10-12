@@ -1,5 +1,5 @@
 ﻿import React, {useEffect,useState} from 'react';
-import '../styles/Chat.css';
+import '../App.css';
 import axios from "axios";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {GetMessageItem} from "../components/message-box";
@@ -23,8 +23,6 @@ function Chat() {
             .withUrl(process.env.REACT_APP_ORIGIN_API + '/forum')
             .build();
 
-        console.log(connection);
-
         try {
             connection.start().then(async () => {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
@@ -45,12 +43,11 @@ function Chat() {
         }
 
         cnct();
-        console.log(connection);
     }, [])
 
     if (!connection)
         return <div>Loading...</div>
-
+    
     return (
         <div className="App">
             <div className="chat-container">

@@ -4,11 +4,14 @@ import MessageBox from "./message-box";
 
 
 const MessageArea = ({messages}: any) => {
+    
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
+    
     const scrollToBottom = () => {
         if (messagesEndRef.current)
             messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     };
+    
     useEffect(scrollToBottom, [messages]);
 
     return (

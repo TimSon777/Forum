@@ -27,11 +27,11 @@ const CustomTextArea = ({connection}: Props) => {
             })
             .catch(err => console.log(err));
     }, []);
+
     const [message, setMessage] = useState({text: ''});
 
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(ip)
         const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text}
         await connection.invoke('SendMessageAsync', sendMessageItem);
         setMessage({text: ''});
