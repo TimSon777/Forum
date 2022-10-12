@@ -1,5 +1,4 @@
-﻿using Chat.DAL.Implementations.Database;
-using FluentMigrator;
+﻿using FluentMigrator;
 
 namespace Chat.Migrator.Migrations;
 
@@ -10,27 +9,27 @@ public class Migration2AddUserIdToMessage : Migration
     public override void Up()
     {
         Create
-            .Column(Naming.Message.ForeignKeyUser)
-            .OnTable(Naming.Message.TableName)
+            .Column("UserId")
+            .OnTable("Messages")
             .AsInt64();
         
         Create
             .ForeignKey()
-            .FromTable(Naming.Message.TableName)
-            .ForeignColumn(Naming.Message.ForeignKeyUser)
-            .ToTable(Naming.User.TableName)
-            .PrimaryColumn(Naming.User.PrimaryKey);
+            .FromTable("Messages")
+            .ForeignColumn("UserId")
+            .ToTable("Users")
+            .PrimaryColumn("Id");
     }
 
     public override void Down()
     {
         Delete
             .ForeignKey()
-            .FromTable(Naming.Message.TableName)
-            .ForeignColumn(Naming.Message.ForeignKeyUser);
+            .FromTable("Messages")
+            .ForeignColumn("UserId");
 
         Delete
-            .Column(Naming.Message.ForeignKeyUser)
-            .FromTable(Naming.Message.TableName);
+            .Column("UserId")
+            .FromTable("Messages");
     }
 }

@@ -8,7 +8,7 @@ public static class ConsumerDataMapper
     {
         var user = new GetUserConsumerItem
         {
-            Name = string.Join(":", hubItem.IPv4, hubItem.Port)
+            Name = hubItem.IPv4.ToString()
         };
 
         return new GetMessageConsumerItem

@@ -11,6 +11,7 @@
       <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
       <PackageReference Include="MassTransit" Version="8.0.6" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.0-rc.1.22427.2" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />

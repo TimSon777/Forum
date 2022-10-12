@@ -7,9 +7,6 @@ public class GetMessageHubItemValidator : AbstractValidator<GetMessageHubItem>
 {
     public GetMessageHubItemValidator()
     {
-        RuleFor(x => x.Port)
-            .InclusiveBetween(0, 65535);
-
         RuleFor(x => x.IPv4)
             .GreaterThan(0);
 

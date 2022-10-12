@@ -8,13 +8,13 @@ var configuration = builder.Configuration;
 
 var logger = new LoggerFactory().CreateLogger<Program>();
 
-services.AddDatabase(configuration, logger);
-//services.AddMessageConsumer(configuration);
+services.AddDatabase(configuration);
 services.AddRepositories();
-services.AddMessageHandlers();
+services.AddMessageHandlers(configuration);
 services.AddSignalR();
 services.AddCors();
 services.AddFluentValidators();
+
 var app = builder.Build();
 
 app.UseCors(options =>

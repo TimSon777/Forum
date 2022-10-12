@@ -1,5 +1,4 @@
-﻿using Chat.DAL.Implementations.Database;
-using FluentMigrator;
+﻿using FluentMigrator;
 
 namespace Chat.Migrator.Migrations;
 
@@ -10,32 +9,32 @@ public class Migration1Init : Migration
     public override void Up()
     {
         Create
-            .Table(Naming.User.TableName)
+            .Table("Users")
             
-            .WithColumn(Naming.User.PrimaryKey)
+            .WithColumn("Id")
             .AsInt32()
             .PrimaryKey()
             .Identity()
             
-            .WithColumn(Naming.User.Name)
+            .WithColumn("Name")
             .AsString(20)
             .Unique();
         
         Create
-            .Table(Naming.Message.TableName)
+            .Table("Messages")
             
-            .WithColumn(Naming.Message.PrimaryKey)
+            .WithColumn("Id")
             .AsInt64()
             .PrimaryKey()
             .Identity()
             
-            .WithColumn(Naming.Message.Text)
+            .WithColumn("Text")
             .AsString(500);
     }
 
     public override void Down()
     {
-        Delete.Table(Naming.User.TableName);
-        Delete.Table(Naming.Message.TableName);
+        Delete.Table("Users");
+        Delete.Table("Messages");
     }
 }

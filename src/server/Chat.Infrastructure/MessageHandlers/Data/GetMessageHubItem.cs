@@ -5,6 +5,5 @@ public class GetMessageHubItem
 {
     // ReSharper disable once InconsistentNaming
     public long IPv4 { get; set; } = default;
-    public int Port { get; set; } = default;
     public string Text { get; set; } = "";
 }

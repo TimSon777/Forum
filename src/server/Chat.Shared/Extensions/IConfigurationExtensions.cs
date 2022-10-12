@@ -4,9 +4,10 @@ namespace Microsoft.Extensions.Configuration;
 // ReSharper disable once InconsistentNaming
 public static class IConfigurationExtensions
 {
-    public static T Get<T>(this IConfiguration configuration, string position)
+    public static T Get<T>(this IConfiguration configuration, string position) 
+        where T : new()
     {
-        var obj = Activator.CreateInstance<T>();
+        var obj = new T();
         
         configuration
             .GetSection(position)

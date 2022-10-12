@@ -22,12 +22,19 @@ public class ChatRepository : IChatRepository
     {
         try
         {
-            const string userAddQuery = $"INSERT INTO {Naming.User.TableName}({Naming.User.Name})" +
-                                        "VALUES (@userName) ON CONFLICT DO NOTHING;";
+            const string userAddQuery = 
+                @"
+                    INSERT INTO ""Users"" (""Name"")
+                    VALUES (@userName) ON CONFLICT DO NOTHING;
+                ";
         
             const string messageAddQuery =
-                $"INSERT INTO {Naming.Message.TableName}({Naming.Message.ForeignKeyUser}, {Naming.Message.Text})" +
-                $"SELECT {Naming.User.PrimaryKey}, (@text) FROM {Naming.User.TableName} WHERE {Naming.User.Name} = (@userName)";
+                @"
+                    INSERT INTO ""Messages""(""UserId"", ""Text"")
+                    SELECT ""Id"", (@text) 
+                    FROM ""Users"" 
+                    WHERE ""Name"" = (@userName)
+                ";
 
             const string query = userAddQuery + messageAddQuery;
 
@@ -45,15 +52,24 @@ public class ChatRepository : IChatRepository
     {
         try
         {
-            var query = $"SELECT * FROM {Naming.Message.TableName} m JOIN {Naming.User.TableName} u" 
-                        + $" ON u.{Naming.User.PrimaryKey} = m.{Naming.Message.ForeignKeyUser}" 
-                        + $" ORDER BY m.{Naming.Message.PrimaryKey} DESC LIMIT {count}";
+            const string query = 
+                @"
+                    SELECT *
+                    FROM (
+                        SELECT m.""Text"" MessageText, m.""Id"" ""Id"", u.""Name"" UserName
+                        FROM ""Messages"" m JOIN ""Users"" u 
+                            ON u.""Id"" = m.""UserId""
+                        ORDER BY m.""Id"" DESC 
+                        LIMIT @count
+                    ) sub
+                    ORDER BY ""Id""
+                ";
 
             return await _connection.QueryAsync<GetMessageItemStorage, GetUserItemStorage, GetMessageItemStorage>(query, (m, u) =>
             { 
                 m.User = u;
                 return m;
-            });
+            }, new { count }, splitOn: @"Id");
         }
         catch (DbException ex)
         {
