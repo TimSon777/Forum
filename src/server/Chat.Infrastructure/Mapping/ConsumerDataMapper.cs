@@ -17,4 +17,13 @@ public static class ConsumerDataMapper
             Text = hubItem.Text
         };
     }
+
+    public static SendMessageHubItem ToSendMessageHubItem(this GetMessageConsumerItem consumerItem)
+    {
+        return new SendMessageHubItem
+        {
+            Name = consumerItem.User.Name,
+            Text = consumerItem.Text
+        };
+    }
 }

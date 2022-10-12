@@ -30,7 +30,7 @@ function App() {
             await connection.start().then(async () => {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
                     console.log(message.text);
-                    console.log(message.user.name);
+                    console.log(message.name);
                     
                     setMessages((st) => [...st, message]);
                 });

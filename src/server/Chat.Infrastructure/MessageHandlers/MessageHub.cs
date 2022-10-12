@@ -25,12 +25,13 @@ public class MessageHub : Hub
 
         validationResult.EnsureSuccess();
         
-        var message = messageHubItem.ToGetMessageConsumerItem();
-
-        var publishTask = _bus.Publish(message);
+        var consumerMessage = messageHubItem.ToGetMessageConsumerItem();
+        var sendMessage = consumerMessage.ToSendMessageHubItem();
+        
+        var publishTask = _bus.Publish(consumerMessage);
         
         var sendTask = Clients.All
-            .SendAsync(ReceiveMessageMethod, message);
+            .SendAsync(ReceiveMessageMethod, sendMessage);
 
         await Task.WhenAll(publishTask, sendTask);
     }

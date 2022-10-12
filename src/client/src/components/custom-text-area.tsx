@@ -31,7 +31,7 @@ const CustomTextArea = ({connection}: Props) => {
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(ip)
-        const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, port: 3534}
+        const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text}
         await connection.invoke('SendMessageAsync', sendMessageItem);
         setMessage({text: ''});
     }
@@ -43,7 +43,7 @@ const CustomTextArea = ({connection}: Props) => {
                     value={message.text}
                     type={"text"}
                     onChange={(e: any) => setMessage({text: e.target.value})}
-                ></CustomInput>
+                />
             </form> }</>
         );
 }

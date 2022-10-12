@@ -1,18 +1,13 @@
 ﻿import React from 'react';
 import '../App.css';
 
-export interface GetUserItem {
-    name: string;
-}
-
 export interface GetMessageItem {
-    user: GetUserItem;
+    name: string;
     text: string;
 }
 
 export interface SendMessageItem {
     iPv4: number;
-    port: number;
     text: string;
 }
 
@@ -26,7 +21,7 @@ const MessageBox = (props: any) => {
                 
                 <div className={"message-box-text-container"}>
                     <div className={"message-box-user-name"}>
-                        {props.message.user.name}
+                        {props.message.name}
                     </div>
                     <div className={"message-box-text"}>
                         {props.message.text}
