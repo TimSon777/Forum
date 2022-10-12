@@ -1,6 +1,6 @@
 ﻿import React, {FormEvent, useEffect, useState} from 'react';
 import '../App.css';
-import CustomInput from "./custom-input";
+import CustomInput from "./ui/custom-input";
 import {SendMessageItem} from "./message-box";
 import {HubConnection} from "@microsoft/signalr";
 import axios from "axios";
@@ -12,6 +12,7 @@ interface Props {
 interface Ip {
     IPv4: string;
 }
+
 const CustomTextArea = ({connection}: Props) => {
     let [ip, setIp] = useState(1);
     let [isLoaded, setLoaded] = useState(false);

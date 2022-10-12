@@ -1,15 +1,23 @@
-﻿import React, {ReactNode} from 'react';
+﻿import React, {useEffect, useRef} from 'react';
 import '../App.css';
+import MessageBox from "./message-box";
 
-interface Props {
-    children?: ReactNode
-}
 
-const MessageArea = ({children}: Props) => {
+const MessageArea = ({messages}: any) => {
+    const messagesEndRef = useRef<null | HTMLDivElement>(null);
+    const scrollToBottom = () => {
+        if (messagesEndRef.current)
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    };
+    useEffect(scrollToBottom, [messages]);
+
     return (
-    <div className={"message-area-container"}>
-        {children}
-    </div>
+        <div className={"message-area-container"}>
+            {messages.map((message: any) =>
+                <MessageBox message={message}></MessageBox>
+            )}
+            <div ref={messagesEndRef} />
+        </div>
     )
 };
 
