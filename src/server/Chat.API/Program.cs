@@ -1,3 +1,4 @@
+using Chat.API.Mapping;
 using Chat.DAL.Abstractions.Chat;
 using Chat.Infrastructure.MessageHandlers;
 
@@ -33,7 +34,15 @@ app.MapGet("/history/{count}",
     async (HttpContext context, IChatRepository chatRepository, int count) =>
     {
         var messages = await chatRepository.GetMessagesAsync(count);
-        await context.Response.WriteAsJsonAsync(messages);
+
+        if (messages is null)
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            return;
+        }
+        
+        var items = messages.Select(x => x.ToSendMessageItem());
+        await context.Response.WriteAsJsonAsync(items);
     });
 
 app.UseRouting();
