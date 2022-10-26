@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Chat.Shared.Settings;
+namespace Shared.Settings;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class PostgresSettings
@@ -23,4 +23,9 @@ public class PostgresSettings
     {
         return $"Host={Host}; user id={UserName}; password={Password}; database={DatabaseName}";
     }
+    
+    public static implicit operator string(PostgresSettings settings)
+    {
+        return settings.ToString();
+    } 
 }

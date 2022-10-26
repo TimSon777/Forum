@@ -15,4 +15,10 @@ public static class IConfigurationExtensions
         
         return obj;
     }
+
+    public static string GetString(this IConfiguration configuration, string position)
+    {
+        return configuration[position] 
+               ?? throw new AggregateException($"Not found string by position: {position}");
+    }
 }
