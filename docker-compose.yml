@@ -4,11 +4,59 @@ volumes:
   data:
     
 services:
+  
+  queue-listener:
+    restart: always
+    depends_on:
+      - broker
+      - db
+    build:
+      context: src/server
+      dockerfile: Dockerfile_QueueListener
+    container_name: queue-listener
+    ports:
+      - "8085:80"
+      - "8086:443"
+    environment:
+      POSTGRESQL_SETTINGS__HOST: db
+      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
+      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
+      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
+      
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+    
+#  file-server:
+#    restart: always
+#    image: ${S3_IMAGE}
+#    ports:
+#      - "9000:9000"
+#    environment:
+#      MINIO_ROOT_USER: ${S3_USER}
+#      MINIO_ROOT_PASSWORD: ${S3_PASSWORD}
+#    command: server /data
+#    volumes:
+#      - ~/minio/data:/data
+  
+#  file-api:
+#    restart: always
+#    build:
+#      context: /src/server/File
+#      dockerfile: File.API/Dockerfile
+#    ports:
+#      - "8082:80"
+#      - "8083:443"
+#    environment:
+#      FILE_SERVER_SETTINGS__HOST: http://file-server:9000
+#      FILE_SERVER_SETTINGS__USER: ${S3_USER}
+#      FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
+
   api:
     restart: always
     build: 
-      context: /src/server
-      dockerfile: Chat.API/Dockerfile
+      context: src/server
+      dockerfile: Dockerfile_ForumAPI
     container_name: api
     depends_on:
       - migrator
@@ -21,7 +69,9 @@ services:
       POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
       POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
       POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
+      
       ORIGIN__FRONT: ${ORIGIN_FRONT}
+      
       BROKER_CONNECTION_SETTINGS__HOST: broker
       BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
       BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
@@ -29,8 +79,8 @@ services:
   migrator:
     restart: on-failure
     build:
-      context: /src/server
-      dockerfile: Chat.Migrator/Dockerfile
+      context: src/server
+      dockerfile: Dockerfile_ForumMigrator
     container_name: migrator
     depends_on:
       - db
@@ -45,7 +95,7 @@ services:
     depends_on:
       - api
     build:
-      context: /src/client
+      context: src/client
       dockerfile: Dockerfile
     container_name: web-front
     ports:
