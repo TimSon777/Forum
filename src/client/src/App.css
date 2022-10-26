@@ -189,3 +189,24 @@ div::-webkit-scrollbar-thumb {
   display: flex;
   padding: 6px 16px;
 }
+
+.hidden {
+  opacity: 0;
+  height: 0;
+  width: 0;
+  line-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.upload-file-area {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: start;
+}
+
+.file-name-container {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}

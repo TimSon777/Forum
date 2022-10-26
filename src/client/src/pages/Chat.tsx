@@ -5,6 +5,7 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {GetMessageItem} from "../components/message-box";
 import CustomTextArea from "../components/custom-text-area";
 import MessageArea from "../components/message-area";
+import {UploadFIle} from "../components/UploadFIle";
 
 
 function Chat() {
@@ -53,6 +54,7 @@ function Chat() {
             <div className="chat-container">
                 <h1 className={"forum-header"}>FORUM</h1>
                 <MessageArea messages={messages}></MessageArea>
+                <UploadFIle></UploadFIle>                
                 <CustomTextArea connection={connection}/>
             </div>
         </div>
