@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace File.API.Controllers;
 
 [ApiController]
-[Route("file/[controller]")]
+[Route("file")]
 public class FileController : ControllerBase
 {
     private readonly IFileProvider _fileProvider;
