@@ -9,6 +9,7 @@ interface UploadedFile {
 export const UploadFIle = () => {
     const filePicker = useRef<any>(null);
     const [selectedFile, setSelectedFile] = useState<UploadedFile>();
+    const [uploaded, setUploaded] = useState();
     
     const  handleChange = (event: any) => {
         console.log(event.target.files);
@@ -20,6 +21,18 @@ export const UploadFIle = () => {
             alert("No file");
             return;
         }
+        
+        const formData = new FormData();
+        formData.append('file',  JSON.stringify(selectedFile));
+        
+        const response = await fetch(process.env.REACT_APP_FILE_API + "/file", {
+           method: 'POST',
+           body: formData
+       });
+        
+        const data = await response.json();
+        
+        setUploaded(data);
     };
 
     function handlePick() {
