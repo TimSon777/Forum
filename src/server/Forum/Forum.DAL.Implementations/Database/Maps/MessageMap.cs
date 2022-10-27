@@ -8,5 +8,6 @@ public class MessageMap : EntityMap<GetMessageItemStorage>
     public MessageMap()
     {
         Map(x => x.Text).ToColumn("MessageText", false);
+        Map(x => x.FileKey).ToColumn("FileKey", false);
     }
 }

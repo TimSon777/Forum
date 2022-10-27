@@ -23,17 +23,18 @@ public class FileProvider : IFileProvider
     {
         try
         {
-            var file = await _amazonS3.GetObjectAsync(_fileServerSettings.BucketName, key, token);
+            var response = await _amazonS3.GetObjectAsync(_fileServerSettings.BucketName, key, token);
 
-            if (file is null)
+            if (response is null)
             {
                 return Result<GetFileItem>.WithError($"File by key {key} was not found");
             }
 
             var result = new GetFileItem
             {
-                Body = file.ResponseStream,
-                Name = string.Join("-", file.BucketName, file.Key)
+                Body = response.ResponseStream,
+                Name = string.Join("-", response.BucketName, response.Key),
+                ContentType = response.Headers.ContentType
             };
 
             return Result.WithValue(result);
@@ -44,17 +45,20 @@ public class FileProvider : IFileProvider
         }
     }
 
-    public async Task<Result<GetSavedFileInfoItem>> SaveFileAsync(Stream file, CancellationToken token = new())
+    public async Task<Result<GetSavedFileInfoItem>> SaveFileAsync(IFormFile file, CancellationToken token = new())
     {
         try
         {
-            var key = Guid.NewGuid().ToString("N");
+            var key = Guid
+                .NewGuid()
+                .ToString();
 
             var request = new PutObjectRequest
             {
                 BucketName = _fileServerSettings.BucketName,
                 Key = key,
-                InputStream = file
+                InputStream = file.OpenReadStream(),
+                ContentType = file.ContentType
             };
 
             var response = await _amazonS3.PutObjectAsync(request, token);
@@ -67,7 +71,6 @@ public class FileProvider : IFileProvider
             var result = new GetSavedFileInfoItem
             {
                 Key = key,
-                BucketName = _fileServerSettings.BucketName
             };
             
             return Result.WithValue(result);

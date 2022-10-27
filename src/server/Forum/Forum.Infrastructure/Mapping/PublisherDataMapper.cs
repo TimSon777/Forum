@@ -15,7 +15,8 @@ public static class PublisherDataMapper
         return new GetMessageConsumerItem
         {
             User = user,
-            Text = hubItem.Text
+            Text = hubItem.Text,
+            FileKey = hubItem.FileKey
         };
     }
 
@@ -24,7 +25,8 @@ public static class PublisherDataMapper
         return new SendMessageHubItem
         {
             Name = publisherItem.User.Name,
-            Text = publisherItem.Text
+            Text = publisherItem.Text,
+            FileKey = publisherItem.FileKey 
         };
     }
 }

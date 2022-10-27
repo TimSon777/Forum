@@ -10,7 +10,8 @@ public static class DatabaseDataMapper
         return new SendMessageItem
         {
             Name = item.User.Name,
-            Text = item.Text
+            Text = item.Text,
+            FileKey = item.FileKey
         };
     }
 }

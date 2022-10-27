@@ -34,16 +34,16 @@ services:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: minio_user
-      MINIO_ROOT_PASSWORD: minio_password
+      MINIO_ROOT_USER: ${S3_USER}
+      MINIO_ROOT_PASSWORD: ${S3_PASSWORD}
     volumes:
-      - minio-storage:/data
+      - ~/s3/data:/data
   
   file-api:
     restart: always
     build:
-      context: /src/server/File
-      dockerfile: File.API/Dockerfile
+      context: /src/server
+      dockerfile: Dockerfile_FileAPI
     ports:
       - "8082:80"
       - "8083:443"
@@ -51,6 +51,7 @@ services:
       FILE_SERVER_SETTINGS__HOST: http://file-server:9000
       FILE_SERVER_SETTINGS__USER: ${S3_USER}
       FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
+      FILE_SERVER_SETTINGS__BUCKET_NAME: ${S3_BUCKET_NAME}
 
   api:
     restart: always

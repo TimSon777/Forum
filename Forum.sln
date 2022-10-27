@@ -24,11 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "File", "File", "{ECD328FE-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dockerfiles Server", "Dockerfiles Server", "{E6D882BA-B97C-4CC0-A647-E23CE2C70814}"
 	ProjectSection(SolutionItems) = preProject
-		src\server\Dockerfile_FileAPI = src\server\Dockerfile_FileAPI
 		src\server\Dockerfile_ForumAPI = src\server\Dockerfile_ForumAPI
 		src\server\Dockerfile_ForumMigrator = src\server\Dockerfile_ForumMigrator
 		src\server\Dockerfile_QueueListener = src\server\Dockerfile_QueueListener
 		src\server\.dockerignore = src\server\.dockerignore
+		src\server\Dockerfile_FileAPI = src\server\Dockerfile_FileAPI
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{47EB5504-33D1-4CDB-BBCB-5848D9C96BF7}"

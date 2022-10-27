@@ -21,16 +21,19 @@ public class FileController : ControllerBase
 
         if (!result.Succeeded)
         {
-            return UnprocessableEntity($"File not found by key {key}");
+            return UnprocessableEntity($"File not found by key {key}. Error: {result.Error}");
         }
 
-        return Ok(result);
+        return File(
+            result.Value!.Body, 
+            result.Value.ContentType, 
+            result.Value.Name);
     }
 
     [HttpPost]
     public async Task<IActionResult> SaveAsync(IFormFile file, CancellationToken token = new())
     {
-        var result = await _fileProvider.SaveFileAsync(file.OpenReadStream(), token);
+        var result = await _fileProvider.SaveFileAsync(file, token);
 
         if (result.Succeeded)
         {

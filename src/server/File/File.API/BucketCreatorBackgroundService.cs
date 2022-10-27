@@ -33,9 +33,7 @@ public sealed class BucketCreatorBackgroundService : BackgroundService
     {
         var request = new PutBucketRequest
         {
-            BucketName = _fileServerSettings.BucketName,
-            CannedACL = S3CannedACL.PublicReadWrite,
-            UseClientRegion = true
+            BucketName = _fileServerSettings.BucketName
         };
 
         var response = await _amazonS3.PutBucketAsync(request, token);

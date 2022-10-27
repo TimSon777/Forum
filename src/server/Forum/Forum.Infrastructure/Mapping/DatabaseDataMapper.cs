@@ -12,7 +12,8 @@ public static class DatabaseDataMapper
         return new AddMessageStorageItem
         {
             Text = item.Text,
-            User = item.User.ToAddUserStorageItem()
+            User = item.User.ToAddUserStorageItem(),
+            FileKey = item.FileKey
         };
     }
 

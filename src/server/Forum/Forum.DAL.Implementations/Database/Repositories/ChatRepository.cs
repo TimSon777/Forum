@@ -26,7 +26,7 @@ public class ChatRepository : IChatRepository
                 @"
                     SELECT *
                     FROM (
-                        SELECT m.""Text"" MessageText, m.""Id"" ""Id"", u.""Name"" UserName
+                        SELECT m.""Text"" MessageText, m.""FileKey"" FileKey, m.""Id"" ""Id"", u.""Name"" UserName
                         FROM ""Messages"" m JOIN ""Users"" u 
                             ON u.""Id"" = m.""UserId""
                         ORDER BY m.""Id"" DESC 
