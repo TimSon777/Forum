@@ -1,5 +1,8 @@
-﻿import React from 'react';
+﻿import {useEffect, useState} from 'react';
+import React from 'react';
 import '../App.css';
+import axios from "axios";
+import * as stream from "stream";
 
 export interface GetMessageItem {
     name: string;
@@ -29,6 +32,14 @@ const MessageBox = (props: any) => {
                     <div className={"message-box-text"}>
                         {props.message.text}
                     </div>
+
+                    {props.message.fileKey && (
+                        <div>
+                            <a href={process.env.REACT_APP_FILE_API + "/file" + `/${props.message.fileKey}`}>
+                                {props.message.fileKey}
+                            </a>
+                        </div>
+                    )}
                 </div>
             </div>
         );

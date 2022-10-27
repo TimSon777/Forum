@@ -83,6 +83,7 @@ const CustomTextArea = ({connection}: Props) => {
             })
             .catch(err => {
                 console.log(err);
+                setLoaded(true);
             });
     }, []);
 
