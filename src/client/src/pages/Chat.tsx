@@ -42,7 +42,6 @@ function Chat() {
         const cnct =  () => {
             setConnection( configureConnection());
         }
-
         cnct();
     }, [])
 
@@ -54,7 +53,6 @@ function Chat() {
             <div className="chat-container">
                 <h1 className={"forum-header"}>FORUM</h1>
                 <MessageArea messages={messages}></MessageArea>
-                <UploadFIle></UploadFIle>                
                 <CustomTextArea connection={connection}/>
             </div>
         </div>

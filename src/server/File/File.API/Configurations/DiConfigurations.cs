@@ -12,6 +12,7 @@ public static class DiConfigurations
         services.AddControllers();
         services.AddAws(cfg);
         services.AddFileProvider();
+        services.AddCors();
         return builder;
     }
 }

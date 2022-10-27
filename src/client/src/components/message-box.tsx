@@ -4,11 +4,13 @@ import '../App.css';
 export interface GetMessageItem {
     name: string;
     text: string;
+    fileKey: string | null;
 }
 
 export interface SendMessageItem {
     iPv4: number;
     text: string;
+    fileKey: string | null;
 }
 
 const MessageBox = (props: any) => {
