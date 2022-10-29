@@ -18,6 +18,6 @@ public class MessageSaverConsumer : IConsumer<GetMessageConsumerItem>
     public async Task Consume(ConsumeContext<GetMessageConsumerItem> context)
     {
         var message = context.Message;
-        await _forumRepository.SaveMessageAsync(message.User.Name, message.Text);
+        await _forumRepository.SaveMessageAsync(message.User.Name, message.Text, message.FileKey);
     }
 }

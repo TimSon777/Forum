@@ -12,15 +12,15 @@ public sealed class ForumRepository : IForumRepository
         _context = forumDbContext;
     }
 
-    public async Task SaveMessageAsync(string userName, string text)
+    public async Task SaveMessageAsync(string userName, string text, Guid? fileKey)
     {
         await _context.Database.ExecuteSqlInterpolatedAsync(
             $@"
                 INSERT INTO ""Users"" (""Name"")
                 VALUES ({userName}) ON CONFLICT DO NOTHING;
 
-                INSERT INTO ""Messages""(""UserId"", ""Text"")
-                SELECT ""Id"", ({text}) 
+                INSERT INTO ""Messages""(""UserId"", ""Text"", ""FileKey"")
+                SELECT ""Id"", ({text}), ({fileKey})
                 FROM ""Users"" 
                 WHERE ""Name"" = ({userName});
             ");
