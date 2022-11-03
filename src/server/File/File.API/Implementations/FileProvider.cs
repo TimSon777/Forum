@@ -56,7 +56,7 @@ public class FileProvider : IFileProvider
             var request = new PutObjectRequest
             {
                 BucketName = _fileServerSettings.BucketName,
-                Key = key,
+                Key = $"{key}.{file.FileName}",
                 InputStream = file.OpenReadStream(),
                 ContentType = file.ContentType
             };
