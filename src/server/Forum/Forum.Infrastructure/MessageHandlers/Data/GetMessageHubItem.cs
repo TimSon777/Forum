@@ -6,5 +6,5 @@ public class GetMessageHubItem
     // ReSharper disable once InconsistentNaming
     public long IPv4 { get; set; } = default;
     public string Text { get; set; } = default!;
-    public Guid? FileKey { get; set; } = default!;
+    public string? FileKey { get; set; } = default!;
 }

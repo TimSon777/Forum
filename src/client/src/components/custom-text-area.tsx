@@ -33,35 +33,44 @@ const CustomTextArea = ({connection}: Props) => {
     const filePicker = useRef<any>(null);
     const [selectedFile, setSelectedFile] = useState();
     
-    const [fileKey, setKey] = useState(''); 
+    const [fileKey, setKey] = useState<string | null>(null); 
 
     const  handleChange = (event: any) => {
         console.log(event.target.files[0]);
         setSelectedFile(event.target.files[0]);
     };
 
-    const handleUpload = async () => {
+    const handleUpload : () => Promise<string | null> = async () => {
         if (selectedFile) {
             const formData = new FormData();
             formData.set('file', selectedFile!);
             console.log('formdata:' + formData);
-            axios.create({
-                baseURL: process.env.REACT_APP_FILE_API,
-            }).post("/file", formData)
-                .then(async function (response) {
-                    const data = response.data;
-                    const key: string = data.key;
-                    console.log("Key: " + key);
-                    setKey(key);
-                    console.log("Key after set key: " + fileKey);
-                })
-                .catch(function (response) {
+            console.log(process.env.REACT_APP_FILE_API);
+            try {
+                const response = await axios.create({
+                    baseURL: process.env.REACT_APP_FILE_API,
+                }).post("/file", formData);
+
+
+                const data = response.data;
+                const key: string = data.key;
+                console.log("Key: " + key);
+                setKey(key);
+                console.log("Key after set key: " + fileKey);
+                return key;
+            }
+            catch(response) {
                     console.log(response);
-                })
-                .finally(() => {
+                    return null;
+                }
+            finally {
                     setSelectedFile(undefined);
-                });
+                };
+            
+            return null;
         }
+        
+        return null;
     };
 
     function handlePick() {
@@ -88,23 +97,24 @@ const CustomTextArea = ({connection}: Props) => {
         
         e.preventDefault();
         
-        handleUpload().then(() => {
+        await handleUpload().then(async (k) => {
             console.log(`After handle upload: ${fileKey}`)
+            console.log("Prosto: " + fileKey);
+            setAlert(false);
+            const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: k == '' ? null : k};
+            console.log(sendMessageItem);
+            await connection.invoke('SendMessageAsync', sendMessageItem)
+                .catch(err => {
+                    console.log(err);
+                    setAlert(true);
+                });
+
+            console.log("Message: " + message.text + " " + message.fileKey);
+
+            setMessage({text: '', fileKey: null});
+            setKey('');
         });
-        console.log("Prosto: " + fileKey);
-        setAlert(false);
-        const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: fileKey != '' ? fileKey : null};
-        console.log(sendMessageItem);
-        await connection.invoke('SendMessageAsync', sendMessageItem)
-            .catch(err => {
-                console.log(err);
-                setAlert(true);
-            });
         
-        console.log("Message: " + message.text + " " + message.fileKey);
-        
-        setMessage({text: '', fileKey: null});
-        setKey('');
     }
     
     return (

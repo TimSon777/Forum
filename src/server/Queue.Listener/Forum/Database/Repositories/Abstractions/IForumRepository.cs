@@ -2,5 +2,5 @@
 
 public interface IForumRepository
 {
-    Task SaveMessageAsync(string userName, string text, Guid? fileKey);
+    Task SaveMessageAsync(string userName, string text, string? fileKey);
 }

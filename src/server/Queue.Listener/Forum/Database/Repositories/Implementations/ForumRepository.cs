@@ -12,7 +12,7 @@ public sealed class ForumRepository : IForumRepository
         _context = forumDbContext;
     }
 
-    public async Task SaveMessageAsync(string userName, string text, Guid? fileKey)
+    public async Task SaveMessageAsync(string userName, string text, string? fileKey)
     {
         await _context.Database.ExecuteSqlInterpolatedAsync(
             $@"

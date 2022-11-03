@@ -4,5 +4,5 @@ public class SendMessageHubItem
 {
     public string Name { get; init; } = default!;
     public string Text { get; init; } = default!;
-    public Guid? FileKey { get; init; }
+    public string? FileKey { get; init; }
 }
