@@ -50,13 +50,12 @@ public class FileProvider : IFileProvider
         try
         {
             var key = Guid
-                .NewGuid()
-                .ToString();
+                .NewGuid() + $".{file.FileName}";
 
             var request = new PutObjectRequest
             {
                 BucketName = _fileServerSettings.BucketName,
-                Key = $"{key}.{file.FileName}",
+                Key = key,
                 InputStream = file.OpenReadStream(),
                 ContentType = file.ContentType
             };
