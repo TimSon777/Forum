@@ -5,8 +5,7 @@ import {SendMessageItem} from "./message-box";
 import {HubConnection} from "@microsoft/signalr";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
-import {Alert, Button, ButtonGroup} from "@mui/material";
-//import {UploadFIle} from "../components/UploadFIle";
+import {Button, ButtonGroup} from "@mui/material";
 
 interface Props {
     connection: HubConnection;
@@ -32,41 +31,37 @@ const CustomTextArea = ({connection}: Props) => {
     let [isLoaded, setLoaded] = useState(false);
 
     const filePicker = useRef<any>(null);
-    const [selectedFile, setSelectedFile] = useState<UploadedFile>();
-    const [key, setKey] = useState('');
+    const [selectedFile, setSelectedFile] = useState();
+    
+    const [fileKey, setKey] = useState(''); 
 
     const  handleChange = (event: any) => {
-        console.log(event.target.files);
+        console.log(event.target.files[0]);
         setSelectedFile(event.target.files[0]);
     };
 
     const handleUpload = async () => {
-        if (!selectedFile) {
-            return;
+        if (selectedFile) {
+            const formData = new FormData();
+            formData.set('file', selectedFile!);
+            console.log('formdata:' + formData);
+            axios.create({
+                baseURL: process.env.REACT_APP_FILE_API,
+            }).post("/file", formData)
+                .then(async function (response) {
+                    const data = response.data;
+                    const key: string = data.key;
+                    console.log("Key: " + key);
+                    setKey(key);
+                    console.log("Key after set key: " + fileKey);
+                })
+                .catch(function (response) {
+                    console.log(response);
+                })
+                .finally(() => {
+                    setSelectedFile(undefined);
+                });
         }
-
-        const json = JSON.stringify(selectedFile);
-        const blob = new Blob([json], {
-            type: 'application/json'
-        });
-
-        let formData = new FormData();
-        formData.append('file',  blob);
-
-        const response = await fetch(process.env.REACT_APP_FILE_API + "/file", {
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-
-        console.log("Response: " + data.key);
-        let key = data.key;
-
-        let fileFromServer = await fetch(process.env.REACT_APP_FILE_API + "/file" + `/${key}`);
-        console.log(fileFromServer);
-        
-        setKey(key);
     };
 
     function handlePick() {
@@ -79,7 +74,7 @@ const CustomTextArea = ({connection}: Props) => {
                 const ipInArr = value.data.IPv4.split(".").map(x => parseInt(x));
                 setIp(ipInArr[0] * 256 * 256 * 256 + ipInArr[1] * 256 * 256 + ipInArr[2] * 256 + ipInArr[3]);
                 setLoaded(true);
-                console.log("IP", ip, value.data.IPv4);
+                console.log("IP hello", ip, value.data.IPv4);
             })
             .catch(err => {
                 console.log(err);
@@ -87,22 +82,29 @@ const CustomTextArea = ({connection}: Props) => {
             });
     }, []);
 
-    const [message, setMessage] = useState({text: '', fileKey: ''});
+    const [message, setMessage] = useState<{text: '', fileKey: string | null}>({text: '', fileKey: null});
 
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        
         e.preventDefault();
         
-        handleUpload();
-
+        handleUpload().then(() => {
+            console.log(`After handle upload: ${fileKey}`)
+        });
+        console.log("Prosto: " + fileKey);
         setAlert(false);
-        const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: key};
+        const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: fileKey != '' ? fileKey : null};
+        console.log(sendMessageItem);
         await connection.invoke('SendMessageAsync', sendMessageItem)
             .catch(err => {
                 console.log(err);
                 setAlert(true);
             });
         
-        setMessage({text: '', fileKey: ''});
+        console.log("Message: " + message.text + " " + message.fileKey);
+        
+        setMessage({text: '', fileKey: null});
+        setKey('');
     }
     
     return (
@@ -112,7 +114,7 @@ const CustomTextArea = ({connection}: Props) => {
                     {...{ required: true, maxLength: 500}}
                     value={message.text}
                     type={"text"}
-                    onChange={(e: any) => setMessage({text: e.target.value, fileKey: key})}
+                    onChange={(e: any) => setMessage({text: e.target.value, fileKey: fileKey != '' ? fileKey : null})}
                 />
                 
                 <div className={"upload-file-area"}>
@@ -132,7 +134,7 @@ const CustomTextArea = ({connection}: Props) => {
 
                     {selectedFile && (
                         <div className={"file-name-container"}>
-                            {selectedFile.name}
+                            File selected
                         </div>
                     )}
                 </div>

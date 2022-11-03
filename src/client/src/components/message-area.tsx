@@ -1,9 +1,12 @@
 ﻿import React, {useEffect, useRef} from 'react';
 import '../App.css';
-import MessageBox from "./message-box";
+import MessageBox, {GetMessageItem} from "./message-box";
 
+interface MessageAreaProprs {
+    messages: GetMessageItem[]
+}
 
-const MessageArea = ({messages}: any) => {
+const MessageArea = ({messages}: MessageAreaProprs) => {
     
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
     
@@ -16,7 +19,7 @@ const MessageArea = ({messages}: any) => {
 
     return (
         <div className={"message-area-container"}>
-            {messages.map((message: any) =>
+            {messages.map((message: GetMessageItem) =>
                 <MessageBox message={message}></MessageBox>
             )}
             <div ref={messagesEndRef} />

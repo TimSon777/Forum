@@ -16,7 +16,11 @@ export interface SendMessageItem {
     fileKey: string | null;
 }
 
-const MessageBox = (props: any) => {
+interface MessageBoxProps {
+    message: GetMessageItem;
+}
+
+const MessageBox = (props: MessageBoxProps) => {
         return (
             <div className={"message-box-container"}>
                 <div className={"message-box-image-container"}>
@@ -35,8 +39,9 @@ const MessageBox = (props: any) => {
 
                     {props.message.fileKey && (
                         <div>
-                            <a href={process.env.REACT_APP_FILE_API + "/file" + `/${props.message.fileKey}`}>
-                                {props.message.fileKey}
+                            <a href={process.env.REACT_APP_FILE_API + "/file" + `/${props.message.fileKey}`} 
+                               download={props.message.name}>
+                                {props.message.fileKey} 
                             </a>
                         </div>
                     )}
