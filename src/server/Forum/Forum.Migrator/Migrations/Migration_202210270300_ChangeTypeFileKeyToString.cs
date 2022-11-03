@@ -1,7 +1,7 @@
 ﻿namespace Chat.Migrator.Migrations;
 
 [Migration(2022_11_03_03_00)]
-public sealed class Migration_202211030300_ChangeTypeFiledFileIpToString : Migration
+public sealed class Migration_202211030300_ChangeTypeFileKeyToString : Migration
 {
     public override void Up()
     {
