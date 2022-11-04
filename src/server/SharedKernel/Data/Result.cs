@@ -1,4 +1,6 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using System.Diagnostics.CodeAnalysis;
+
+// ReSharper disable once CheckNamespace
 namespace System;
 
 public static class Result
@@ -11,6 +13,8 @@ public static class Result
 
 public sealed class Result<T>
 {
+    [MemberNotNullWhen(true, nameof(Value))]
+    [MemberNotNullWhen(false, nameof(Error))]
     public bool Succeeded { get; private init; }
 
     public T? Value { get; private init; }
