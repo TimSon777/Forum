@@ -22,7 +22,7 @@ interface UploadedFile {
     type: string;
 }
 
-const CustomTextArea = ({connection}: Props) => {
+const ForumForm = ({connection}: Props) => {
     const {
             formState: { errors },
     } = useForm();
@@ -159,4 +159,4 @@ const CustomTextArea = ({connection}: Props) => {
         );
 }
 
-export default CustomTextArea;
+export default ForumForm;

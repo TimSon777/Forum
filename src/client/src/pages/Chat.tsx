@@ -3,9 +3,8 @@ import '../App.css';
 import axios from "axios";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {GetMessageItem} from "../components/message-box";
-import CustomTextArea from "../components/custom-text-area";
+import ForumForm from "../components/forum-form";
 import MessageArea from "../components/message-area";
-import {UploadFIle} from "../components/UploadFIle";
 
 
 function Chat() {
@@ -53,7 +52,7 @@ function Chat() {
             <div className="chat-container">
                 <h1 className={"forum-header"}>FORUM</h1>
                 <MessageArea messages={messages}></MessageArea>
-                <CustomTextArea connection={connection}/>
+                <ForumForm connection={connection}/>
             </div>
         </div>
     );
