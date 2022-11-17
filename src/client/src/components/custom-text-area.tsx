@@ -6,6 +6,8 @@ import {HubConnection} from "@microsoft/signalr";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
 import {Button, ButtonGroup} from "@mui/material";
+import { AiFillPushpin } from "react-icons/ai";
+import CustomAlert from "./ui/custom-alert";
 
 interface Props {
     connection: HubConnection;
@@ -31,7 +33,7 @@ const CustomTextArea = ({connection}: Props) => {
     let [isLoaded, setLoaded] = useState(false);
 
     const filePicker = useRef<any>(null);
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState<UploadedFile>();
     
     const [fileKey, setKey] = useState<string | null>(null); 
 
@@ -43,6 +45,7 @@ const CustomTextArea = ({connection}: Props) => {
     const handleUpload : () => Promise<string | null> = async () => {
         if (selectedFile) {
             const formData = new FormData();
+            // @ts-ignore
             formData.set('file', selectedFile!);
             console.log('formdata:' + formData);
             console.log(process.env.REACT_APP_FILE_API);
@@ -130,9 +133,9 @@ const CustomTextArea = ({connection}: Props) => {
                 <div className={"upload-file-area"}>
                     <ButtonGroup size="large" aria-label="large button group">
                         <Button color="inherit" onClick={handlePick}>
-                            PICK FILE
+                            <AiFillPushpin size={25} />
                         </Button>
-
+                        
                         <input
                             className={"hidden"}
                             type = "file"
@@ -144,15 +147,14 @@ const CustomTextArea = ({connection}: Props) => {
 
                     {selectedFile && (
                         <div className={"file-name-container"}>
-                            File selected
+                            {selectedFile.name}
                         </div>
                     )}
                 </div>
                 
             </form> }
-                 <div className={"alert"} style={{ display: alert ? "block" : "none" }}>
-                      SERVER ERROR
-                 </div> 
+
+            <CustomAlert isAlert={alert}></CustomAlert>
         </>
         );
 }

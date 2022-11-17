@@ -210,3 +210,14 @@ div::-webkit-scrollbar-thumb {
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+.download-file-container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  color: aqua!important;
+}
+
+.file-icon {
+  margin-right: 5px;
+}

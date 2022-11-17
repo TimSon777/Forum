@@ -3,6 +3,8 @@ import React from 'react';
 import '../App.css';
 import axios from "axios";
 import * as stream from "stream";
+import { FaFileDownload } from 'react-icons/fa';
+
 
 export interface GetMessageItem {
     name: string;
@@ -38,7 +40,10 @@ const MessageBox = (props: MessageBoxProps) => {
                     </div>
 
                     {props.message.fileKey && (
-                        <div>
+                        <div className={"download-file-container"}>
+                            <p className={"file-icon"}>
+                                <FaFileDownload />
+                            </p>
                             <a href={process.env.REACT_APP_FILE_API + "/file" + `/${props.message.fileKey}`} 
                                download={props.message.name}>
                                 {props.message.fileKey} 
