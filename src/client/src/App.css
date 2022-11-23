@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: white;
 }
 
 *::-webkit-scrollbar {
@@ -68,6 +67,8 @@ div::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+
+  color: white;
 }
 
 .message-area-container-border {
@@ -83,12 +84,14 @@ div::-webkit-scrollbar-thumb {
   margin: 2rem auto 0;
 
   background: linear-gradient(180deg, rgba(120, 255, 158, 0.1) 39.88%, rgba(0, 0, 0, 0) 100%), rgba(217, 217, 217, 0.4);
-  box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(2px);
   border-radius: 5px;
 
   display: flex;
   gap: 1rem;
+  
+  color: white;
 }
 
 .custom-text-area {
@@ -215,9 +218,63 @@ div::-webkit-scrollbar-thumb {
   display: flex;
   flex-direction: row;
   margin: 10px;
-  color: aqua!important;
+  color: aqua;
 }
 
 .file-icon {
+  color: white;
   margin-right: 5px;
+}
+
+.modal {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-content {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  width: fit-content;
+  transform: scale(0.5);
+  transition: 0.4s all;
+}
+
+.modal-content.active {
+  transform: scale(1);
+}
+
+.file-name-text {
+  color: aqua;
+}
+
+.file-link {
+  color: white;
+}
+
+.file-link:link {
+  color: aqua;
+}
+
+.file-link:hover, .file-link:focus {
+  color: #8effff;
+}
+
+.file-link:active {
+  color: #a7fafa;
 }
