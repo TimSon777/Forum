@@ -164,9 +164,10 @@ const ForumForm = ({connection}: Props) => {
             </form> }
 
             {selectedFile && (
-                /*<div className={"file-name-container"}>
+                <>
+                <div className={"file-name-container"}>
                     {selectedFile.name}
-                </div>*/
+                </div>
                 <FileDataModal active={modalActive} setActive={setModalActive}>
                     <p className={"file-name-text"}>{selectedFile.name}</p>
                     
@@ -187,27 +188,16 @@ const ForumForm = ({connection}: Props) => {
                             <MenuItem value={"Audio"}>Audio</MenuItem>
                             <MenuItem value={"Other"}>Other</MenuItem>
                         </Select>
+
+                        <div className={"select-file-fields"}>
+                            <FormatFileForm setSelectedFile={setSelectedFile} setModalActive={setModalActive} format={fileFormat}></FormatFileForm>
+                        </div>
                     </FormControl>
-                    
-                    <div className={"select-file-fields"}>
-                        <FormatFileForm format={fileFormat}></FormatFileForm>
-                    </div>
-
-                    <Button color="inherit" onClick={() => {
-                        setModalActive(false);
-                        setSelectedFile(undefined);
-                    }}> Cancel </Button>
-
-                    <Button color="primary" onClick={() => {
-                        setModalActive(false);
-                    }}>
-                        Submit </Button>
                 </FileDataModal>
+                </>
             )}
 
             <CustomAlert isAlert={alert}></CustomAlert>
-
-            
         </>
         );
 }

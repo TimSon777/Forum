@@ -212,6 +212,9 @@ div::-webkit-scrollbar-thumb {
 .file-name-container {
   margin-left: 1rem;
   margin-right: 1rem;
+  color: white;
+  align-self: center;
+  margin-top: 1rem;
 }
 
 .download-file-container {
