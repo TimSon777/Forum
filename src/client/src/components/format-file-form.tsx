@@ -19,106 +19,110 @@ interface FormatFileFormInterface {
 const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFormInterface) => {
 
     const [fileName, setFileName] = useState('');
+    const [otherFormat, setOtherFormat] = useState('');
+    const [duration, setDuration] = useState(0);
+    const [author, setAuthor] = useState('');
 
-    const [error, setError] = useState(false);
+    //const [error, setError] = useState(false);
 
     const handleClick = () => {
-        if (!fileName) {
-            setError(true);
-            return null;
-        }
-        else {
+       // if (!fileName) {
+       //     setError(true);
+       //     return null;
+       // }
+       // else {
             setModalActive(false);
-        }
+       // }
     };
     
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setError(false);
+       // setError(false);
         setFileName(e.target.value);
     };
+
+    let form;
     
     if (format.toString() == "Image"){
-        
-        //                
-        //                 <Button onClick={handleClick}>
-        //                     Submit
-        //                 </Button>
-        return (
-            <div>
+        form =  <div>
                 <TextField
                     required
                     id="outlined-required"
                     label="File name"
                     value={fileName}
-                    error={!!error}
                     onChange={(e) => handleChangeValue(e)}
-                    helperText={error ? 'this is required' : ''}
                 />
-
-                <Button color="inherit" onClick={() => {
-                    setModalActive(false);
-                    setSelectedFile(undefined);
-                }}> Cancel </Button>
-
-                <Button color="primary" onClick={() => {
-                    handleClick();
-                }}>
-                    Submit </Button>
             </div>
-        );
     }
     else if (format.toString() == "Video"){
-        return (
-            <div>
+        form = <div>
                 <TextField
                     required
                     id="outlined-required"
                     label="File name"
+                    value={fileName}
+                    onChange={(e) => handleChangeValue(e)}
                     />
                 <TextField
                     required
                     id="outlined-required"
                     type="number"
                     label="Duration"
+                    value={duration}
                 />
             </div>
-        );
     }
     else if (format.toString() == "Audio"){
-        return (
-            <div>
+        form =  <div>
                 <TextField
                     required
                     id="outlined-required"
                     label="File name"
+                    value={fileName}
+                    onChange={(e) => handleChangeValue(e)}
                 />
                 <TextField
                     required
                     id="outlined-required"
                     type="number"
                     label="Duration"
+                    value={duration}
+                />
+                <TextField
+                    required
+                    id="outlined-required"
+                    label="Author"
+                    value={author}
                 />
             </div>
-        );
     }
     else if (format.toString() == "Other"){
-        return (
-            <div>
+        form =  <div>
                 <TextField
                     required
                     id="outlined-required"
                     label="File name"
+                    value={fileName}
+                    onChange={(e) => handleChangeValue(e)}
+                />
+                <TextField
+                    required
+                    id="outlined-required"
+                    label="Format"
+                    value={format}
                 />
             </div>
-        );
     }
     else {
-        return (
-            <div>
+        form =  <div>
                 Select file format
             </div>
-        );
     }
+    
+    return (
+        <div>
+            {form}
+        </div>
+    );
 };
 
 export default FormatFileForm;

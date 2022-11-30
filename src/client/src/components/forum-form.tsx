@@ -14,6 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormatFileForm from './format-file-form';
+import GUID from '../Guid';
 
 interface Props {
     connection: HubConnection;
@@ -45,7 +46,9 @@ const ForumForm = ({connection}: Props) => {
     
     const [modalActive, setModalActive] = useState(false);
 
-    const [fileFormat, setFileFormat] = React.useState('');
+    const [fileFormat, setFileFormat] = useState('');
+    
+    const [requestId, setRequestId] = useState('');
 
     const handleSelectChange = (event: SelectChangeEvent) => {
         setFileFormat(event.target.value);
@@ -54,8 +57,6 @@ const ForumForm = ({connection}: Props) => {
     const  handleChange = (event: any) => {
         console.log(event.target.files[0]);
         setSelectedFile(event.target.files[0]);
-        
-        setModalActive(true);
     };
 
     const handleUpload : () => Promise<string | null> = async () => {
@@ -63,14 +64,16 @@ const ForumForm = ({connection}: Props) => {
             const formData = new FormData();
             // @ts-ignore
             formData.set('file', selectedFile!);
-            console.log('formdata:' + formData);
-            console.log(process.env.REACT_APP_FILE_API);
+            
+            setRequestId(new GUID().toString());
+            console.log('GUID:' + requestId);
+            formData.append('requestId', requestId);
+            console.log('formdata requestId:' + formData.get('requestId'));
+            
             try {
                 const response = await axios.create({
                     baseURL: process.env.REACT_APP_FILE_API,
                 }).post("/file", formData);
-
-
                 const data = response.data;
                 const key: string = data.key;
                 console.log("Key: " + key);
@@ -84,6 +87,7 @@ const ForumForm = ({connection}: Props) => {
                 }
             finally {
                     setSelectedFile(undefined);
+                    setRequestId('');
                 };
             
             return null;
@@ -117,8 +121,6 @@ const ForumForm = ({connection}: Props) => {
         e.preventDefault();
         
         await handleUpload().then(async (k) => {
-            console.log(`After handle upload: ${fileKey}`)
-            console.log("Prosto: " + fileKey);
             setAlert(false);
             const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: k == '' ? null : k};
             console.log(sendMessageItem);
@@ -128,8 +130,6 @@ const ForumForm = ({connection}: Props) => {
                     setAlert(true);
                 });
 
-            console.log("Message: " + message.text + " " + message.fileKey);
-
             setMessage({text: '', fileKey: null});
             setKey('');
         });
@@ -138,7 +138,7 @@ const ForumForm = ({connection}: Props) => {
     
     return (
         <>
-            {isLoaded && <form className="custom-text-area-form" onSubmit={onFormSubmit} >
+            {isLoaded && <form className="custom-text-area-form" onSubmit={onFormSubmit}>
                 <CustomInput
                     {...{ required: true, maxLength: 500}}
                     value={message.text}
@@ -161,41 +161,58 @@ const ForumForm = ({connection}: Props) => {
                         />
                     </ButtonGroup>
                 </div>
-            </form> }
 
-            {selectedFile && (
-                <>
-                <div className={"file-name-container"}>
-                    {selectedFile.name}
-                </div>
-                <FileDataModal active={modalActive} setActive={setModalActive}>
-                    <p className={"file-name-text"}>{selectedFile.name}</p>
-                    
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-standard-label">Format</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-standard-label"
-                            id="demo-simple-select-standard"
-                            value={fileFormat}
-                            onChange={handleSelectChange}
-                            label="Format"
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"Image"}>Image</MenuItem>
-                            <MenuItem value={"Video"}>Video</MenuItem>
-                            <MenuItem value={"Audio"}>Audio</MenuItem>
-                            <MenuItem value={"Other"}>Other</MenuItem>
-                        </Select>
-
-                        <div className={"select-file-fields"}>
-                            <FormatFileForm setSelectedFile={setSelectedFile} setModalActive={setModalActive} format={fileFormat}></FormatFileForm>
+                {selectedFile && (
+                    <>
+                        <div className={"file-name-container"}>
+                            {selectedFile.name}
                         </div>
-                    </FormControl>
-                </FileDataModal>
-                </>
-            )}
+                        <FileDataModal active={modalActive} setActive={setModalActive}>
+                            <p className={"file-name-text"}>{selectedFile.name}</p>
+
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-standard-label">Format</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    value={fileFormat}
+                                    onChange={handleSelectChange}
+                                    label="Format"
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={"Image"}>Image</MenuItem>
+                                    <MenuItem value={"Video"}>Video</MenuItem>
+                                    <MenuItem value={"Audio"}>Audio</MenuItem>
+                                    <MenuItem value={"Other"}>Other</MenuItem>
+                                </Select>
+
+                                <div className={"select-file-fields"}>
+                                    <FormatFileForm setSelectedFile={setSelectedFile} setModalActive={setModalActive}
+                                                    format={fileFormat}></FormatFileForm>
+                                </div>
+                            </FormControl>
+
+                            <Button type={"submit"} color="primary" onClick={(e) => {
+                                setModalActive(false);
+                            }}>
+                                Submit 
+                            </Button>
+
+                            <Button color="inherit" onClick={() => {
+                                setModalActive(false);
+                                setSelectedFile(undefined);
+                            }}> Cancel </Button>
+                        </FileDataModal>
+                    </>
+                )}
+                
+                <button type={"button"} onClick={() => {
+                    setModalActive(true)
+                }}>send</button>
+                
+            </form> }
 
             <CustomAlert isAlert={alert}></CustomAlert>
         </>
@@ -203,3 +220,5 @@ const ForumForm = ({connection}: Props) => {
 }
 
 export default ForumForm;
+//key-value: <string, string> duration, author 
+// || fileApi (requestkey vmesto fileKey),  metadataApi(requestkey) requestkey its a GUID
