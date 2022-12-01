@@ -12,7 +12,7 @@ function Chat() {
     const [connection, setConnection] = useState<HubConnection>();
 
     useEffect(() => {
-        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/history/20')
+        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/api/history/20')
             .then(value => {
                 setMessages(value.data);
             });
