@@ -69,9 +69,9 @@ const ForumForm = ({connection}: Props) => {
         if (selectedFile) {
             const formData = new FormData();
             // @ts-ignore
-            formData.set('file', selectedFile!);
+            formData.set('File', selectedFile!);
             GenerateAndSetRequestId();
-            formData.append('requestId', requestId);
+            formData.append('RequestId', requestId);
             
             try {
                 const response = await axios.create({
@@ -97,9 +97,9 @@ const ForumForm = ({connection}: Props) => {
     };
     
     const GenerateAndSetRequestId = () => {
-        let guid = new GUID().toString();
-        console.log(guid);
-        setRequestId(guid);
+            let guid = new GUID().toString();
+            console.log(guid);
+            setRequestId(guid) 
     };
 
     function handlePick() {
@@ -207,8 +207,6 @@ const ForumForm = ({connection}: Props) => {
                 RequestId: requestId,
                 Metadata: metadata
             };
-        
-        console.log(obj);
         
         return JSON.stringify(obj);
     }
