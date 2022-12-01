@@ -175,13 +175,11 @@ const ForumForm = ({connection}: Props) => {
         let metadata;
         if (fileFormat === 'Image') {
             metadata = {
-                requestId: requestId,
                 fileName: fileName
             };
         }
         else if (fileFormat === 'Audio') {
             metadata = {
-                requestId: requestId,
                 fileName: fileName,
                 duration: duration,
                 author: author
@@ -189,14 +187,12 @@ const ForumForm = ({connection}: Props) => {
         }
         else if (fileFormat === 'Video') {
             metadata = {
-                requestId: requestId,
                 fileName: fileName,
                 duration: duration
             };
         }
         else if (fileFormat === 'Other') {
             metadata = {
-                requestId: requestId,
                 fileName: fileName,
                 otherFormat: otherFormat
             };
@@ -204,8 +200,8 @@ const ForumForm = ({connection}: Props) => {
 
         let obj =
             {
-                RequestId: requestId,
-                Metadata: metadata
+                requestId: requestId,
+                metadata: metadata
             };
         
         return JSON.stringify(obj);
