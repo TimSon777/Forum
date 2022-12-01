@@ -9,14 +9,14 @@
 
     <ItemGroup>
       <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.2" />
-      <PackageReference Include="AWSSDK.S3" Version="3.7.101.3" />
+      <PackageReference Include="AWSSDK.S3" Version="3.7.101.25" />
       <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Shared\Shared.csproj" />
+      <ProjectReference Include="..\File.Infrastructure\File.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AWSSDK.S3" Version="3.7.101.25" />
+        <PackageReference Include="MassTransit" Version="8.0.9-develop.669" />
+        <PackageReference Include="MassTransit.Abstractions" Version="8.0.9-develop.669" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.9-develop.669" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+        <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Cache\Cache.csproj" />
+      <ProjectReference Include="..\FileMetadata.Queue.Shared\FileMetadata.Queue.Shared.csproj" />
+    </ItemGroup>
+</Project>

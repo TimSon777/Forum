@@ -8,13 +8,12 @@ var builder = new ConfigurationBuilder();
 
 builder.SetBasePath(Directory.GetCurrentDirectory());
 
-// ReSharper disable once StringLiteralTypo
 builder.AddJsonFile("appsettings.json");
 builder.AddEnvironmentVariables();
 
 var configurationRoot = builder.Build();
 var connection = configurationRoot
-    .Get<PostgresSettings>(PostgresSettings.Position)
+    .Get<DatabaseSettings>(DatabaseSettings.Position)
     .ToString();
 
 using var serviceProvider = new ServiceCollection()

@@ -1,0 +1,142 @@
+volumes:
+  data:
+
+services:
+
+  forum-api:
+    ports:
+      - "8080:80"
+    environment:
+      DATABASE_SETTINGS__HOST: forum-db
+      DATABASE_SETTINGS__USER_NAME: ${FORUM_DB_USER_NAME}
+      DATABASE_SETTINGS__PASSWORD: ${FORUM_DB_PASSWORD}
+      DATABASE_SETTINGS__DATABASE_NAME: ${FORUM_DB_NAME}
+      
+      ORIGIN__FRONT: ${FRONTEND_ORIGIN_FRONT}
+      
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+  
+  forum-migrator:
+    environment:
+      DATABASE_SETTINGS__HOST: forum-db
+      DATABASE_SETTINGS__USER_NAME: ${FORUM_DB_USER_NAME}
+      DATABASE_SETTINGS__PASSWORD: ${FORUM_DB_PASSWORD}
+      DATABASE_SETTINGS__DATABASE_NAME: ${FORUM_DB_NAME}
+
+  forum-queue-listener:
+    ports:
+      - "8081:80"
+    environment:
+      DATABASE_SETTINGS__HOST: forum-db
+      DATABASE_SETTINGS__USER_NAME: ${FORUM_DB_USER_NAME}
+      DATABASE_SETTINGS__PASSWORD: ${FORUM_DB_PASSWORD}
+      DATABASE_SETTINGS__DATABASE_NAME: ${FORUM_DB_NAME}
+      
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+
+  forum-db:
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/forum-db/data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: ${FORUM_DB_NAME}
+      POSTGRES_USER: ${FORUM_DB_USER_NAME}
+      POSTGRES_PASSWORD: ${FORUM_DB_PASSWORD}
+
+  metadata-api:
+    ports:
+      - "8082:80"
+    environment:
+      ORIGIN__FRONT: ${FRONTEND_ORIGIN_FRONT}
+      
+      CACHE_SETTINGS__HOST: cache
+      CACHE_SETTINGS__PORT: 6379
+      CACHE_SETTINGS__PASSWORD: ${CACHE_PASSWORD}
+  
+  metadata-db:
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/metadata-db/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${METADATA_DB_USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${METADATA_DB_PASSWORD}
+
+  file-api:
+    ports:
+      - "8083:80"
+    environment:
+      FILE_SERVER_SETTINGS__HOST: http://file-server:9000
+      FILE_SERVER_SETTINGS__USER: ${S3_USER}
+      FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
+      
+      ORIGIN__FRONT: ${FRONTEND_ORIGIN_FRONT}
+      
+      CACHE_SETTINGS__HOST: cache
+      CACHE_SETTINGS__PORT: 6379
+      CACHE_SETTINGS__PASSWORD: ${CACHE_PASSWORD}
+      
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+  
+  file-metadata-queue-listener:
+    ports:
+      - "8084:80"
+    environment:
+      CACHE_SETTINGS__HOST: 6379
+      CACHE_SETTINGS__PORT: cache
+      CACHE_SETTINGS__PASSWORD: ${CACHE_PASSWORD}
+      
+      BROKER_CONNECTION_SETTINGS__HOST: broker
+      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
+      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+      
+      DATABASE_SETTINGS__HOST: "metadata-db:27017"
+      DATABASE_SETTINGS__USER_NAME: ${METADATA_DB_USER_NAME}
+      DATABASE_SETTINGS__PASSWORD: ${METADATA_DB_PASSWORD}
+      DATABASE_SETTINGS__DATABASE_NAME: ${METADATA_DB_NAME}
+      
+      FILE_SERVER_SETTINGS__HOST: http://file-server:9000
+      FILE_SERVER_SETTINGS__USER: ${S3_USER}
+      FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
+
+  web-front:
+    ports:
+      - "3000:80"
+  
+  broker:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ~/broker/data:/var/lib/rabbitmq
+      - ~/broker/logs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${BROKER_USER_NAME}
+      RABBITMQ_DEFAULT_PASS: ${BROKER_PASSWORD}
+
+  s3:
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server --console-address ":9001" /data/
+    volumes:
+      - ~/s3/data:/data
+    environment:
+      MINIO_ROOT_USER: ${S3_USER}
+      MINIO_ROOT_PASSWORD: ${S3_PASSWORD}
+  
+  cache:
+    ports:
+      - "6379:6379"
+    volumes:
+      - ~/cache/data:/bitnami/redis/data
+    environment:
+      REDIS_PASSWORD: ${CACHE_PASSWORD}
+      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL

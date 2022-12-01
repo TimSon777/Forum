@@ -7,10 +7,10 @@ public class GetMessageHubItemValidator : AbstractValidator<GetMessageHubItem>
 {
     public GetMessageHubItemValidator()
     {
-        RuleFor(x => x.IPv4)
+        RuleFor(item => item.IpAddress)
             .GreaterThan(0);
 
-        RuleFor(x => x.Text)
-            .Length(1, 500);
+        RuleFor(item => item)
+            .Must(item => item.Text.Length is >= 1 and <= 500 || item.FileKey is not null);
     }
 }

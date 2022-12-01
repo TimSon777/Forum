@@ -1,129 +1,91 @@
 version: "3.8"
 
-volumes:
-  data:
-    
 services:
-  
-  queue-listener:
+
+  forum-api:
     restart: always
     depends_on:
       - broker
-      - db
-    build:
-      context: src/server
-      dockerfile: Dockerfile_QueueListener
-    container_name: queue-listener
-    ports:
-      - "8085:80"
-      - "8086:443"
-    environment:
-      POSTGRESQL_SETTINGS__HOST: db
-      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
-      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
-      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
-      
-      BROKER_CONNECTION_SETTINGS__HOST: broker
-      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
-      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
-    
-  file-server:
-    image: ${S3_IMAGE}
-    command: server --console-address ":9001" /data/
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: ${S3_USER}
-      MINIO_ROOT_PASSWORD: ${S3_PASSWORD}
-    volumes:
-      - ~/s3/data:/data
-  
-  file-api:
-    restart: always
-    build:
-      context: /src/server
-      dockerfile: Dockerfile_FileAPI
-    ports:
-      - "8082:80"
-      - "8083:443"
-    environment:
-      FILE_SERVER_SETTINGS__HOST: http://file-server:9000
-      FILE_SERVER_SETTINGS__USER: ${S3_USER}
-      FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
-      FILE_SERVER_SETTINGS__BUCKET_NAME: ${S3_BUCKET_NAME}
-
-  api:
-    restart: always
+      - forum-db
     build: 
       context: src/server
-      dockerfile: Dockerfile_ForumAPI
-    container_name: api
-    depends_on:
-      - migrator
-      - broker
-    ports:
-      - "8080:80"
-      - "8081:443"
-    environment:
-      POSTGRESQL_SETTINGS__HOST: db
-      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
-      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
-      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
-      
-      ORIGIN__FRONT: ${ORIGIN_FRONT}
-      
-      BROKER_CONNECTION_SETTINGS__HOST: broker
-      BROKER_CONNECTION_SETTINGS__USER_NAME: ${BROKER_USER_NAME}
-      BROKER_CONNECTION_SETTINGS__PASSWORD: ${BROKER_PASSWORD}
+      dockerfile: Forum/Forum.API/Dockerfile
+    container_name: forum-api
   
-  migrator:
+  forum-migrator:
     restart: on-failure
+    depends_on:
+      - forum-db
     build:
       context: src/server
-      dockerfile: Dockerfile_ForumMigrator
-    container_name: migrator
-    depends_on:
-      - db
-    environment:
-      POSTGRESQL_SETTINGS__HOST: db
-      POSTGRESQL_SETTINGS__USER_NAME: ${DB_USER_NAME}
-      POSTGRESQL_SETTINGS__PASSWORD: ${DB_PASSWORD}
-      POSTGRESQL_SETTINGS__DATABASE_NAME: ${DB_NAME}
-      
-  web-front:
+      dockerfile: Forum/Forum.Migrator/Dockerfile
+    container_name: forum-migrator
+
+  forum-queue-listener:
     restart: always
     depends_on:
-      - api
+      - broker
+      - forum-db
+    build:
+      context: src/server
+      dockerfile: Forum/Forum.Queue.Listener/Dockerfile
+    container_name: forum-queue-listener
+
+  forum-db:
+    image: ${FORUM_DB_IMAGE}
+    container_name: forum-db
+
+  metadata-api:
+    restart: always
+    depends_on:
+      - metadata-db
+      - broker
+      - cache
+    build:
+      context: src/server
+      dockerfile: Metadata/Metadata.API/Dockerfile
+    container_name: metadata-api
+    
+  metadata-db:
+    image: ${METADATA_DB_IMAGE}
+    container_name: metadata-db
+
+  file-api:
+    restart: always
+    depends_on:
+      - s3
+    build:
+      context: src/server
+      dockerfile: File/File.API/Dockerfile
+    container_name: file-api
+
+  file-metadata-queue-listener:
+    restart: always
+    depends_on:
+      - metadata-db
+      - broker
+      - s3
+      - cache
+    build:
+      context: src/server
+      dockerfile: FileMetadata/FileMetadata.Queue.Listener/Dockerfile
+    container_name: file-metadata-queue-listener
+
+  web-front:
+    restart: always
     build:
       context: src/client
       dockerfile: Dockerfile
     container_name: web-front
-    ports:
-      - "3000:80"
-      - "3001:443"
-        
-  db:
-    image: ${DB_IMAGE}
-    container_name: db
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER_NAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - ~/db/data:/var/lib/postgresql
   
   broker:
-    image: ${RABBITMQ_IMAGE}
+    image: ${BROKER_IMAGE}
     container_name: broker
-    ports:
-      - "15672:15672"
-      - "5672:5672"
-    environment:
-      RABBITMQ_DEFAULT_USER: ${BROKER_USER_NAME}
-      RABBITMQ_DEFAULT_PASS: ${BROKER_PASSWORD}
-    volumes:
-      - ~/broker/data:/var/lib/rabbitmq
-      - ~/broker/logs:/var/log/rabbitmq
+
+  s3:
+    image: ${S3_IMAGE}
+    container_name: s3
+  
+  cache:
+    image: ${CACHE_IMAGE}
+    container_name: cache

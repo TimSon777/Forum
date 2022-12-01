@@ -24,9 +24,9 @@ public class MessageHub : Hub
         var validationResult = await _validator.ValidateAsync(messageHubItem);
 
         validationResult.EnsureSuccess();
-        
-        var consumerMessage = messageHubItem.ToGetMessageConsumerItem();
-        var sendMessage = consumerMessage.ToSendMessageHubItem();
+
+        var consumerMessage = messageHubItem.Map();
+        var sendMessage = consumerMessage.Map();
         
         var publishTask = _bus.Publish(consumerMessage);
         

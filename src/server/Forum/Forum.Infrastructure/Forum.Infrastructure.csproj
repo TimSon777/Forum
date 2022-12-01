@@ -8,21 +8,23 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.0.123" />
+      <PackageReference Include="Dapper.FluentMap" Version="2.0.0" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.2" />
-      <PackageReference Include="MassTransit" Version="8.0.6" />
-      <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+      <PackageReference Include="MassTransit" Version="8.0.9-develop.669" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.9-develop.669" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.0-rc.1.22427.2" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="7.0.0-rc.1.22427.2" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0-rc.1.22426.10" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
       <PackageReference Include="Npgsql" Version="7.0.0-rc.1" />
       <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Broker.Contracts\Broker.Contracts.csproj" />
-      <ProjectReference Include="..\Forum.DAL.Implementations\Forum.DAL.Implementations.csproj" />
+      <ProjectReference Include="..\..\Shared\Shared.csproj" />
+      <ProjectReference Include="..\Forum.Application\Forum.Application.csproj" />
+      <ProjectReference Include="..\Forum.Queue.Shared\Forum.Queue.Shared.csproj" />
     </ItemGroup>
 
 

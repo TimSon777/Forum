@@ -25,7 +25,7 @@ public static class MassTransitConfiguration
                 brokerConfigurator.ReceiveEndpoint(new TemporaryEndpointDefinition(),
                     endpointConfigurator =>
                     {
-                        var exchangeName = configuration.GetString("MESSAGE_EXCHANGE_NAME");
+                        var exchangeName = configuration.GetString("EXCHANGE_NAME");
                         endpointConfigurator.Bind(exchangeName);
                     });
                 

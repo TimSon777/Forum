@@ -1,5 +1,3 @@
-using Forum.API.Mapping;
-using Forum.DAL.Abstractions.Chat;
 using Forum.Infrastructure.MessageHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddSwaggerGen();
+services.AddEndpointsApiExplorer();
+
+services.AddControllers();
 services.AddDatabase(configuration);
 services.AddRepositories();
 services.AddMassTransitPublisher(configuration);
@@ -28,22 +30,9 @@ app.UseCors(options =>
         .WithOrigins(frontOrigin);
 });
 
-app.MapGet("/history/{count}",
-    async (HttpContext context, IChatRepository chatRepository, int count) =>
-    {
-        var messages = await chatRepository.GetMessagesAsync(count);
-
-        if (messages is null)
-        {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return;
-        }
-        
-        var items = messages.Select(x => x.ToSendMessageItem());
-        await context.Response.WriteAsJsonAsync(items);
-    });
-
+app.UseSwaggerUI();
 app.UseRouting();
 app.MapHub<MessageHub>("/forum");
+app.MapControllers();
 
 app.Run();

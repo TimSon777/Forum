@@ -2,7 +2,7 @@
 
 public class SendMessageHubItem
 {
-    public string Name { get; init; } = default!;
+    public string UserName { get; init; } = default!;
     public string Text { get; init; } = default!;
     public string? FileKey { get; init; }
 }

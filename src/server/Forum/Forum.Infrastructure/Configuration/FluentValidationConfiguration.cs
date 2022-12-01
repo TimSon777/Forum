@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using FluentValidation;
+﻿using FluentValidation;
 using Forum.Infrastructure.MessageHandlers.Validators;
 
 // ReSharper disable once CheckNamespace
@@ -9,11 +8,7 @@ public static class FluentValidationConfiguration
 {
     public static IServiceCollection AddFluentValidators(this IServiceCollection services)
     {
-        var assembly = Assembly.GetAssembly(typeof(GetMessageHubItemValidator)) 
-                       ?? throw new AggregateException();
-        
-        var assemblies = new List<Assembly> { assembly };
-        services.AddValidatorsFromAssemblies(assemblies);
+        services.AddValidatorsFromAssemblyContaining<GetMessageHubItemValidator>();
         return services;
     }
 }
