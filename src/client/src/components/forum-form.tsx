@@ -73,9 +73,13 @@ const ForumForm = ({connection}: Props) => {
             formData.append('RequestId', requestId!);
             console.log('formdata RequestId:' + formData.get('RequestId'));
             try {
-                const response = await axios.create({
-                    baseURL: process.env.REACT_APP_FILE_API,
-                }).post("/file", formData);
+                const response = await axios.post("http://localhost:8083/file", formData);
+
+                let metadata = createMetadata();
+                console.log('JSON: ' + metadata);
+                
+                await axios.post("http://localhost:8082/metadata", metadata);
+                
                 const data = response.data;
                 const key: string = data.key;
                 setKey(key);
@@ -125,8 +129,6 @@ const ForumForm = ({connection}: Props) => {
         
         e.preventDefault();
 
-        let metadata = createMetadata();
-        console.log('JSON: ' + metadata);
         
         await handleUpload().then(async (k) => {
             setAlert(false);
