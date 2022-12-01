@@ -70,9 +70,8 @@ const ForumForm = ({connection}: Props) => {
             const formData = new FormData();
             // @ts-ignore
             formData.set('File', selectedFile!);
-            GenerateAndSetRequestId();
-            formData.append('RequestId', requestId);
-            
+            formData.append('RequestId', requestId!);
+            console.log('formdata RequestId:' + formData.get('RequestId'));
             try {
                 const response = await axios.create({
                     baseURL: process.env.REACT_APP_FILE_API,
@@ -198,9 +197,13 @@ const ForumForm = ({connection}: Props) => {
             };
         }
 
+        let guid = new GUID().toString();
+        console.log(guid);
+        setRequestId(guid)
+
         let obj =
             {
-                requestId: requestId,
+                requestId: guid,
                 metadata: metadata
             };
         
