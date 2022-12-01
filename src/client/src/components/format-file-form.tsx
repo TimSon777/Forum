@@ -14,32 +14,16 @@ interface FormatFileFormInterface {
     format: string;
     setSelectedFile: any;
     setModalActive: React.Dispatch<React.SetStateAction<boolean>>;
+    onChangeValue: Function
 }
 
-const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFormInterface) => {
+const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} : FormatFileFormInterface) => {
 
     const [fileName, setFileName] = useState('');
     const [otherFormat, setOtherFormat] = useState('');
     const [duration, setDuration] = useState(0);
     const [author, setAuthor] = useState('');
-
-    //const [error, setError] = useState(false);
-
-    const handleClick = () => {
-       // if (!fileName) {
-       //     setError(true);
-       //     return null;
-       // }
-       // else {
-            setModalActive(false);
-       // }
-    };
     
-    const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-       // setError(false);
-        setFileName(e.target.value);
-    };
-
     let form;
     
     if (format.toString() == "Image"){
@@ -48,8 +32,12 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFo
                     required
                     id="outlined-required"
                     label="File name"
+                    name={"imageFileName"}
                     value={fileName}
-                    onChange={(e) => handleChangeValue(e)}
+                    onChange={(e) => {
+                        setFileName(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                 />
             </div>
     }
@@ -58,16 +46,25 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFo
                 <TextField
                     required
                     id="outlined-required"
+                    name={"videoFileName"}
                     label="File name"
                     value={fileName}
-                    onChange={(e) => handleChangeValue(e)}
+                    onChange={(e) => {
+                        setFileName(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                     />
                 <TextField
                     required
                     id="outlined-required"
                     type="number"
+                    name={"videoDuration"}
                     label="Duration"
                     value={duration}
+                    onChange={(e) => {
+                        setDuration(Number(e.target.value));
+                        onChangeValue(e.target);
+                    }}
                 />
             </div>
     }
@@ -76,22 +73,36 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFo
                 <TextField
                     required
                     id="outlined-required"
+                    name={"audioFileName"}
                     label="File name"
                     value={fileName}
-                    onChange={(e) => handleChangeValue(e)}
+                    onChange={(e) => {
+                        setFileName(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                 />
                 <TextField
                     required
                     id="outlined-required"
                     type="number"
+                    name={"audioDuration"}
                     label="Duration"
                     value={duration}
+                    onChange={(e) => {
+                        setDuration(Number(e.target.value));
+                        onChangeValue(e.target);
+                    }}
                 />
                 <TextField
                     required
                     id="outlined-required"
+                    name={"audioAuthor"}
                     label="Author"
                     value={author}
+                    onChange={(e) => {
+                        setAuthor(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                 />
             </div>
     }
@@ -100,15 +111,24 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile} : FormatFileFo
                 <TextField
                     required
                     id="outlined-required"
+                    name={"otherFileName"}
                     label="File name"
                     value={fileName}
-                    onChange={(e) => handleChangeValue(e)}
+                    onChange={(e) => {
+                        setFileName(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                 />
                 <TextField
                     required
                     id="outlined-required"
+                    name={"otherFileFormat"}
                     label="Format"
                     value={format}
+                    onChange={(e) => {
+                        setOtherFormat(e.target.value);
+                        onChangeValue(e.target);
+                    }}
                 />
             </div>
     }

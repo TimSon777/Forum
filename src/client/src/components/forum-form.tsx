@@ -50,6 +50,12 @@ const ForumForm = ({connection}: Props) => {
     
     const [requestId, setRequestId] = useState('');
 
+
+    const [fileName, setFileName] = useState('');
+    const [otherFormat, setOtherFormat] = useState('');
+    const [duration, setDuration] = useState(0);
+    const [author, setAuthor] = useState('');
+
     const handleSelectChange = (event: SelectChangeEvent) => {
         setFileFormat(event.target.value);
     };
@@ -64,11 +70,8 @@ const ForumForm = ({connection}: Props) => {
             const formData = new FormData();
             // @ts-ignore
             formData.set('file', selectedFile!);
-            
-            setRequestId(new GUID().toString());
-            console.log('GUID:' + requestId);
+            GenerateAndSetRequestId();
             formData.append('requestId', requestId);
-            console.log('formdata requestId:' + formData.get('requestId'));
             
             try {
                 const response = await axios.create({
@@ -76,9 +79,7 @@ const ForumForm = ({connection}: Props) => {
                 }).post("/file", formData);
                 const data = response.data;
                 const key: string = data.key;
-                console.log("Key: " + key);
                 setKey(key);
-                console.log("Key after set key: " + fileKey);
                 return key;
             }
             catch(response) {
@@ -87,7 +88,6 @@ const ForumForm = ({connection}: Props) => {
                 }
             finally {
                     setSelectedFile(undefined);
-                    setRequestId('');
                 };
             
             return null;
@@ -95,10 +95,16 @@ const ForumForm = ({connection}: Props) => {
         
         return null;
     };
+    
+    const GenerateAndSetRequestId = () => {
+        let guid = new GUID().toString();
+        console.log(guid);
+        setRequestId(guid);
+    };
 
     function handlePick() {
         filePicker.current.click();
-    }
+    };
     
     useEffect(() => {
         axios.get<Ip>('https://geolocation-db.com/json/')
@@ -119,6 +125,9 @@ const ForumForm = ({connection}: Props) => {
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         
         e.preventDefault();
+
+        let metadata = createMetadata();
+        console.log('JSON: ' + metadata);
         
         await handleUpload().then(async (k) => {
             setAlert(false);
@@ -134,6 +143,74 @@ const ForumForm = ({connection}: Props) => {
             setKey('');
         });
         
+    }
+    
+    const handleOnChange = (val: HTMLInputElement) => {
+        console.log('fileFormat' + fileFormat);
+        
+        if (val.name === 'imageFileName' || val.name === 'videoFileName'
+            || val.name === 'audioFileName' || val.name === 'otherFileName') {
+            console.log(val.name + ': ' + val.value);
+            setFileName(val.value);
+            console.log(fileName);
+        }
+        
+        if (val.name === 'videoDuration' || val.name === 'audioDuration') {
+            console.log(val.name + ': ' + val.value);
+            setDuration(Number(val.value));
+        }
+
+        if (val.name === 'audioAuthor') {
+            console.log(val.name + ': ' + val.value);
+            setAuthor(val.value);
+        }
+
+        if (val.name === 'otherFileFormat') {
+            console.log(val.name + ': ' + val.value);
+            setOtherFormat(val.value);
+        }
+    }
+    
+    const createMetadata = (): string => {
+        let metadata;
+        if (fileFormat === 'Image') {
+            metadata = {
+                requestId: requestId,
+                fileName: fileName
+            };
+        }
+        else if (fileFormat === 'Audio') {
+            metadata = {
+                requestId: requestId,
+                fileName: fileName,
+                duration: duration,
+                author: author
+            };
+        }
+        else if (fileFormat === 'Video') {
+            metadata = {
+                requestId: requestId,
+                fileName: fileName,
+                duration: duration
+            };
+        }
+        else if (fileFormat === 'Other') {
+            metadata = {
+                requestId: requestId,
+                fileName: fileName,
+                otherFormat: otherFormat
+            };
+        }
+
+        let obj =
+            {
+                RequestId: requestId,
+                Metadata: metadata
+            };
+        
+        console.log(obj);
+        
+        return JSON.stringify(obj);
     }
     
     return (
@@ -179,9 +256,6 @@ const ForumForm = ({connection}: Props) => {
                                     onChange={handleSelectChange}
                                     label="Format"
                                 >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
                                     <MenuItem value={"Image"}>Image</MenuItem>
                                     <MenuItem value={"Video"}>Video</MenuItem>
                                     <MenuItem value={"Audio"}>Audio</MenuItem>
@@ -190,7 +264,8 @@ const ForumForm = ({connection}: Props) => {
 
                                 <div className={"select-file-fields"}>
                                     <FormatFileForm setSelectedFile={setSelectedFile} setModalActive={setModalActive}
-                                                    format={fileFormat}></FormatFileForm>
+                                                    format={fileFormat}
+                                    onChangeValue = {handleOnChange}></FormatFileForm>
                                 </div>
                             </FormControl>
 
@@ -220,5 +295,3 @@ const ForumForm = ({connection}: Props) => {
 }
 
 export default ForumForm;
-//key-value: <string, string> duration, author 
-// || fileApi (requestkey vmesto fileKey),  metadataApi(requestkey) requestkey its a GUID
