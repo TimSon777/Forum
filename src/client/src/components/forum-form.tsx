@@ -78,7 +78,8 @@ const ForumForm = ({connection}: Props) => {
             formData.append('RequestId', requestId);
 
             try {
-               // await connection.invoke("SaveConnectionId");
+                
+                await connection.invoke("SaveConnectionId", requestId);
                 
                 const response = await axios.post("http://localhost:8083/file", formData);
 
