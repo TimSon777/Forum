@@ -10,11 +10,13 @@ import { AiFillPushpin } from "react-icons/ai";
 import CustomAlert from "./ui/custom-alert";
 import FileDataModal from "./file-data-modal";
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormatFileForm from './format-file-form';
 import GUID from '../Guid';
+import { BsFillCursorFill } from "react-icons/bs";
 
 interface Props {
     connection: HubConnection;
@@ -34,7 +36,7 @@ const ForumForm = ({connection}: Props) => {
             formState: { errors },
     } = useForm();
 
-    const [alert, setAlert] = useState(false);
+    const [customAlert, setCustomAlert] = useState(false);
     
     let [ip, setIp] = useState(1);
     let [isLoaded, setLoaded] = useState(false);
@@ -46,7 +48,7 @@ const ForumForm = ({connection}: Props) => {
     
     const [modalActive, setModalActive] = useState(false);
 
-    const [fileFormat, setFileFormat] = useState('');
+    const [fileFormat, setFileFormat] = useState('Other');
     
     const [requestId, setRequestId] = useState('');
 
@@ -55,7 +57,9 @@ const ForumForm = ({connection}: Props) => {
     const [otherFormat, setOtherFormat] = useState('');
     const [duration, setDuration] = useState(0);
     const [author, setAuthor] = useState('');
-
+    
+    const [isSend, setIsSend] = useState(false);
+    
     const handleSelectChange = (event: SelectChangeEvent) => {
         setFileFormat(event.target.value);
     };
@@ -63,6 +67,7 @@ const ForumForm = ({connection}: Props) => {
     const  handleChange = (event: any) => {
         console.log(event.target.files[0]);
         setSelectedFile(event.target.files[0]);
+        setModalActive(true);
     };
 
     const handleUpload : () => Promise<string | null> = async () => {
@@ -70,9 +75,11 @@ const ForumForm = ({connection}: Props) => {
             const formData = new FormData();
             // @ts-ignore
             formData.set('File', selectedFile!);
-            formData.append('RequestId', requestId!);
-            console.log('formdata RequestId:' + formData.get('RequestId'));
+            formData.append('RequestId', requestId);
+
             try {
+               // await connection.invoke("SaveConnectionId");
+                
                 const response = await axios.post("http://localhost:8083/file", formData);
 
                 let metadata = createMetadata();
@@ -82,11 +89,15 @@ const ForumForm = ({connection}: Props) => {
                 
                 const data = response.data;
                 const key: string = data.key;
+                
                 setKey(key);
+                setIsSend(true);
+                alert("File uploaded!");
                 return key;
             }
             catch(response) {
                     console.log(response);
+                    alert("File cannot be uploaded!");
                     return null;
                 }
             finally {
@@ -101,8 +112,7 @@ const ForumForm = ({connection}: Props) => {
     
     const GenerateAndSetRequestId = () => {
             let guid = new GUID().toString();
-            console.log(guid);
-            setRequestId(guid) 
+            setRequestId(guid);
     };
 
     function handlePick() {
@@ -128,22 +138,23 @@ const ForumForm = ({connection}: Props) => {
     const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         
         e.preventDefault();
-
         
-        await handleUpload().then(async (k) => {
-            setAlert(false);
+        await handleUpload()
+            .then(async (k) => {
+            setCustomAlert(false);
             const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: k == '' ? null : k};
-            console.log(sendMessageItem);
-            await connection.invoke('SendMessageAsync', sendMessageItem)
+            
+            await connection.invoke('SendMessage', sendMessageItem)
                 .catch(err => {
                     console.log(err);
-                    setAlert(true);
+                    setCustomAlert(true);
                 });
 
             setMessage({text: '', fileKey: null});
             setKey('');
-        });
-        
+            setRequestId('');
+            setIsSend(false);
+            });
     }
     
     const handleOnChange = (val: HTMLInputElement) => {
@@ -151,23 +162,18 @@ const ForumForm = ({connection}: Props) => {
         
         if (val.name === 'imageFileName' || val.name === 'videoFileName'
             || val.name === 'audioFileName' || val.name === 'otherFileName') {
-            console.log(val.name + ': ' + val.value);
             setFileName(val.value);
-            console.log(fileName);
         }
         
         if (val.name === 'videoDuration' || val.name === 'audioDuration') {
-            console.log(val.name + ': ' + val.value);
             setDuration(Number(val.value));
         }
 
         if (val.name === 'audioAuthor') {
-            console.log(val.name + ': ' + val.value);
             setAuthor(val.value);
         }
 
         if (val.name === 'otherFileFormat') {
-            console.log(val.name + ': ' + val.value);
             setOtherFormat(val.value);
         }
     }
@@ -224,7 +230,7 @@ const ForumForm = ({connection}: Props) => {
                 
                 <div className={"upload-file-area"}>
                     <ButtonGroup size="large" aria-label="large button group">
-                        <Button color="inherit" onClick={handlePick}>
+                        <Button color="inherit" onClick={handlePick} disabled={!message.text}>
                             <AiFillPushpin size={25} />
                         </Button>
                         
@@ -240,14 +246,15 @@ const ForumForm = ({connection}: Props) => {
 
                 {selectedFile && (
                     <>
-                        <div className={"file-name-container"}>
-                            {selectedFile.name}
-                        </div>
                         <FileDataModal active={modalActive} setActive={setModalActive}>
+                            
                             <p className={"file-name-text"}>{selectedFile.name}</p>
 
                             <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="demo-simple-select-standard-label">Format</InputLabel>
+
+                                <InputLabel id="demo-simple-select-standard-label">
+                                    Format
+                                </InputLabel>
                                 <Select
                                     labelId="demo-simple-select-standard-label"
                                     id="demo-simple-select-standard"
@@ -255,10 +262,10 @@ const ForumForm = ({connection}: Props) => {
                                     onChange={handleSelectChange}
                                     label="Format"
                                 >
+                                    <MenuItem value={"Other"}>Other</MenuItem>
                                     <MenuItem value={"Image"}>Image</MenuItem>
                                     <MenuItem value={"Video"}>Video</MenuItem>
                                     <MenuItem value={"Audio"}>Audio</MenuItem>
-                                    <MenuItem value={"Other"}>Other</MenuItem>
                                 </Select>
 
                                 <div className={"select-file-fields"}>
@@ -267,28 +274,36 @@ const ForumForm = ({connection}: Props) => {
                                     onChangeValue = {handleOnChange}></FormatFileForm>
                                 </div>
                             </FormControl>
+                            
+                                <Box display="flex" justifyContent={"space-between"} padding={1}>
+                                    
+                                <Button type={"submit"} color="primary" onClick={(e) => {
+                                    setModalActive(false);
+                                }}>
+                                    Submit
+                                </Button>
 
-                            <Button type={"submit"} color="primary" onClick={(e) => {
-                                setModalActive(false);
-                            }}>
-                                Submit 
-                            </Button>
-
-                            <Button color="inherit" onClick={() => {
-                                setModalActive(false);
-                                setSelectedFile(undefined);
-                            }}> Cancel </Button>
+                                <Button color="warning" onClick={() => {
+                                        setModalActive(false);
+                                        setSelectedFile(undefined);
+                                    }}> 
+                                    Cancel 
+                                </Button>
+                                </Box>
+                            
                         </FileDataModal>
                     </>
                 )}
                 
-                <button type={"button"} onClick={() => {
-                    setModalActive(true)
-                }}>send</button>
+                <Button name={"send-message-button"} disabled={!isSend} type={"button"} color={"inherit"}>
+                    <BsFillCursorFill size={25} ></BsFillCursorFill>
+                </Button>
                 
             </form> }
-
-            <CustomAlert isAlert={alert}></CustomAlert>
+            
+            <CustomAlert isAlert={customAlert} color={"white"}>
+                SERVER ERROR
+            </CustomAlert>
         </>
         );
 }

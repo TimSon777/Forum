@@ -4,12 +4,14 @@ import {HubConnection} from "@microsoft/signalr";
 
 interface AlertProps {
     isAlert: boolean;
+    children: React.ReactNode;
+    color: string
 }
 
-const CustomAlert = ({isAlert}: AlertProps) => {
+const CustomAlert = ({isAlert, children, color}: AlertProps) => {
     return (
-        <div className={"alert"} style={{ display: isAlert ? "block" : "none" }}>
-            SERVER ERROR
+        <div className={"alert"} style={{ display: isAlert ? "block" : "none" , color: color}}>
+            {children}
         </div>
     );
 };

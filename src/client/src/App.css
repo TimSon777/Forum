@@ -80,18 +80,14 @@ div::-webkit-scrollbar-thumb {
 .custom-text-area-form {
   width: 470px;
   min-height: 91px;
-
-  margin: 2rem auto 0;
-
   background: linear-gradient(180deg, rgba(120, 255, 158, 0.1) 39.88%, rgba(0, 0, 0, 0) 100%), rgba(217, 217, 217, 0.4);
   box-shadow: 0 2px 1px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(2px);
   border-radius: 5px;
-
   display: flex;
   gap: 1rem;
-  
   color: white;
+  margin-top: 2rem;
 }
 
 .custom-text-area {
@@ -233,8 +229,8 @@ div::-webkit-scrollbar-thumb {
   height: 100vh;
   width: 100vw;
   position: fixed;
-  top: -600px;
-  left: -100px;
+  top: -45vw;
+  left: -45vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,7 +258,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .file-name-text {
-  color: aqua;
+  color: #46277a;
 }
 
 .file-link {

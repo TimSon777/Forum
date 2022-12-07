@@ -2,6 +2,7 @@
 import Input from '@mui/material/Input';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 enum Format{
     Image,
@@ -27,7 +28,7 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} 
     let form;
     
     if (format.toString() == "Image"){
-        form =  <div>
+        form =  <Box display="flex" flexDirection="column" justifyContent={"center"} padding={1} gap={2}>
                 <TextField
                     required
                     id="outlined-required"
@@ -39,10 +40,10 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} 
                         onChangeValue(e.target);
                     }}
                 />
-            </div>
+        </Box>
     }
     else if (format.toString() == "Video"){
-        form = <div>
+        form = <Box display="flex" flexDirection="column" justifyContent={"center"} padding={1} gap={2}>
                 <TextField
                     required
                     id="outlined-required"
@@ -66,10 +67,10 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} 
                         onChangeValue(e.target);
                     }}
                 />
-            </div>
+        </Box>
     }
     else if (format.toString() == "Audio"){
-        form =  <div>
+        form =  <Box display="flex" flexDirection="column" justifyContent={"center"} padding={1} gap={2}>
                 <TextField
                     required
                     id="outlined-required"
@@ -104,10 +105,10 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} 
                         onChangeValue(e.target);
                     }}
                 />
-            </div>
+        </Box>
     }
     else if (format.toString() == "Other"){
-        form =  <div>
+        form =  <Box display="flex" flexDirection="column" justifyContent={"center"} padding={1} gap={2}>
                 <TextField
                     required
                     id="outlined-required"
@@ -124,18 +125,18 @@ const FormatFileForm = ({format, setModalActive, setSelectedFile,onChangeValue} 
                     id="outlined-required"
                     name={"otherFileFormat"}
                     label="Format"
-                    value={format}
+                    value={otherFormat}
                     onChange={(e) => {
                         setOtherFormat(e.target.value);
                         onChangeValue(e.target);
                     }}
                 />
-            </div>
+        </Box>
     }
     else {
         form =  <div>
                 Select file format
-            </div>
+                </div>
     }
     
     return (
