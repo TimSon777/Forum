@@ -93,12 +93,14 @@ const ForumForm = ({connection}: Props) => {
                 
                 setKey(key);
                 setIsSend(true);
-                alert("File uploaded!");
+
+                //alert("File uploaded!");
+                
                 return key;
             }
             catch(response) {
                     console.log(response);
-                    alert("File cannot be uploaded!");
+                  //  alert("File cannot be uploaded!");
                     return null;
                 }
             finally {
@@ -207,12 +209,11 @@ const ForumForm = ({connection}: Props) => {
         }
 
         let guid = new GUID().toString();
-        console.log(guid);
         setRequestId(guid)
 
         let obj =
             {
-                requestId: guid,
+                requestId: requestId,
                 metadata: metadata
             };
         
