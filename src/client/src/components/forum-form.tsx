@@ -60,6 +60,8 @@ const ForumForm = ({connection}: Props) => {
     
     const [isSend, setIsSend] = useState(false);
     
+   // const metadata = useRef();
+
     const handleSelectChange = (event: SelectChangeEvent) => {
         setFileFormat(event.target.value);
     };
@@ -100,7 +102,7 @@ const ForumForm = ({connection}: Props) => {
             }
             catch(response) {
                     console.log(response);
-                  //  alert("File cannot be uploaded!");
+                    alert("File cannot be uploaded!");
                     return null;
                 }
             finally {

@@ -1,4 +1,4 @@
-﻿import React, {useEffect,useState} from 'react';
+﻿import React, {useEffect, useRef, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
@@ -28,7 +28,7 @@ function Chat() {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
                     setMessages((st) => [...st, message]);
                 });
-
+                
                 connection.on("ReceiveFileUploadedNotification", () => {
                     alert("File uploaded");
                 });
