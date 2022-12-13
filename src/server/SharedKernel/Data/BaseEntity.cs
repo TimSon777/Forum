@@ -1,9 +1,9 @@
 ﻿namespace SharedKernel.Data;
 
-public class BaseEntity<TKey>
+public class BaseEntity<TKey> : BaseEntity
 {
     public TKey Id { get; set; } = default!;
 }
 
-public class BaseEntity : BaseEntity<int>
+public class BaseEntity
 { }

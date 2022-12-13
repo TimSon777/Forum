@@ -9,7 +9,9 @@ services:
       - forum-db
     build: 
       context: src/server
-      dockerfile: Forum/Forum.API/Dockerfile
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: Forum.API
     container_name: forum-api
   
   forum-migrator:
@@ -18,7 +20,7 @@ services:
       - forum-db
     build:
       context: src/server
-      dockerfile: Forum/Forum.Migrator/Dockerfile
+      dockerfile: Forum.Migrator/Dockerfile
     container_name: forum-migrator
 
   forum-queue-listener:
@@ -28,7 +30,9 @@ services:
       - forum-db
     build:
       context: src/server
-      dockerfile: Forum/Forum.Queue.Listener/Dockerfile
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: Forum.Consumer
     container_name: forum-queue-listener
 
   forum-db:
@@ -43,7 +47,9 @@ services:
       - cache
     build:
       context: src/server
-      dockerfile: Metadata/Metadata.API/Dockerfile
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: Metadata.API
     container_name: metadata-api
     
   metadata-db:
@@ -56,7 +62,9 @@ services:
       - s3
     build:
       context: src/server
-      dockerfile: File/File.API/Dockerfile
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: File.API
     container_name: file-api
 
   file-metadata-queue-listener:
@@ -68,7 +76,9 @@ services:
       - cache
     build:
       context: src/server
-      dockerfile: FileMetadata/FileMetadata.Queue.Listener/Dockerfile
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: FileMetadata.Consumer
     container_name: file-metadata-queue-listener
 
   web-front:
