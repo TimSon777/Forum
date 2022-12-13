@@ -15,7 +15,7 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
         _messageRepository = messageRepository;
     }
 
-    public async Task<IResult> HandleAsync(Request request)
+    public async Task<IResult> HandleAsync([AsParameters]Request request)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
