@@ -64,7 +64,7 @@ const ForumForm = ({connection}: Props) => {
         setFileFormat(event.target.value);
     };
 
-    const  handleChange = (event: any) => {
+    const handleChange = (event: any) => {
         console.log(event.target.files[0]);
         setSelectedFile(event.target.files[0]);
         setModalActive(true);
@@ -91,16 +91,7 @@ const ForumForm = ({connection}: Props) => {
                 requests.push(axios.post("http://localhost:8082/metadata", metadata));
                 
                 await Promise.all(requests);
-                
-           //     const data = response.data;
-              //  const key: string = data.key;
-                
-            //    setKey(key);
                 setIsSend(true);
-                
-                //alert("File uploaded!");
-                
-               // return key;
             }
             catch(response) {
                     console.log(response);
@@ -239,6 +230,9 @@ const ForumForm = ({connection}: Props) => {
                             ref={filePicker}
                             onChange={handleChange}
                             accept={"image/*,text/*"}
+                            onClick={(event: any)=> {
+                                event.target.value = null
+                            }}
                         />
                     </ButtonGroup>
                 </div>
@@ -283,8 +277,8 @@ const ForumForm = ({connection}: Props) => {
                                 </Button>
 
                                 <Button color="warning" onClick={() => {
-                                        setModalActive(false);
                                         setSelectedFile(undefined);
+                                        setModalActive(false);
                                     }}> 
                                     Cancel 
                                 </Button>
