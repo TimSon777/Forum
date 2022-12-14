@@ -15,8 +15,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormatFileForm from './format-file-form';
-import GUID from '../Guid';
 import { BsFillCursorFill } from "react-icons/bs";
+import {Guid} from "guid-typescript";
 
 interface Props {
     connection: HubConnection;
@@ -50,9 +50,6 @@ const ForumForm = ({connection}: Props) => {
 
     const [fileFormat, setFileFormat] = useState('Other');
     
-    const [requestId, setRequestId] = useState('');
-
-
     const [fileName, setFileName] = useState('');
     const [otherFormat, setOtherFormat] = useState('');
     const [duration, setDuration] = useState(0);
@@ -75,6 +72,7 @@ const ForumForm = ({connection}: Props) => {
 
     const handleUpload : () => Promise<string | null> = async () => {
         if (selectedFile) {
+            const requestId = Guid.raw();
             const formData = new FormData();
             // @ts-ignore
             formData.set('File', selectedFile!);
@@ -86,7 +84,7 @@ const ForumForm = ({connection}: Props) => {
 
             try {
                 await connection.invoke("SaveConnectionId", requestId);
-                let metadata = createMetadata()
+                let metadata = createMetadata(requestId)
                 
                 let requests = [];
                 requests.push(axios.post("http://localhost:8083/file", formData));
@@ -117,11 +115,6 @@ const ForumForm = ({connection}: Props) => {
         }
         
         return null;
-    };
-    
-    const GenerateAndSetRequestId = () => {
-            let guid = new GUID().toString();
-            setRequestId(guid);
     };
 
     function handlePick() {
@@ -161,7 +154,6 @@ const ForumForm = ({connection}: Props) => {
 
             setMessage({text: '', fileKey: null});
             setKey('');
-            setRequestId('');
             setIsSend(false);
             setFileUploaded(false);
             });
@@ -188,7 +180,7 @@ const ForumForm = ({connection}: Props) => {
         }
     }
     
-    const createMetadata = (): string => {
+    const createMetadata = (requestId : string): string => {
         let metadata;
         if (fileFormat === 'Image') {
             metadata = {
@@ -215,8 +207,6 @@ const ForumForm = ({connection}: Props) => {
             };
         }
 
-        let guid = new GUID().toString();
-        setRequestId(guid)
 
         let obj =
             {
