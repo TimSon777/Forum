@@ -59,9 +59,10 @@ const ForumForm = ({connection}: Props) => {
     const [author, setAuthor] = useState('');
     
     const [isSend, setIsSend] = useState(false);
-    
-   // const metadata = useRef();
 
+    const [fileUploaded, setFileUploaded] = useState(false);
+
+    
     const handleSelectChange = (event: SelectChangeEvent) => {
         setFileFormat(event.target.value);
     };
@@ -79,26 +80,29 @@ const ForumForm = ({connection}: Props) => {
             formData.set('File', selectedFile!);
             formData.append('RequestId', requestId);
 
+            connection.on("ReceiveFileUploadedNotification", () => {
+                setFileUploaded(true);
+            });
+
             try {
-                
                 await connection.invoke("SaveConnectionId", requestId);
+                let metadata = createMetadata()
                 
-                const response = await axios.post("http://localhost:8083/file", formData);
-
-                let metadata = createMetadata();
-                console.log('JSON: ' + metadata);
+                let requests = [];
+                requests.push(axios.post("http://localhost:8083/file", formData));
+                requests.push(axios.post("http://localhost:8082/metadata", metadata));
                 
-                await axios.post("http://localhost:8082/metadata", metadata);
+                Promise.all(requests);
                 
-                const data = response.data;
-                const key: string = data.key;
+           //     const data = response.data;
+              //  const key: string = data.key;
                 
-                setKey(key);
+            //    setKey(key);
                 setIsSend(true);
-
+                
                 //alert("File uploaded!");
                 
-                return key;
+               // return key;
             }
             catch(response) {
                     console.log(response);
@@ -159,6 +163,7 @@ const ForumForm = ({connection}: Props) => {
             setKey('');
             setRequestId('');
             setIsSend(false);
+            setFileUploaded(false);
             });
     }
     
@@ -304,6 +309,10 @@ const ForumForm = ({connection}: Props) => {
                 </Button>
                 
             </form> }
+
+            <CustomAlert isAlert={fileUploaded} color={"white"}>
+                File is loading...
+            </CustomAlert>
             
             <CustomAlert isAlert={customAlert} color={"white"}>
                 SERVER ERROR

@@ -28,10 +28,6 @@ function Chat() {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
                     setMessages((st) => [...st, message]);
                 });
-                
-                connection.on("ReceiveFileUploadedNotification", () => {
-                    alert("File uploaded");
-                });
             });
 
         } catch (err) {
