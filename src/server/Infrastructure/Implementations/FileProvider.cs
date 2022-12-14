@@ -42,13 +42,13 @@ public class FileProvider : IFileProvider
 
     public async Task<Result<SavedFileItem>> SaveFileAsync(SaveFileItem file, CancellationToken token = new())
     {
-        var fileKey = Guid.NewGuid().ToString();
+        var fileKey = Guid.NewGuid();
         try
         {
             var request = new PutObjectRequest
             {
                 BucketName = _fileServerSettings.TemporaryBucketName,
-                Key = fileKey,
+                Key = fileKey.ToString(),
                 InputStream = file.File,
                 ContentType = file.ContentType
             };

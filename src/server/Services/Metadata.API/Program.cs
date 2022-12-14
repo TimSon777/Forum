@@ -9,8 +9,8 @@ services.AddSwaggerGen();
 services.AddEndpointsApiExplorer();
 
 services.AddCache(configuration);
+services.AddCachingService();
 services.AddMetadataDatabase(configuration);
-services.AddCollectionCreatorBackgroundService();
 services.AddRabbitMq(configuration);
 
 var app = builder.Build();

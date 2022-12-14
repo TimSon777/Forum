@@ -13,6 +13,7 @@ await Host
             configure => configure.AddConsumer<FileAndMetadataSaverConsumer>());
         
         services.AddCache(configuration);
+        services.AddCachingService();
     })
     .Build()
     .RunAsync();

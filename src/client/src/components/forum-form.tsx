@@ -92,7 +92,7 @@ const ForumForm = ({connection}: Props) => {
                 requests.push(axios.post("http://localhost:8083/file", formData));
                 requests.push(axios.post("http://localhost:8082/metadata", metadata));
                 
-                Promise.all(requests);
+                await Promise.all(requests);
                 
            //     const data = response.data;
               //  const key: string = data.key;

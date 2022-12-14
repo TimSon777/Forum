@@ -16,6 +16,7 @@ services.AddEndpointsApiExplorer();
 services.AddSignalR();
 services.AddCors();
 services.AddCache(configuration);
+services.AddCachingService();
 services.AddRabbitMq(configuration,
     configure => configure.AddConsumer<NotificationFileUploadedConsumer>());
 services.AddValidatorsFromAssemblyContaining<Validator>();

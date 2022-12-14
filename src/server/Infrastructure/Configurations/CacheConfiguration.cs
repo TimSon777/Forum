@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.Abstractions;
+using Infrastructure.Implementations;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
 // ReSharper disable once CheckNamespace
@@ -19,7 +21,13 @@ public static class CacheConfiguration
         };
 
         var redis = ConnectionMultiplexer.Connect(options);
-        services.AddSingleton<IConnectionMultiplexer>(redis);
+        services.AddScoped(_ => redis.GetDatabase());
         return services;
-    } 
+    }
+
+    public static IServiceCollection AddCachingService(this IServiceCollection services)
+    {
+        services.AddScoped<ICachingService, CachingService>();
+        return services;
+    }
 }

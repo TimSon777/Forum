@@ -9,7 +9,7 @@ public sealed class CachingService : ICachingService
     private const string FileIdField = "File Id";
     private const string MetadataField = "Metadata";
     private const string IncrementField = "Increment";
-    private const string ConnectionId = "Connection Id";
+    private const string ConnectionIdField = "Connection Id";
     
     private readonly IDatabase _caching;
 
@@ -31,12 +31,12 @@ public sealed class CachingService : ICachingService
 
     public async Task SaveConnectionIdAsync(Guid requestId, string connectionId)
     {
-        await _caching.HashSetAsync(requestId.ToString(), FileIdField, connectionId);
+        await _caching.HashSetAsync(requestId.ToString(), ConnectionIdField, connectionId);
     }
 
     public async Task SaveFileIdAsync(Guid requestId, Guid fileId)
     {
-        await _caching.HashSetAsync(requestId.ToString(), ConnectionId, fileId.ToString());
+        await _caching.HashSetAsync(requestId.ToString(), FileIdField, fileId.ToString());
     }
 
     public async Task<Dictionary<string, string>?> FindMetadataAsync(Guid requestId)
@@ -50,7 +50,7 @@ public sealed class CachingService : ICachingService
 
     public async Task<string?> FindConnectionIdAsync(Guid requestId)
     {
-        return await _caching.HashGetAsync(requestId.ToString(), ConnectionId);
+        return await _caching.HashGetAsync(requestId.ToString(), ConnectionIdField);
     }
 
     public async Task<Guid?> FindFileIdAsync(Guid requestId)

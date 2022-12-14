@@ -32,6 +32,6 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapGet("history/{CountMessages}", HandleAsync);
+        app.MapGet("api/history/{CountMessages}", HandleAsync);
     }
 }

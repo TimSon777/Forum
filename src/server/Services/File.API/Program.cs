@@ -7,6 +7,8 @@ var configuration = builder.Configuration;
 
 services.AddCors();
 
+services.AddCache(configuration);
+services.AddCachingService();
 services.AddSwaggerGen();
 services.AddEndpointsApiExplorer();
 services.AddAws(configuration);

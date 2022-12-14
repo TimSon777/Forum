@@ -8,7 +8,7 @@ public class GetMessageHubItemValidator : AbstractValidator<GetMessageHubItem>
     public GetMessageHubItemValidator()
     {
         RuleFor(item => item.IpAddress)
-            .GreaterThan(0);
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(item => item)
             .Must(item => item.Text.Length is >= 1 and <= 500 || item.FileKey is not null);

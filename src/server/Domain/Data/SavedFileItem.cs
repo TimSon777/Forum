@@ -2,5 +2,5 @@
 
 public sealed class SavedFileItem
 {
-    public required string FileKey { get; set; } = default!;
+    public required Guid FileKey { get; set; } = default!;
 }
