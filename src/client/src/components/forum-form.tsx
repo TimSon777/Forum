@@ -20,6 +20,8 @@ import {Guid} from "guid-typescript";
 
 interface Props {
     connection: HubConnection;
+    fileKey: string | null;
+    fileUploaded: boolean;
 }
 
 interface Ip {
@@ -70,18 +72,14 @@ const ForumForm = ({connection}: Props) => {
         setModalActive(true);
     };
 
-    const handleUpload : () => Promise<string | null> = async () => {
+    const handleUpload = async () => {
         if (selectedFile) {
             const requestId = Guid.raw();
             const formData = new FormData();
             // @ts-ignore
             formData.set('File', selectedFile!);
             formData.append('RequestId', requestId);
-
-            connection.on("ReceiveFileUploadedNotification", () => {
-                setFileUploaded(true);
-            });
-
+            
             try {
                 await connection.invoke("SaveConnectionId", requestId);
                 let metadata = createMetadata(requestId)
@@ -93,19 +91,14 @@ const ForumForm = ({connection}: Props) => {
                 await Promise.all(requests);
                 setIsSend(true);
             }
-            catch(response) {
+            catch (response) {
                     console.log(response);
                     alert("File cannot be uploaded!");
-                    return null;
-                }
+            }
             finally {
                     setSelectedFile(undefined);
-                };
-            
-            return null;
+            };
         }
-        
-        return null;
     };
 
     function handlePick() {
@@ -133,9 +126,10 @@ const ForumForm = ({connection}: Props) => {
         e.preventDefault();
         
         await handleUpload()
-            .then(async (k) => {
+            .then(async () => {
+                
             setCustomAlert(false);
-            const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: k == '' ? null : k};
+            const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: fileKey};
             
             await connection.invoke('SendMessage', sendMessageItem)
                 .catch(err => {
