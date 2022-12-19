@@ -10,6 +10,8 @@ import MessageArea from "../components/message-area";
 function Chat() {
     const [messages, setMessages] = useState<GetMessageItem[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
+    const [fileKey, setKey] = useState<string | null>(null);
+    const [fileUploaded, setFileUploaded] = useState(false);
 
     useEffect(() => {
         axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/api/history/20')
@@ -27,6 +29,11 @@ function Chat() {
             connection.start().then(async () => {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
                     setMessages((st) => [...st, message]);
+                });
+
+                connection.on("ReceiveFileUploadedNotification", (fileId) => {
+                    setKey(fileId);
+                    setFileUploaded(true);
                 });
             });
 
@@ -52,7 +59,7 @@ function Chat() {
             <div className="chat-container">
                 <h1 className={"forum-header"}>FORUM</h1>
                 <MessageArea messages={messages}></MessageArea>
-                <ForumForm connection={connection}/>
+                <ForumForm connection={connection} fileKey={fileKey} fileUploaded={fileUploaded}/>
             </div>
         </div>
     );
