@@ -33,7 +33,7 @@ interface UploadedFile {
     type: string;
 }
 
-const ForumForm = ({connection}: Props) => {
+const ForumForm = ({connection, fileKey}: Props) => {
     const {
             formState: { errors },
     } = useForm();
@@ -45,8 +45,6 @@ const ForumForm = ({connection}: Props) => {
 
     const filePicker = useRef<any>(null);
     const [selectedFile, setSelectedFile] = useState<UploadedFile>();
-    
-    const [fileKey, setKey] = useState<string | null>(null); 
     
     const [modalActive, setModalActive] = useState(false);
 
@@ -142,7 +140,7 @@ const ForumForm = ({connection}: Props) => {
                 });
 
             setMessage({text: '', fileKey: null});
-            setKey('');
+       //     setKey('');
             setIsSend(false);
             setFileUploaded(false);
             });
