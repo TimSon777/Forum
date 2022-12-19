@@ -1,5 +1,4 @@
 ﻿using Domain.Events;
-using Forum.Handler;
 using Infrastructure.Abstractions;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
@@ -19,15 +18,22 @@ public class NotificationFileUploadedConsumer : IConsumer<FileUploadedEvent>
 
     public async Task Consume(ConsumeContext<FileUploadedEvent> context)
     {
-        var connectionId = await _cachingService.FindConnectionIdAsync(context.Message.RequestId);
+        var requestId = context.Message.RequestId;
+        var connectionIdTask = _cachingService.FindConnectionIdAsync(context.Message.RequestId);
+        var fileKeyTask = _cachingService.FindFileIdAsync(requestId);
 
-        if (connectionId is null)
+        await Task.WhenAll(connectionIdTask, fileKeyTask);
+
+        var connectionId = await connectionIdTask;
+        var fileKey = await fileKeyTask;
+        
+        if (connectionId is null || fileKey is null)
         {
             return;
         }
 
         await _hubContext.Clients
             .Client(connectionId)
-            .SendAsync("ReceiveFileUploadedNotification");
+            .SendAsync("ReceiveFileUploadedNotification", fileKey);
     }
 }
