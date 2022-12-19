@@ -28,6 +28,7 @@ app.UseCors(options => options
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.MapEndpoints();
 app.MapControllers();
+
+app.MapEndpoints();
 app.Run();
