@@ -6,7 +6,8 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 services.AddCors();
-
+services.AddControllers();
+services.AddEndpoints();
 services.AddCache(configuration);
 services.AddCachingService();
 services.AddSwaggerGen();
@@ -17,14 +18,16 @@ services.AddBucketCreator();
 services.AddRabbitMq(configuration);
 services.AddBucketCreatorBackgroundService();
 
-var app =builder.Build();
+var app = builder.Build();
 
 app.UseCors(options => options
-    .AllowAnyMethod()
+    .AllowCredentials()
     .AllowAnyHeader()
-    .AllowAnyOrigin());
+    .AllowAnyMethod()
+    .WithOrigins(configuration.GetString("ORIGIN:FRONT")));
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapEndpoints();
-
+app.MapControllers();
 app.Run();

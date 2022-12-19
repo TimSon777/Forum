@@ -2,41 +2,38 @@
 using Infrastructure.Abstractions;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using MinimalApi.Endpoint;
 
 namespace File.API.Features.File.Create;
 
-public sealed class Endpoint : IEndpoint<IResult, Request>
+[ApiController]
+[Route("file")]
+public sealed class Controller : ControllerBase
 {
     private readonly IFileProvider _fileProvider;
     private readonly ICachingService _cachingService;
     private readonly IBus _bus;
 
-    public Endpoint(IFileProvider fileProvider, IBus bus, ICachingService cachingService)
+    public Controller(IFileProvider fileProvider, ICachingService cachingService, IBus bus)
     {
         _fileProvider = fileProvider;
-        _bus = bus;
         _cachingService = cachingService;
+        _bus = bus;
     }
 
-    public async Task<IResult> HandleAsync([FromForm]Request request)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] Request request)
     {
         var file = request.MapToSave();
         var result = await _fileProvider.SaveFileAsync(file);
 
         if (!result.Succeeded)
         {
-            return Results.Problem(result.Error);
+            return Problem(result.Error);
         }
 
         var fileUploaded = request.MapToEvent();
         await _cachingService.SaveFileIdAsync(request.RequestId, result.Value.FileKey);
         await _bus.Publish(fileUploaded);
-        return Results.Ok(result.Value.FileKey);
-    }
-
-    public void AddRoute(IEndpointRouteBuilder app)
-    {
-        app.MapPost("file", HandleAsync);
+        return Ok(result.Value.FileKey);
     }
 }

@@ -1,8 +1,7 @@
 ﻿namespace Chat.Migrator.Migrations;
 
-[Migration(2022_10_26__17_50)]
-// ReSharper disable once UnusedType.Global
-public class Migration_202210261750_AddUserIdToMessage : Migration
+[TimestampedMigration(2022, 10, 26, 17, 50)]
+public class AddUserIdToMessage : Migration
 {
     public override void Up()
     {

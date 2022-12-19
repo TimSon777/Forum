@@ -1,21 +1,23 @@
 ﻿namespace Chat.Migrator.Migrations;
 
-[Migration(2022_10_27_03_00)]
-public sealed class Migration_202210270300_AddFileId : Migration
+[TimestampedMigration(2022, 11, 3, 3, 0)]
+public sealed class ChangeTypeFileKeyToString : Migration
 {
     public override void Up()
     {
-        Create
+        Alter
             .Column("FileKey")
             .OnTable("Messages")
-            .AsGuid()
+            .AsString()
             .Nullable();
     }
 
     public override void Down()
     {
-        Delete
+        Alter
             .Column("FileKey")
-            .FromTable("Messages");
+            .OnTable("Messages")
+            .AsGuid()
+            .Nullable();
     }
 }
