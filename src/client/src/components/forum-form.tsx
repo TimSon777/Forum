@@ -86,8 +86,12 @@ const ForumForm = ({connection}: Props) => {
                 
                 let requests = [];
                 requests.push(axios.post("http://localhost:8083/file", formData));
-                requests.push(axios.post("http://localhost:8082/metadata", metadata));
-                
+                requests.push(axios.post("http://localhost:8082/metadata", metadata, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }));
+
                 await Promise.all(requests);
                 setIsSend(true);
             }
