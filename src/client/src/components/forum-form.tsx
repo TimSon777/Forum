@@ -21,7 +21,6 @@ import {Guid} from "guid-typescript";
 interface Props {
     connection: HubConnection;
     fileKey: string | null;
-    fileUploaded: boolean;
 }
 
 interface Ip {
@@ -127,7 +126,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
         
         e.preventDefault();
         
-        if (!fileUploaded && isSend){
+        if ((fileKey === null || fileKey === '') && isSend){
             alert("File not uploaded");
         }
         else {
@@ -285,7 +284,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
                     </>
                 )}
                 
-                <Button name={"send-message-button"} disabled={!isSend} type={"button"} color={"inherit"}>
+                <Button name={"send-message-button"} disabled={!isSend} color={"inherit"}>
                     <BsFillCursorFill size={25} ></BsFillCursorFill>
                 </Button>
                 
