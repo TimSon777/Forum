@@ -266,14 +266,14 @@ const ForumForm = ({connection, fileKey}: Props) => {
                             
                                 <Box display="flex" justifyContent={"space-between"} padding={1}>
                                     
-                                <Button type={"submit"} color="primary" onClick={async (e) => {
+                                <Button type={"button"} color="primary" onClick={async (e) => {
                                     setModalActive(false);
                                     await handleUpload();
                                 }}>
                                     Submit
                                 </Button>
 
-                                <Button color="warning" onClick={() => {
+                                <Button type={"button"} color="warning" onClick={() => {
                                         setSelectedFile(undefined);
                                         setModalActive(false);
                                     }}> 
