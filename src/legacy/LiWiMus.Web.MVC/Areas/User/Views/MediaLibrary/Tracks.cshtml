@@ -1,0 +1,44 @@
+@using LiWiMus.Web.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@model List<LiWiMus.Web.MVC.Areas.Music.ViewModels.TrackViewModel>
+@inject IOptions<PullUrls> PullUrls
+
+@{
+    Layout = "_MediaLibraryLayout";
+    var fileUrl = PullUrls.Value.FileServer;
+}
+<div class="editor-wrap">
+    <div>
+        <h3 class="your-profile-header">
+            Tracks
+        </h3>
+    </div>
+    <section class="edit-inputs-group">
+        <div>
+            <a class="text-link" style="font-weight: bolder; font-size: larger" asp-area="Search" asp-controller="Track" asp-action="Index">
+                Search new tracks
+            </a>
+        </div>
+        @foreach (var track in Model)
+        {
+            <div>
+                <a asp-area="Music" class="text-center text-link" asp-controller="Track" asp-action="Index" asp-route-trackId="@track.Id">
+                    @track.Name
+                </a>
+            </div>
+
+
+@*<div>
+                <a asp-area="Music" class="text-center text-link" asp-controller="Track" asp-action="Index" asp-route-trackId="@track.Id">
+                    @track.Name
+                </a>
+            </div>*@
+
+        @*$1$<img src="@(fileUrl + track.Album.CoverLocation)" alt=""/>#1#
+
+            @:Genres @string.Join(" & ", track.Genres.Select(a => a.Name))
+            @:Artists @string.Join(" & ", track.Owners.Select(a => a.Name))*@
+        }
+    </section>
+</div>

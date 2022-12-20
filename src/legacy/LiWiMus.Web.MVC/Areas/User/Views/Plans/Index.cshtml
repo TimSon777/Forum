@@ -1,0 +1,98 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.PlansIndexViewModel
+
+@{
+    ViewData["Title"] = "Plans";
+}
+
+@section Header
+{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<h1 class="plans-header">Plans</h1>
+
+<section class="tarif-section">
+    <h2>Active plans</h2>
+    <div class="tariffs-cards active-plan">
+        @foreach (var plan in Model.ActivePlans)
+        {
+            <div class="tariff-container">
+                <div class="tariff-card">
+                    <div class="tariff-card-header">
+                        <div class="tariff-title">
+                            @plan.Name
+                        </div>
+                        <div class="tariff-description">
+                            @plan.Description
+                        </div>
+                    </div>
+                    <div class="tariff-advantages">
+                        @foreach (var permission in plan.Permissions)
+                        {
+                            <div class="advantage mb-3">
+                                <p class="advantage-text">@permission.Description</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="buy-tariff-button-container">
+                        <a asp-action="Details" asp-route-planId="@plan.Id">
+                            <button class="buy-tariff-button">@Math.Round(plan.PricePerMonth, 2)/month</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="tarif-section">
+    <h2>Available plans</h2>
+    <div class="tariffs-cards">
+        @foreach (var plan in Model.AvailablePlans)
+        {
+            <div class="tariff-container">
+                <div class="tariff-card">
+                    <div class="tariff-card-header">
+                        <div class="tariff-title">
+                            @plan.Name
+                        </div>
+                        <div class="tariff-description">
+                            @plan.Description
+                        </div>
+                    </div>
+                    <div class="tariff-advantages mb-5 mt-4">
+                        @foreach (var permission in plan.Permissions)
+                        {
+                            <div class="advantage mb-3">
+                                <p class="advantage-text">@permission.Description</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="buy-tariff-button-container">
+                        <a asp-action="Details" asp-route-planId="@plan.Id">
+                            <button class="buy-tariff-button">
+                                @Math.Round(@plan.PricePerMonth, 2)/month
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="contact-us-section row justify-content-center p-5">
+    <p class="contact-us-header mb-2">Any questions?</p>
+    <div class="contact-us-card-container mt-5 col-lg-6 col-md-12 col-sm-12 p-4">
+        <div class="contact-us-card p-4">
+            <p class="contact-us-card-header mb-5">
+                Contact Us!
+            </p>
+            <a asp-area="User" asp-controller="SupportChat" asp-action="Index">
+                <button class="contact-us-card-button m-1">
+                    To chat
+                </button>
+            </a>
+        </div>
+    </div>
+</section>

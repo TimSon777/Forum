@@ -1,0 +1,83 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+@section Header{
+    <partial name="Partials/_LoginHeaderPartial"/>
+}
+
+<div class="body">
+    <div class="content">
+        <div style="margin:auto; width: auto; padding-bottom: 10%">
+            @{
+                if (Model?.ExternalLogins is null || Model.ExternalLogins.Count == 0)
+                {
+                    <div>No external logins configured</div>
+                }
+                else
+                {
+                    <form method="post" asp-area="User" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                        <div >
+                            @foreach (var provider in Model.ExternalLogins)
+                            {
+                                <button type="submit" class="btn text-black" style="width:100%; border-radius: 50px; background-color: #C4C4C4;"
+                                        name="provider" value="@provider.Name"
+                                        title="Login using your @provider.DisplayName account">
+                                    Continue with @provider.DisplayName
+                                </button>
+                            }
+                        </div>
+                    </form>
+                }
+            }
+        </div>
+        <div>
+            <p class="text-white" style="font-weight: bold; width: 100%; text-align: center">
+                OR
+            </p>
+        </div>
+        <div>
+            <form method="post" asp-area="User" asp-controller="Account" asp-action="Login" style="margin:auto; width: auto;">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="text-white" style="padding-bottom: 2%">
+                    <label asp-for="UserName" style="padding-bottom: 2%"></label><br/>
+                    <input asp-for="UserName" id="userName" class="account-input-field"/>
+                    <span asp-validation-for="UserName"></span>
+                </div>
+                <div class="text-white" style="padding-bottom:10%">
+                    <label asp-for="Password" style="padding-bottom: 2%"></label><br/>
+                    <input asp-for="Password" class="account-input-field"/>
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="text-white account-submit-button-area">
+                    <div >
+
+                        <input asp-for="RememberMe"/>
+                        <label asp-for="RememberMe" style="font-weight: lighter; "></label>
+
+                    </div>
+                    <div>
+                        <input type="submit" class="btn text-white account-submit-button" value="Log In"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="text-white" style="padding-top: 10%">
+            <p>Forgot password?</p>
+        </div>
+        <div>
+            <form asp-formhelper="true" asp-area="User" asp-controller="Account" asp-action="ResetPassword">
+                <input name="userName" type="text" placeholder="Input username" class="account-input-field" style="margin-bottom: 3%"/>
+                <input type="submit" class="btn text-white account-submit-button" value="Reset password">
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="/js/login.js"></script>
+}

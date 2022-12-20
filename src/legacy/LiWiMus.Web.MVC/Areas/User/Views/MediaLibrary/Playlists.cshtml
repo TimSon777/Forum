@@ -1,0 +1,67 @@
+@using LiWiMus.Web.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@model LiWiMus.Web.MVC.Areas.User.ViewModels.MediaLibraryPlaylistsVewMode
+@inject IOptions<PullUrls> PullUrls
+
+@{
+    Layout = "_MediaLibraryLayout";
+    var fileUrl = PullUrls.Value.FileServer;
+}
+<div class="editor-wrap">
+    <div>
+        <h3 class="your-profile-header">
+            My playlists
+        </h3>
+    </div>
+    <section class="edit-inputs-group">
+        <div>
+            <a class="text-link" style="font-weight: bolder; font-size: larger" asp-area="User" asp-controller="Playlist" asp-action="Create">
+                Create new playlist
+            </a>
+        </div>
+        @foreach (var playlist in Model.Playlists)
+        {
+            <div style=" display: grid;
+                          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                        /*  grid-gap: 1rem;*/
+                          margin-bottom: 1rem;">
+                <div>
+                    <a class="text-link" asp-area="Music" asp-controller="Playlist" asp-action="Index" asp-route-playlistId="@playlist.Id">
+                        @playlist.Name
+                    </a>
+                </div>
+                <div>
+                    <a asp-area="User" asp-controller="Playlist" asp-action="Index" asp-route-playlistId="@playlist.Id">
+                        <button class="edit-button" type="submit" id="btn-edit-profile-info">Edit</button>
+                    </a>
+                </div>
+
+
+            </div>
+        }
+    </section>
+
+    <div>
+        <h3 class="your-profile-header">
+            Followed playlists
+        </h3>
+    </div>
+    <section class="edit-inputs-group">
+        <div>
+            <a class="text-link" style="font-weight: bolder; font-size: larger" asp-area="Search" asp-controller="Playlist" asp-action="Index">
+                Search new playlists
+            </a>
+        </div>
+        @foreach (var playlist in Model.SubscribedPlaylists)
+        {
+            <div>
+                <a class="text-link" asp-area="Music" asp-controller="Playlist" asp-action="Index" asp-route-playlistId="@playlist.Id">
+                    @playlist.Name
+                </a>
+
+                <img src="@(fileUrl + playlist.PhotoLocation)" alt=""/>
+            </div>
+        }
+    </section>
+</div>

@@ -1,0 +1,15 @@
+﻿@model dynamic
+
+@{
+    Layout = "_MainLayout";
+}
+
+<div class="map-container">
+    <div class="map" id="map"></div>
+    <div class="map-menu" id="map-menu"></div>
+</div>
+@section Scripts
+{
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=ea4a565e-3c66-4cf3-8142-d61c866a2b5c&lang=ru_RU" type="text/javascript"></script>
+    <script src="~/js/map.js"></script>
+}

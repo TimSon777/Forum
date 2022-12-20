@@ -1,0 +1,12 @@
+﻿@model (LiWiMus.Web.MVC.Areas.User.ViewModels.ChatViewModel chat, string ownerUserName)
+
+@{
+    Layout = null;
+}
+
+<div id="user-messages">
+    @foreach (var message in Model.chat.Messages)
+    {
+        <partial name="MessageUserPartial" model="@((message, message.Owner.UserName == Model.ownerUserName))"/>
+    }
+</div>

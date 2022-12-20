@@ -1,0 +1,14 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - LiWiMus</title>
+    <partial name="Partials/_LinksPartial"></partial>
+</head>
+<body>
+@RenderBody()
+<partial name="Partials/_ScriptsPartial"></partial>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

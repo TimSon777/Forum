@@ -1,0 +1,98 @@
+﻿@using LiWiMus.Core.Users
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Core.Roles
+@using LiWiMus.Web.Shared
+
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+@inject IOptions<PullUrls> _urls
+@inject IAuthorizationService _authorizationService
+@{
+    var currentUser = _signInManager.IsSignedIn(User) ? await _userManager.GetUserAsync(User) : null;
+    var avatarSrc = currentUser?.AvatarLocation is not null ? _urls.Value.FileServer + currentUser.AvatarLocation : "/images/avatar-placeholder.jpg";
+}
+
+<div class="w3-sidebar w3-bar-block w3-collapse w3-card " style="width:300px;  background-color: #212529" id="mySidebar">
+    <button class="w3-bar-item w3-button w3-large w3-hide-large" style="color: wheat" onclick="w3_close()">&times;</button>
+    @{
+        if (currentUser is not null)
+        {
+            <div class="user-sidebar-nav">
+                <img id="avatar" src="@avatarSrc" alt="" class="img-fluid" style="width: 120px; border-radius: 100%"/>
+                <div style="padding-top: 7%; padding-bottom : 10%">
+                    <p class="text-white" style="font-weight: bold; word-wrap: break-word; text-align: center; margin: auto; width: 120px; font-size: larger">
+                        @currentUser.UserName
+                    </p>
+                </div>
+
+                <div>
+                    <a class="text-link" asp-area="User" asp-controller="Profile" asp-action="Index" asp-route-userName="@currentUser.UserName">Profile</a>
+                </div>
+                <div>
+                                    <a class="text-link" asp-area="User" asp-controller="Playlist" asp-action="Create">Create playlist</a>
+                                </div>
+                <div>
+                    <a class="text-link" asp-area="User" asp-controller="MediaLibrary" asp-action="Tracks">Media library</a>
+                </div>
+                <div>
+                    <a class="text-link" asp-area="Search" asp-controller="Track" asp-action="Index">Search</a>
+                </div>
+                @if (await _authorizationService.AuthorizeAsync(User, DefaultSystemPermissions.Chat.Answer.Name) is {Succeeded: true})
+                {
+                    <div>
+                        <a class="text-link" asp-area="User" asp-controller="SupportChat" asp-action="Chats">Support Chats</a>
+                    </div>
+                }
+                <div>
+                    <form class="form-inline" asp-area="User" asp-controller="Account" asp-action="Logout">
+                        <button type="submit" class="nav-link btn btn-link text-link" style="padding:0; font-weight: lighter; font-size: smaller">Logout</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="login-buttons text-white">
+                <div style="margin: 15px">
+                    <a asp-area="User" asp-controller="Account" asp-action="Login"
+                       class="btn text-black" style="width:100%; border-radius: 50px; background-color: #C4C4C4;">
+                        Log In
+                    </a>
+                </div>
+                <div style="margin: 15px;">
+                    <a asp-area="User" asp-controller="Account" asp-action="Register" class="btn text-link" style="background-color: transparent;border-radius: 50px;width:100%;">
+                        Sign Up
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    <div class="website-info text-white"; style=" font-weight: lighter; position: absolute;top: 80%; left: 10%; transform: translate(-10%, -80%)">
+
+        <div>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-link">Privacy</a>
+        </div>
+        <div>
+            <a asp-area="User" asp-controller="Plans" asp-action="Index" class="text-link">Plans</a>
+        </div>
+        <div>
+            <a asp-area="Company" asp-controller="Offices" asp-action="Offices" class="text-link">Offices</a>
+        </div>
+        <div>
+                    <a asp-area="User" asp-controller="Payment" asp-action="Pay" class="text-link">Payment</a>
+                </div>
+
+    </div>
+</div>
+<script>
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+}
+
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+}
+</script>

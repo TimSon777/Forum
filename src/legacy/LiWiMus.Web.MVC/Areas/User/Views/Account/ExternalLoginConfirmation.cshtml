@@ -1,0 +1,43 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.ExternalLoginConfirmationViewModel
+@{
+    ViewData["Title"] = "Register via provider";
+}
+
+@section Header{
+    <partial name="Partials/_LoginHeaderPartial"/>
+}
+
+<div class="body">
+    <div class="content">
+        <div>
+            <p class="text-white" style="font-weight: bold; width: 100%; text-align: center">
+                Associate your @Model?.ProviderDisplayName account.
+            </p>
+        </div>
+        <div>
+            <form asp-area="User" asp-controller="Account" asp-action="ExternalLoginConfirmation" asp-route-returnurl="@Model?.ReturnUrl" method="post" class="form-horizontal" role="form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <p class="text-info">
+                    You've successfully authenticated with <strong>@Model?.ProviderDisplayName</strong>.
+                </p>
+                <p>
+                    Please enter a user name for this site below and click the Register button to finish
+                    logging in.
+                </p>
+                <div class="text-white" style="padding-bottom:10%">
+                    <label asp-for="UserName" style="padding-bottom: 2%"></label><br/>
+                    <input asp-for="UserName" class="account-input-field"/>
+                    <span asp-validation-for="UserName"></span>
+                </div>
+                <div>
+                    <input type="submit" class="btn text-white account-submit-button" value="Register"/>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

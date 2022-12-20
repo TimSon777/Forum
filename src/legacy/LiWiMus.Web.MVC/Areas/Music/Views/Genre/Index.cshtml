@@ -1,0 +1,31 @@
+@model LiWiMus.Web.MVC.Areas.Music.ViewModels.GenreViewModel
+
+@{
+    ViewBag.Title = "Artist";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div class="music-track-section">
+    <h2 class="music-genre-name">
+        @Model.Name
+    </h2>
+    @foreach (var track in Model.Tracks)
+    {
+        <a>
+            <div class="music-track-container mt-3">
+                <div class="music-track-image-wrap">
+                    <img class="music-track-image" src="@System.IO.Path.Combine(ViewData["fileServer"]?.ToString()!, track.Album.CoverLocation)" alt="Track cover."/>
+                </div>
+                <div class="music-track-text">
+                    <p class="music-track-name">@track.Name</p>
+                    <p class="music-track-artists">@string.Join(" & ", track.Owners.Select(x => x.Name).Take(3))</p>
+                    <p class="music-track-album-title">@track.Album.Title</p>
+                </div>
+            </div>
+        </a>
+    }
+</div>

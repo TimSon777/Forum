@@ -1,0 +1,26 @@
+﻿@model List<LiWiMus.Core.Tracks.Track>
+
+@{
+    ViewData["Title"] = "Tracks";
+    Layout = "_LayoutSidebar";
+}
+<div class="p-0">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                Your tracks
+            </h2>
+        </div>
+        <div style="margin-left: 3%">
+            <a class="text-link" style="font-size: larger" asp-area="Artist" asp-controller="Tracks" asp-route-artistId="@ViewContext.RouteData.Values["artistId"]" asp-action="Create">Create new track</a>
+        </div>
+        <ol style="margin: 2% 0 0 2%">
+            @foreach (var track in Model)
+            {
+                <li>
+                    <a asp-area="Artist" asp-controller="Tracks" asp-action="Index" asp-route-id="@track.Id">@track.Name </a>
+                </li>
+            }
+        </ol>
+    </div>
+</div>

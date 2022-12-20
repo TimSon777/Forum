@@ -99,3 +99,15 @@ services:
   cache:
     image: ${CACHE_IMAGE}
     container_name: cache
+
+  legacy-liwimus-mvc:
+    restart: always
+    depends_on:
+      - legacy-liwimus-db
+    build:
+      context: src/legacy
+      dockerfile: LiWiMus.Web.MVC/Dockerfile
+
+  legacy-liwimus-db:
+    image: ${LIWIMUS_DB_IMAGE}
+    container_name: liwimus-db

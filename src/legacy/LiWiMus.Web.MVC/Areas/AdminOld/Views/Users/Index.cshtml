@@ -1,0 +1,67 @@
+@model List<LiWiMus.Core.Users.User>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h1>User List</h1>
+<br />
+<table class="table table-striped" id="userTable">
+    <thead>
+    <tr>
+        <th>
+            User
+        </th>
+        <th>
+            Email
+        </th>
+        <th style="width:10%">
+            Actions
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model is null || Model.Count == 0)
+    {
+        <p>There are nothing to show</p>
+    }
+    else
+    {
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    <div class="row">
+                        <div class="col-sm">
+                            <a>
+                                @user.UserName
+                            </a>
+                            <br>
+                            <small>
+                                @user.Id
+                            </small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a>
+                        @user.Email
+                    </a>
+                </td>
+                <td>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a style='margin-right:16px' asp-area="AdminOld" asp-controller="UserRoles" asp-action="Index" asp-route-userId="@user.Id" class="dropdown-item">
+                                                            <i class="fas fa-wrench"></i> Manage Roles
+                                                        </a></li>
+                      </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>

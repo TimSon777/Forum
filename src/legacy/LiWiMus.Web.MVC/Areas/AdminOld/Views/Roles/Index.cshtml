@@ -1,0 +1,66 @@
+@model List<LiWiMus.Core.Roles.Role>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h1>Roles</h1>
+@if (Model is null || Model.Count == 0)
+{
+    <p>There are nothing to show</p>
+}
+else
+{
+    <table class="table table-striped" id="roleTable">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>IsPublic</th>
+            <th>PricePerMonth</th>
+            <th style="width:10%">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Id</td>
+                <td>@role.Name</td>
+                <td>@role.Description</td>
+                <td>@role.IsPublic</td>
+                <td>@role.PricePerMonth</td>
+                <td class="text-right">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item">
+                                    <i class="fas fa-pencil-alt"></i> Edit
+                                </a>
+                            </li>
+                            <li>
+                                <form class="d-inline">
+                                    <a class="dropdown-item"><i class="fas fa-trash-alt"></i> Delete</a>
+                                </form>
+                            </li>
+                            @if (role.Name != "SuperAdmin")
+                            {
+                                <li>
+                                    <a style='margin-right:16px' asp-area="AdminOld" asp-controller="Permission" asp-action="Index" asp-route-roleId="@role.Id" class="dropdown-item">
+                                        <i class="fas fa-wrench"></i> Manage Permissions
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+<a asp-area="AdminOld" asp-controller="Roles" asp-action="AddRole">Add new role</a>

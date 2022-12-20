@@ -1,0 +1,94 @@
+@using Microsoft.AspNetCore.Authorization
+@using LiWiMus.Web.MVC.Areas.User.ViewModels
+@using LiWiMus.Core.Plans
+@model LiWiMus.Web.MVC.Areas.Music.ViewModels.PlaylistViewModel
+@inject IAuthorizationService _authorizationService
+
+@{
+    ViewBag.Title = "Add tracks";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header
+{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div class="editor-wrap">
+    <div>
+        <h2 class="your-profile-header">
+            Add tracks to playlist
+        </h2>
+    </div>
+    
+    <section class="edit-inputs-group">
+        @foreach (var track in Model.Tracks)
+        {
+            <p>@track.Name</p>
+
+            <form class="form-add-track-to-playlist" method="post" asp-action="AddOrRemoveTrack">
+                <input type="hidden" name="@nameof(TrackPlaylistViewModel.TrackId)" value="@track.Id">
+                <input type="hidden" name="@nameof(TrackPlaylistViewModel.PlaylistId)" value="@Model.Id">
+                <input type="submit" class="edit-button" value="Remove">
+            </form>
+        }
+
+        <form id="search-tracks-to-playlist" method="get" asp-action="Search">
+            <div class="label-input">
+                <input type="text" class="form-control" name="@nameof(SearchForPlaylistViewModel.Title)"/>
+                <input type="hidden" name="@nameof(SearchForPlaylistViewModel.PlaylistId)" value="@Model.Id"/>
+            </div>
+            <div>
+                <button class="edit-button">Search</button>
+
+            </div>
+        </form>
+
+        <div id="tracks-to-playlist">
+
+        </div>
+    </section>
+    
+    <section class="edit-inputs-group">
+        <div class="m-3">
+            @if (await _authorizationService.AuthorizeAsync(User, DefaultPermissions.Playlist.Private.Name) is {Succeeded:true})
+            {
+                <form class="m-3" asp-formhelper="true" method="post" asp-area="User" asp-controller="Playlist" asp-action="TogglePublicity" asp-enableButtonAfterSuccess="true">
+                    <input type="hidden" name="playlistId" value="@Model.Id">
+                    <input class="mt-2 change-password-button" type="submit" value="Toggle publicity" style="background: none; border-color: #EF6817; color: #EF6817">
+                </form>
+            }
+            else
+            {
+                 <a class="text-link" asp-area="User" asp-controller="Plans" asp-action="Index">Buy plan to make playlist public</a>
+            }
+        </div>
+
+
+        <div class="m-3">
+            @if (await _authorizationService.AuthorizeAsync(User, DefaultPermissions.Playlist.Cover.Name) is {Succeeded:true})
+                    {
+                        <form class="m-3" asp-enableButtonAfterSuccess="true" asp-formhelper="true" method="post" asp-area="User" asp-controller="Playlist" asp-action="UpdatePhoto" enctype="multipart/form-data">
+                            <input type="hidden" name="Id" value="@Model.Id">
+                            <input class="form-control" type="file" name="Photo" accept="image/*">
+                            <input class="mt-3 change-password-button" type="submit" value="Update photo" style="background: none; border-color: #EF6817; color: #EF6817">
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="text-link" asp-area="User" asp-controller="Plans" asp-action="Index">Buy plan to set photo</a>
+                    }
+        </div>
+
+        <form asp-formhelper="true" class="m-3" method="put" asp-resetFormAfterSuccess="false" asp-area="User" asp-controller="Playlist" asp-action="Update" asp-enableButtonAfterSuccess="true">
+            <input type="hidden" name="Id" value="@Model.Id">
+            <input class="form-control" type="text" name="Name" value="@Model.Name">
+            <input class="mt-2 edit-button" type="submit" value="Edit">
+        </form>
+    </section>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/playlist.js"></script>
+}

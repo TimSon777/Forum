@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@model IEnumerable<LiWiMus.Web.MVC.ViewModels.ForListViewModels.PlaylistForListViewModel>
+@inject IOptions<PullUrls> Urls
+
+<div class="playlists">
+    @foreach (var playlist in Model)
+    {
+        <a asp-area="Music" asp-controller="Playlist" asp-action="Index" asp-route-playlistId="@playlist.Id">
+            <div class="playlist-container search-item">
+                <div>
+                    @if (playlist.PhotoLocation != null)
+                    {
+                        var src = Urls.Value.FileServer + playlist.PhotoLocation;
+
+                        <img class="playlist-image" src="@src" alt="Playlist cover." width="250px" height="250px"/>
+                    }
+                    else
+                    {
+                        <img class="playlist-image" src="../images/main-background.jpg" alt="Playlist cover." width="250px" height="250px"/>
+                    }
+                </div>
+                <div class="playlist-information">
+                    <p class="playlist-name">@playlist.Name</p>
+                    @if (playlist.IsOwner)
+                    {
+                        <p class="playlist-owner">Your playlist</p>
+                    }
+                    else
+                    {
+                        <p class="playlist-owner">Owner: @playlist.Owner.UserName</p>
+                    }
+
+                    <p class="playlist-subscribers">Subscribers: @playlist.CountSubscribers</p>
+                </div>
+            </div>
+        </a>
+    }
+</div>

@@ -1,0 +1,25 @@
+﻿@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<LiWiMus.Web.MVC.ViewModels.ForListViewModels.TrackForListViewModel>
+@inject IOptions<PullUrls> Urls
+
+@{
+    Layout = null;
+}
+
+<div class="tracks">
+    @foreach (var e in Model)
+    {
+        var src = Urls.Value.FileServer + e.Album.CoverLocation;
+
+        <a asp-area="Music" asp-controller="Track" asp-action="Index" asp-route-trackId="@e.Id">
+            <div class="track-container search-item">
+                <img class="track-image" src="@src" alt="Track cover." width="230px" height="230px"/>
+                <p class="track-name">@e.Name</p>
+                <p class="track-album-title">@e.Album.Title</p>
+                <p class="track-owner">@e.Owners.FirstOrDefault()?.Name</p>
+            </div>
+        </a>
+    }
+</div>

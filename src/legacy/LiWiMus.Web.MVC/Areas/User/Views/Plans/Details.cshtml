@@ -1,0 +1,88 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.PlanViewModel
+
+@{
+    ViewData["Title"] = "Plan";
+}
+
+@section Header
+{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<section class="p-3">
+    <a asp-area="User" asp-controller="Plans" asp-action="Index">
+        <button class="random-avatar-button">
+            Back
+        </button>
+    </a>
+</section>
+
+<section class="tarif-section p-1">
+    <div class="tariffs-header m-1" >
+        <p>Plan @Model.Name</p>
+    </div>
+</section>
+
+<section class="buy-tariff-section">
+    @if (!Model.IsActive)
+    {
+        <p class="contact-us-header">Interested?</p>
+
+    }
+    else
+    {
+        <p class="contact-us-header">Do you like it?</p>
+
+    }
+
+    <div class="tariff-curd-buy-wrap">
+        <div class="tariffs-cards active-plan">
+            <div class="tariff-container">
+                <div class="tariff-card">
+                    <div class="tariff-card-header">
+                        <div class="tariff-title">
+                            @Model.Name
+                        </div>
+                        <div class="tariff-description">
+                            @Model.Description
+                        </div>
+                    </div>
+                    <div class="tariff-advantages">
+                        @foreach (var permission in Model.Permissions)
+                        {
+                            <div class="advantage mb-3">
+                                <p class="advantage-text">@permission.Description</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="contact-us-card-container">
+            <div class="contact-us-card">
+                <p class="contact-us-card-header">
+                    Try the plan!
+                </p>
+                @if (!Model.IsActive)
+                {
+                    <form class="buy-plan-form" asp-formhelper="true" asp-resetFormAfterSuccess="false" method="post" asp-action="BuyPlan"
+                          asp-callback="changeBuyButton">
+                        <input type="text" hidden="hidden" name="planId" value="@Model.Id">
+                        <input type="text" hidden="hidden" name="monthsNumber" value="1">
+                        <button type="submit" class="buy-tariff-button">Buy</button>
+                    </form>
+                }
+                else
+                {
+                    <button type="submit" class="buy-tariff-button " disabled="disabled">Purchased</button>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function changeBuyButton() {
+        const btn = $(this).find('button[type="submit"]')[0];
+        btn.target.innerText = 'Purchased';
+    }
+</script>

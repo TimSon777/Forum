@@ -1,0 +1,42 @@
+@model LiWiMus.Web.MVC.Areas.Artist.ViewModels.CreateAlbumViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div class="editor-wrap">
+    <div>
+        <h2 class="your-profile-header">
+            Create album
+        </h2>
+    </div>
+    <section class="edit-inputs-group">
+        <form method="post" enctype="multipart/form-data"
+              asp-action="Create">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                <div class="label-input">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input type="text" class="form-control" asp-for="Title"/>
+                    <span asp-validation-for="Title"></span>
+                </div>
+                <div class="label-input">
+                    <label asp-for="PublishedAt" class="form-label">Published At</label>
+                    <input type="date" class="form-control" asp-for="PublishedAt"/>
+                    <span asp-validation-for="PublishedAt"></span>
+                </div>
+                <div class="label-input">
+                    <label asp-for="Cover" class="form-label">Cover</label>
+                    <input asp-for="Cover" type="file" class="form-control" accept="image/*"/>
+                    <span asp-validation-for="Cover"></span>
+                </div>
+                <div class="" style="text-align: center">
+                    <button class="edit-button" type="submit" id="btn-edit-profile-info">Create</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>

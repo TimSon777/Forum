@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "_Layout";
+}
+@await RenderSectionAsync("Header", false)
+@if (!IsSectionDefined("Header"))
+{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+<div class="container-fluid" style="padding: 0; margin: 0; background: linear-gradient(to right, #212529 100%, rgba(0,0,0,0) 300px);">
+    <main role="main">
+        <div class="body-sidebar">
+            <div class="user-sidebar" style="background-color: #212529; position: relative;">
+                <partial name="Partials/_LoginSidebarPartial"/>
+            </div>
+            <div class="w3-main" style="margin-left:300px">
+              <button class="w3-button w3-xlarge w3-hide-large" style="color: wheat" onclick="w3_open()">&#9776;</button>
+              
+            
+             <div class="w3-container" style="padding: 0">
+               @RenderBody()
+             </div>
+               
+            </div>
+
+        </div>
+    </main>
+</div>
+
+@section Scripts
+{
+    @await RenderSectionAsync("Scripts", false)
+}

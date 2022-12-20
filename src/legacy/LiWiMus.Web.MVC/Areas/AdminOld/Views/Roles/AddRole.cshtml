@@ -1,0 +1,34 @@
+@model LiWiMus.Web.Areas.Admin.ViewModels.RoleViewModel
+
+@{
+    ViewData["Title"] = "Add role";
+}
+
+<form method="post" asp-area="AdminOld" asp-controller="Roles" asp-action="AddRole">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control">
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <input asp-for="Description" class="form-control">
+        <span asp-validation-for="Description"></span>
+    </div>
+    <div class="mb-3 form-check">
+        <input asp-for="IsPublic" class="form-check-input">
+        <label asp-for="IsPublic" class="form-check-label"></label>
+        <span asp-validation-for="IsPublic"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="PricePerMonth" class="form-label"></label>
+        <input asp-for="PricePerMonth" class="form-control">
+        <span asp-validation-for="PricePerMonth"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DefaultTimeout" class="form-label"></label>
+        <input asp-for="DefaultTimeout" class="form-control">
+        <span asp-validation-for="DefaultTimeout"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add role</button>
+</form>

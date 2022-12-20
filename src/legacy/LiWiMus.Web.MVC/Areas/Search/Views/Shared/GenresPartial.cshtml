@@ -1,0 +1,17 @@
+﻿@model IEnumerable<LiWiMus.Web.MVC.ViewModels.ForListViewModels.GenreForListViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="genres">
+    @foreach (var genre in Model)
+    {
+        <a asp-area="Music" asp-controller="Genre" asp-action="Index" asp-route-genreId="@genre.Id">
+            <div class="genre-container search-item">
+                <p class="genre-name">@genre.Name</p>
+            </div>
+        </a>
+    }
+</div>

@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using LiWiMus.Core.Users
+@model LiWiMus.Web.MVC.Areas.User.ViewModels.PaymentViewModel
+@inject UserManager<User> _userManager
+@{
+    ViewData["Title"] = "Pay";
+    Layout = "_LayoutSidebar";
+}
+@{ var user = await _userManager.GetUserAsync(User);}
+<div class="payment-form-container change-password-container">
+    <div class="p-4" style="outline: 1px solid wheat; width: fit-content; border-radius:10px; margin: 0 auto  ">
+       Balance: @Math.Round(user.Balance,2)
+    </div>
+    <div class="change-password-outline row justify-content-center">
+        <div class="change-password-form-container">
+            <h3 class="mb-4" style="padding-bottom: 4%; border-bottom: 2px solid #EF6817">Pay</h3>
+            <form class="change-password-form" asp-formhelper="true" asp-resetFormAfterSuccess="false" method="post">
+                @Html.HiddenFor(model => model.ReturnUrl)
+                @Html.HiddenFor(model => model.Reason)
+
+                <div class="label-input mt-2">
+                    <label asp-for="Amount" class="form-label">Amount</label>
+                    <input asp-for="Amount" class="edit-profile-input">
+                    <div class="mt-2">
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="label-input mt-4">
+                    <label asp-for="CardNumber" class="form-label">Card number</label>
+                    <input asp-for="CardNumber" class="edit-profile-input">
+                    <div class="mt-2">
+                        <span asp-validation-for="CardNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="label-input mt-4">
+                    <label asp-for="CardExpires" class="form-label">Card expires</label>
+                    <input asp-for="CardExpires" class="edit-profile-input">
+                    <div class="mt-2">
+                        <span asp-validation-for="CardExpires" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="label-input mt-4">
+                    <label asp-for="CardHolder" class="form-label">Card holder</label>
+                    <input asp-for="CardHolder" class="edit-profile-input">
+                    <div class="mt-2">
+                        <span asp-validation-for="CardHolder" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="label-input mt-4">
+                    <label asp-for="CvvCode" class="form-label">Cvv code</label>
+                    <input asp-for="CvvCode" class="edit-profile-input">
+                    <div class="mt-2">
+                        <span asp-validation-for="CvvCode" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="save-password-button">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

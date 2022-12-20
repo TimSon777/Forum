@@ -1,0 +1,26 @@
+@model List<LiWiMus.Core.Artists.Artist>
+
+@{
+    ViewData["Title"] = "Artists";
+    Layout = "_LayoutSidebar";
+}
+<div class="p-0">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                Your artists
+            </h2>
+        </div>
+        <div style="margin-left: 3%">
+            <a class="text-link" style="font-size: larger" asp-area="Artist" asp-controller="Home" asp-action="Create">Create new artist</a>
+        </div>
+        <ol style="margin: 2% 0 0 2%">
+            @foreach (var artist in Model)
+            {
+                <li>
+                    <a class="text-link" asp-area="Artist" asp-controller="Home" asp-action="Profile" asp-route-id="@artist.Id">@artist.Name</a>
+                </li>
+            }
+        </ol>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.ChatViewModel?
+@{
+    Layout = "_Layout";
+}
+
+<button class="btn-close-chat m-3" id="btn-close-chat-by-user">Close chat</button>
+
+<div class="chat-and-textarea-and-button">
+    <div class="messages-area" id="chat"></div>
+    <div class="textarea-send-btn">
+        <textarea class="form-control text-area-custom" id="ta-send-to-consultant" rows="3" pattern="^[^<>]*$" minlength="1" maxlength="200"></textarea>
+        <div class="chat-btn-wrap">
+            <button class="btn-send-to-chat" id="btn-send-to-consultant">
+                Send
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/user_chat.js"></script>
+}

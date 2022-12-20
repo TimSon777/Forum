@@ -1,0 +1,38 @@
+﻿@using LiWiMus.Core.Users
+@using Microsoft.AspNetCore.Identity
+@using LiWiMus.Core.Roles
+@inject SignInManager<User> _signInManager
+@inject UserManager<User> _userManager
+
+<ul class="navbar-nav">
+    @{
+        User? currentUser;
+        if (_signInManager.IsSignedIn(User) && (currentUser = await _userManager.GetUserAsync(User)) is not null)
+        {
+            if (User.HasClaim(SystemPermission.ClaimType, DefaultSystemPermissions.Admin.Access.Name))
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-white d-inline-block" title="Admin - roles" href="/admin">Admin</a>
+                </li>
+            }
+            <li class="nav-item">
+                <img src="~/@currentUser.AvatarLocation" alt="" class="img-fluid" style="width: 42px; border-radius: 100%">
+                <a class="nav-link text-white d-inline-block" title="Manage" asp-area="User" asp-controller="Profile" asp-action="Index">Profile</a>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" asp-area="User" asp-controller="Account" asp-action="Logout">
+                    <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
+                </form>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white" asp-area="User" asp-controller="Account" asp-action="Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" asp-area="User" asp-controller="Account" asp-action="Login">Login</a>
+            </li>
+        }
+    }
+</ul>

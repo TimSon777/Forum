@@ -1,0 +1,89 @@
+@model LiWiMus.Web.MVC.Areas.Music.ViewModels.ArtistViewModel
+
+
+@{
+    ViewBag.Title = "Artist";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<style>
+    .img-container img {
+      max-width: 100%;
+    }
+</style>
+<div class="p-0 album-profile">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                @Model.Name
+            </h2>
+        </div>
+        <div class="subscribe-container" id="subscriptionDiv" style="margin: 0 2% 2%;">
+            <form class="subscribe-form" asp-formhelper="true" asp-controller="Artist" asp-action="SubscribeOrUnsubscribe">
+                @if (Model.IsSubscribed)
+                {
+                    <input name="artistId" type="hidden" value="@Model.Id">
+                    <button class="subscribe-button subscribed" id="unsubscribtionButton">Unsubscribe</button>
+                }
+                else
+                {
+                    <input name="artistId" type="hidden" value="@Model.Id">
+                    <button class="subscribe-button" id="subscribtionButton">Subscribe</button>
+                }
+            </form>
+        </div>
+
+        <section class="avatar-about-section edit-inputs-group">
+            <div>
+                    <img class="music-artist-image" src="@System.IO.Path.Combine(ViewData["fileServer"]?.ToString()!, Model.PhotoLocation)" alt="album cover">
+            </div>
+            <div class="music-artist-about">
+                @Model.About
+            </div>
+        </section>
+        <div>
+            <h2 class="your-profile-header">
+                Users
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            <div>
+                @foreach (var user in Model.Owners)
+                {
+                    <div>
+                        <a class="text-link" asp-area="User" asp-controller="Profile" asp-action="Index" asp-route-userName="@user.UserName">@user.UserName</a>
+                    </div>
+                }
+            </div>
+        </section>
+        <div>
+            <h2 class="your-profile-header">
+                Albums
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            <div>
+                @foreach (var album in Model.Albums)
+                {
+                    <div>
+                        <a class="text-link" asp-area="Music" asp-controller="Album" asp-action="Index" asp-route-albumId="@album.Id">
+                            @album.Title 
+                        </a>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js" integrity="sha512-IlZV3863HqEgMeFLVllRjbNOoh8uVj0kgx0aYxgt4rdBABTZCl/h5MfshHD9BrnVs6Rs9yNN7kUQpzhcLkNmHw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/subscribeUnsubscribe.js"></script>
+}
+
+

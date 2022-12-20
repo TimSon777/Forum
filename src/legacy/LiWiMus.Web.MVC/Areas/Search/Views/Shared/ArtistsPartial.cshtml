@@ -1,0 +1,21 @@
+﻿@using LiWiMus.Web.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@model IEnumerable<LiWiMus.Web.MVC.ViewModels.ForListViewModels.ArtistForListViewModel>
+@inject IOptions<PullUrls> Urls
+
+
+<div class="artists">
+    @foreach (var artist in Model)
+    {
+        var src = Urls.Value.FileServer + artist.PhotoLocation;
+
+        <a asp-area="Music" asp-controller="Artist" asp-action="Index" asp-route-artistId="@artist.Id">
+            <div class="artist-container search-item">
+                <img class="artist-image" src="@src" alt="Artist avatar." width="250px" height="250px"/>
+                <p class="artist-name">@artist.Name </p>
+                <p class="artist-about">@artist.About</p>
+            </div>
+        </a>
+    }
+</div>

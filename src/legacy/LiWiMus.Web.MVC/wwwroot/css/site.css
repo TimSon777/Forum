@@ -1,0 +1,119 @@
+html {
+    position: relative;
+    min-height: 100%;
+    font-size: 14px;
+    overflow: auto;
+    font-family: 'Overpass', sans-serif;
+    font-style: normal;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+    
+}
+
+
+br {
+    display: block;
+    margin: 0;
+    content: "";
+}
+
+body {
+    font-family: 'Overpass', sans-serif;
+    font-style: normal;
+}
+
+/*
+body {
+    margin-bottom: 60px;
+}
+*/
+
+.editor-wrap {
+    padding-top: 2%;
+}
+
+.account-input-field {
+    width: 100%;
+    border: none;
+    padding-left: 4%;
+    border-radius: 20px
+}
+
+.account-submit-button-area {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2%;
+    font-size: smaller
+}
+
+.account-submit-button {
+    border-radius: 50px;
+    background-color: #EF6817;
+}
+
+.body {
+    padding: 60px;
+    height: 100vh;
+    background-color: #727271;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    justify-content: center;
+}
+
+/*.body-main {
+    display: grid;
+    grid-template-columns: 4fr 2fr;
+    height: 100vh;
+}
+.body-sidebar {
+    display: grid;
+    grid-template-columns: 1.5fr 6fr;
+    height: 100vh;
+}*/
+
+.content {
+    position: absolute;
+    min-width: 166px;
+    width: 20%
+}
+
+.login-buttons {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    width: 80%;
+    min-width: 120px;
+}
+
+.user-sidebar-nav {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -15%);
+    display: grid;
+}
+
+.text-link {
+    text-decoration: none;
+    color: white;
+}
+
+.text-link:hover {
+    color: wheat;
+}
+
+.custom-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(245,222,179)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+}
+
+.custom-toggler .navbar-toggler {
+    border-color: #f5deb3;
+}

@@ -1,0 +1,84 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@model LiWiMus.Core.Tracks.Track
+@inject IOptions<PullUrls> Urls;
+
+@{
+    ViewData["Title"] = "Track Profile";
+    Layout = "_LayoutSidebar";
+
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+
+<div class="p-0">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                @Model.Name
+            </h2>
+            <a class="text-link your-profile-header" asp-area="Artist" asp-route-artistId="@ViewContext.RouteData.Values["id"]" asp-controller="Tracks" asp-action="Index">
+                Back to all tracks
+            </a>
+            @*<a class="text-link your-profile-header" asp-route-artistId="@Model.Id" asp-area="Artist" asp-controller="Albums" asp-action="Index">
+                Manage albums
+            </a>
+            <a class="text-link your-profile-header" asp-route-artistId="@Model.Id" asp-area="Artist" asp-controller="Tracks" asp-action="Index">
+                Manage tracks
+            </a>*@
+        </div>
+
+        <section class="edit-inputs-group">
+            <form method="put"
+                  enctype="multipart/form-data"
+                  asp-formhelper="true"
+                  asp-action="Update"
+                  asp-route-artistId="@ViewContext.RouteData.Values["artistId"]"
+                  asp-enableButtonAfterSuccess="true"
+                  asp-resetFormAfterSuccess="false">
+                <input type="text" hidden name="Id" value="@Model.Id">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                    <div class="label-input">
+                        <label for="Name" class="form-label">Name</label>
+                        <input id="Name" name="Name" type="text" class="form-control" value="@Model.Name">
+                        <span data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="label-input">
+                        <label for="PublishedAt" class="form-label">Published at</label>
+                        <input id="PublishedAt" name="PublishedAt" class="form-control" type="date" value="@Model.PublishedAt.ToString("yyyy-MM-dd")">
+                        <span data-valmsg-for="PublishedAt" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="label-input">
+                        <label for="File" class="form-label">Change file</label>
+                        <input name="File" class="form-control" type="file" accept="audio/*">
+                        <span data-valmsg-for="File" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="" style="text-align: center">
+                        <button class="edit-button" type="submit" id="btn-edit-profile-info">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+        @*<div>
+            <h2 class="your-profile-header">
+                Genres
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            @{
+                foreach (var genre in Model.Genres)
+                {
+                    <div>
+                        <a class="text-link" asp-area="Music" asp-controller="Genre"  asp-action="Index" asp-route-id="@genre.Id">@genre.Name</a>
+                    </div>
+                }
+            }
+        </section>
+        *@
+
+    </div>
+</div>

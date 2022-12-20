@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@model LiWiMus.Web.MVC.Areas.Artist.ViewModels.CreateArtistViewModel
+@inject IOptions<PullUrls> Urls
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div class="editor-wrap">
+    <div>
+        <h2 class="your-profile-header">
+            Create artist profile
+        </h2>
+    </div>
+    <section class="edit-inputs-group">
+        <form method="post"
+              enctype="multipart/form-data"
+              asp-action="Create"
+              id="create-artist-form"
+              >
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                <div class="label-input">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" asp-for="Name">
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <div class="label-input">
+                    <label asp-for="About" class="form-label">About</label>
+                    <input asp-for="About" type="text" class="form-control">
+                    <span asp-validation-for="About"></span>
+                </div>
+                <div class="label-input">
+                    <label asp-for="Photo" class="form-label">Photo</label>
+                    <input asp-for="Photo" accept="image/*">
+                    <span asp-validation-for="Photo"></span>
+                </div>
+                
+                
+                <div class="" style="text-align: center">
+                    <button class="edit-button" type="submit" id="btn-edit-profile-info">Create</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>

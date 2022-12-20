@@ -1,0 +1,228 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Core.Plans
+@using LiWiMus.Web.Shared
+@model LiWiMus.Web.MVC.Areas.User.ViewModels.ProfileViewModel
+@inject IAuthorizationService AuthorizationService
+@inject IOptions<PullUrls> Urls
+
+@{
+    ViewBag.Title = "User Profile";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<style>
+    .img-container img {
+      max-width: 100%;
+    }
+</style>
+
+
+<div class="p-0">
+    <section class="user-nav">
+
+    </section>
+
+    <div class="editor-wrap">
+        <div>
+            @if (Model.IsAccountOwner)
+            {
+                <h2 class="your-profile-header">
+                    Your profile
+                </h2>
+            }
+            else
+            {
+                <h2 class="your-profile-header">
+                    @Model.UserName profile
+                </h2>  
+            }
+            <div class="top-buttons-container">
+                @if (Model.IsAccountOwner)
+                {
+                    @if (!Model.EmailConfirmed)
+                    {
+                        @:<p class="verified-text fw-bold">(Your account has not been verified)</p>
+                        <div class="verify-account-container">
+                            <form class="confirmation-form" asp-formhelper="true" method="post" asp-controller="Account" asp-action="SendConfirmEmailAgain">
+                                <input class="change-password-button" type="submit" value="Send a confirmation email">
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        @:<p class="verified-text fw-bold">(Your account is verified)</p>
+                    }
+                }
+            </div>
+            @if (Model.IsAccountOwner)
+            {
+                <a class="text-link your-profile-header" asp-area="Artist" asp-controller="Home">
+                    <button class="random-avatar-button">
+                        Manage artists
+                    </button>
+                </a>
+            }
+            else
+            {
+                <div id="subscriptionDiv" style="margin: 0 2% 2%;">
+                    <form asp-formhelper="true" asp-callback="" asp-area="User" asp-controller="Following" method="post" asp-action="SubscribeOrUnsubscribeUser">
+                        <input name="username" type="hidden" value="@Model.UserName">
+                        @if (Model.IsSubscribed)
+                        {
+                            <button class="subscribe-button subscribed" id="unsubscribtionButton">Unsubscribe</button>
+                        }
+                        else
+                        {
+                            <button id="subscribtionButton" class="subscribe-button">Subscribe</button>
+                        }
+                    </form>
+                </div>
+            }
+        </div>
+
+        <section class="edit-inputs-group">
+            <form asp-formhelper="true"
+                  class="edit-inputs-form"
+                  asp-resetFormAfterSuccess="false"
+                  asp-beforeSubmit="beforeSubmit"
+                  asp-area="User" asp-controller="Profile" asp-action="Update">
+
+                <input asp-for="Id" hidden="hidden">
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                    <div class="label-input">
+                        <label asp-for="FirstName"></label>
+                        <input class="edit-profile-input disabled-input" asp-for="FirstName" disabled="disabled"/>
+                        <span asp-validation-for="FirstName"></span>
+                    </div>
+
+                    <div class="label-input">
+                        <label asp-for="BirthDate"></label>
+                        <input class="edit-profile-input disabled-input" asp-for="BirthDate" value="@Model.BirthDate?.ToString("yyyy-MM-dd")" disabled="disabled">
+                        <span asp-validation-for="BirthDate"></span>
+                    </div>
+
+                    <div class="label-input">
+                        <label asp-for="UserName"></label>
+                        <input class="edit-profile-input disabled-input" asp-for="UserName" disabled="disabled">
+                        <span asp-validation-for="UserName"></span>
+                    </div>
+
+                    <div class="label-input">
+                        <label asp-for="SecondName"></label>
+                        <input class="edit-profile-input disabled-input" asp-for="SecondName" disabled="disabled">
+                        <span asp-validation-for="SecondName"></span>
+                    </div>
+
+                    <div class="label-input">
+                        <label asp-for="Patronymic"></label>
+                        <input class="edit-profile-input disabled-input" asp-for="Patronymic" disabled="disabled">
+                        <span asp-validation-for="Patronymic"></span>
+                    </div>
+
+
+                    @if (Model.IsAccountOwner)
+                    {
+                        <div class="label-input">
+                            <label asp-for="Email"></label>
+                            <input class="edit-profile-input disabled-input" asp-for="Email" disabled="disabled">
+                            <span asp-validation-for="Email"></span>
+                        </div>
+
+                        if (await AuthorizationService.AuthorizeAsync(User, DefaultPermissions.Avatar.Upload.Name) is {Succeeded: true})
+                        {
+                            <label class="label-input" style="cursor: pointer">
+                                Change your avatar
+                                <input type="file" asp-for="Avatar" class="visually-hidden disabled-input" id="input" name="image" accept="image/*" disabled="disabled">
+                                <span asp-validation-for="Avatar"></span>
+                                <div class="camera-icon">
+                                    <img src="../images/camera.png" width="48px" height="48px" alt="Camera icon."/>
+                                </div>
+                            </label>
+                        }
+
+                        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel">Crop the image</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="img-container">
+                                            <img id="image" src="">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="crop">Crop</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="label-input">
+                        <p class="m-0">Gender</p>
+                        @{
+                            var isMale = Model.IsMale;
+                        }
+                        <div class="gender-checkbox-container">
+                            <div>
+                                <input class="form-check-input disabled-input custom-radio" @(isMale ? "checked" : "") type="radio" name="gender" id="gender-male" disabled="disabled">
+                                <label class="form-check-label" for="gender-male">
+                                    Male
+                                </label>
+                            </div>
+                            <div>
+                                <input class="form-check-input disabled-input custom-radio" @(!isMale ? "checked" : "") type="radio" name="gender" id="gender-female" disabled="disabled">
+                                <label class="form-check-label" for="gender-female">
+                                    Female
+                                </label>
+                            </div>
+                        </div>
+                        <input type="hidden" id="is-male" asp-for="IsMale">
+                    </div>
+
+
+                    @if (Model.IsAccountOwner)
+                    {
+                        <div class="" style="text-align: center">
+                            <button class="edit-button" type="button" id="btn-edit-profile-info">Edit</button>
+                            <input class="edit-button" id="btn-save-profile-info" type="submit" value="Save" style="display: none; background-color: #21201F">
+                        </div>
+                    }
+
+                </div>
+            </form>
+        </section>
+        
+        <section class="change-password-random-avatar-btns">
+            @if (Model.IsAccountOwner)
+            {
+                <form asp-formhelper="true" asp-action="ChangeAvatarToRandom" style="display: flex; justify-content: center" asp-callback="callback">
+                    <button class="random-avatar-button">Set random avatar</button>
+                </form>
+                <div class="change-password-button">
+                    <a asp-area="User" asp-controller="Profile" asp-action="ChangePassword">Change Password</a>
+                </div>
+            }
+        </section>
+
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js" integrity="sha512-IlZV3863HqEgMeFLVllRjbNOoh8uVj0kgx0aYxgt4rdBABTZCl/h5MfshHD9BrnVs6Rs9yNN7kUQpzhcLkNmHw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/update_profile.js"></script>
+    <script src="/js/subscribeUnsubscribe.js"></script>
+}

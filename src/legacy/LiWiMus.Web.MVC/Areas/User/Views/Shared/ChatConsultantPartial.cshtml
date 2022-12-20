@@ -1,0 +1,34 @@
+﻿@model (LiWiMus.Web.MVC.Areas.User.ViewModels.ChatViewModel chat, string ownerUserName)
+
+@{
+    Layout = null;
+}
+
+<div class="chats" id="chat-@Model.chat.User.UserName">
+    <div class="chat">
+        <button class="btn-send-to-chat" id="delete-chat-@Model.chat.User.UserName"
+                onclick="$('#chat-@Model.chat.User.UserName').remove();" style="display: none"> 
+            Delete chat
+        </button>
+        <div class="user-name">
+            <h3 class="m-2">
+                @Model.chat.User.UserName
+            </h3>
+        </div>
+
+        <div class="chat-textarea">
+            <div id="@Model.chat.User.UserName">
+                @foreach (var message in Model.chat.Messages)
+                {
+                    <partial name="MessageConsultantPartial" model="@((message, message.Owner.UserName == Model.ownerUserName))"/>
+                }
+            </div>
+        </div>
+        
+        <textarea class="ta-send-message-to-user" id="@Model.chat.UserConnectionId" minlength="1" maxlength="200"></textarea>
+        <div class="consultant-chat-buttons">
+                <button id="btn-@Model.chat.User.UserName" class="btn-send-to-user m-3" value="@Model.chat.UserConnectionId">Send</button>
+            <button class="btn-close-chat-by-consultant-@Model.chat.User.UserName btn-send-to-chat" value="@Model.chat.User.UserName" style="outline: 1px solid red">Close chat</button>
+        </div>
+    </div>
+</div>

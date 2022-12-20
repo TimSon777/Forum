@@ -1,0 +1,25 @@
+﻿@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<LiWiMus.Web.MVC.ViewModels.ForListViewModels.AlbumForListViewModel>
+@inject IOptions<PullUrls> Urls
+
+@{
+    Layout = null;
+}
+
+<div class="albums">
+    @foreach (var album in Model)
+    {
+        var src = Urls.Value.FileServer + album.CoverLocation;
+
+        <a asp-area="Music" asp-controller="Album" asp-action="Index" asp-route-albumId="@album.Id">
+            <div class="album-container search-item">
+                <p class="album-title">@album.Title</p>
+                <img class="album-cover" src="@src" alt="Album cover." width="150px" height="150px"/>
+                <p class="album-artists">@string.Join("&", album.Owners.Select(x => x.Name))</p>
+                <p class="album-date">@album.PublishedAt</p>
+            </div>
+        </a>
+    }
+</div>

@@ -1,0 +1,83 @@
+﻿@using LiWiMus.Web.MVC.Areas.Search.ViewModels
+@using LiWiMus.SharedKernel
+@using SortingBy = LiWiMus.Web.MVC.Areas.Search.ViewModels.SortingBy
+
+@{
+    Layout = "_Layout";
+    const string prefix = nameof(SearchViewModel.SortViewModel);
+    var orderName = string.Join(".", prefix, nameof(SearchViewModel.SortViewModel.Order));
+    var sortingByName = string.Join(".", prefix, nameof(SearchViewModel.SortViewModel.SortingBy));
+}
+
+
+<div class="bg-dark custom-nav-container">
+    <nav class="navbar navbar-dark navbar-expand-sm">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LiWiMus</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuItems" aria-controls="menuItems" aria-expanded="false" aria-label="Toggle Navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuItems">
+            <ul class="navbar-nav custom-nav">
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="User" asp-action="Index">Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Album" asp-action="Index">Albums</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Artist" asp-action="Index">Artists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Genre" asp-action="Index">Genres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Playlist" asp-action="Index">Playlists</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Track" asp-action="Index">Tracks</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+<h1 class="text-white text-center mt-3 mb-4">@ViewData["Title"]</h1>
+
+<div>
+    <section class="mb-3">
+        <form method="get"
+              asp-action="ShowMore"
+              id="form-search" class="track-form-search" style="margin: 0 auto">
+            <div class="search-input-button-container">
+                <input type="text" id="input-search" class="form-control" name="@nameof(SearchViewModel.Title)" placeholder="Search..">
+                <input type="hidden" name="@nameof(SearchViewModel.Page)" id="input-page-search" value="2">
+                <button form="form-search" id="btn-search-search" class="search-btn" style="max-width: 80%">Search</button>
+            </div>
+            <div class="box">
+                <select name="@sortingByName" class="selectpicker search-select">
+                    <option class="search-select-option" value="@((int) SortingBy.Popularity)" elected="selected">By pop</option>
+                    <option value="@((int) SortingBy.Title)">By title</option>
+                </select>
+                <select name="@orderName" class="selectpicker search-select">
+                    <option value="@((int) Order.Asc)">Asc</option>
+                    <option value="@((int) Order.Desc)" selected="selected">Desc</option>
+                </select>
+            </div>
+        </form>
+    </section>
+    
+    <section class="track-section" style="margin: 0 auto">
+        <div class="p-3" id="search-items" >
+            @RenderBody()
+        </div>
+    </section>
+    
+    <section class="m-3" style="text-align: center">
+        <button form="form-search" id="btn-search-show-more" class="m-3 show-more-btn" style="min-width: 15%; max-width: 80%">Show more</button>
+    </section>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/js/search.js"></script>
+}

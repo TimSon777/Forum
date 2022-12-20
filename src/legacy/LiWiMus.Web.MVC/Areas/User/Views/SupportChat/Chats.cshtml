@@ -1,0 +1,22 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="row manage-chat-btns">
+    <button class="btn-send-to-chat col-1 m-2" id="online">Start work</button>
+    <button class="btn-send-to-chat col-1 m-2" id="offline">End work</button>
+    <button class="btn-send-to-chat col-1 m-2" id="refresh-chats">Refresh chats</button>
+</div>
+
+<section>
+    <div id="chats" class="chats"></div>
+</section>
+
+@section Scripts
+{
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/consultant_chat.js"></script>
+}

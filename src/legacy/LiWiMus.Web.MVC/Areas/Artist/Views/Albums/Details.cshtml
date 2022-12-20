@@ -1,0 +1,101 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@model LiWiMus.Core.Albums.Album
+@inject IOptions<PullUrls> Urls
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "_LayoutSidebar";
+    var coverSrc = Urls.Value.FileServer + Model.CoverLocation;
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<style>
+    .img-container img {
+      max-width: 100%;
+    }
+</style>
+
+<div class="p-0">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                Your album profile
+            </h2>
+            @*<a class="text-link your-profile-header" asp-route-artistId="@ViewContext.RouteData.Values["artistId"]" asp-area="Artist" asp-controller="Tracks" asp-action="Index">
+                 Manage tracks
+            </a>*@
+        </div>
+        @*<div id="deleteAlbum" style="margin: 0 2% 2%;">
+            <form asp-formhelper="true" method="Post" asp-route-artistId="@ViewContext.RouteData.Values["artistId"]"  asp-route-id="@Model.Id" asp-area="Artist" asp-action="Delete" asp-controller="Albums">
+                
+                <button class="edit-button" id="deleteButton" style="background-color: #21201F; max-width: none">Delete</button>
+            </form>
+        </div>*@
+        <section class="edit-inputs-group">
+            <div>
+                <img style="margin: 2%; border-radius:100%; width: 120px" src="@coverSrc" id="album-cover" alt="album cover">
+            </div>
+            <form method="put"
+                  enctype="multipart/form-data"
+                  asp-formhelper="true"
+                  asp-action="Update"
+                  asp-route-artistId="@ViewContext.RouteData.Values["artistId"]" asp-route-id="@ViewContext.RouteData.Values["id"]"
+                  asp-enableButtonAfterSuccess="true"
+                  asp-callback="callback">
+                <input type="text" hidden name="Id" value="@Model.Id">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                    <div class="label-input">
+                        <label for="Title" class="form-label">Title</label>
+                        <input id="Title" name="Title" type="text" class="form-control" value="@Model.Title">
+                        <span data-valmsg-for="Title" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="label-input">
+                        <label for="PublishedAt" class="form-label">Published At</label>
+                        <input id="PublishedAt" name="PublishedAt" type="date" class="form-control" value="@Model.PublishedAt.ToString("yyyy-MM-dd")">
+                        <span data-valmsg-for="PublishedAt" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="label-input">
+                        <label for="Cover" class="form-label">Change cover</label>
+                        <input id="Cover" name="Cover" class="form-control" type="file" accept="image/*">
+                        <span data-valmsg-for="Cover" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="" style="text-align: center">
+                        <button class="edit-button" type="submit" id="btn-edit-profile-info">Edit</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+        <div>
+            <h2 class="your-profile-header">
+                Album tracks
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            <div style="">
+                <a class="text-link" style="font-size: larger; font-weight: bolder" asp-area="Artist" asp-controller="Tracks" asp-route-artistId="@ViewContext.RouteData.Values["artistId"]" asp-route-albumId="@ViewContext.RouteData.Values["id"]" asp-action="Create">Create new track</a>
+            </div>
+            @{
+                foreach (var track in Model.Tracks)
+                {
+                    <div>
+                        <a class="text-link" asp-area="Artist" asp-controller="Tracks" asp-route-artistId="@ViewContext.RouteData.Values["artistId"]" asp-route-id="@track.Id" asp-action="Details">@track.Name</a>
+                    </div>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        function callback(e) {
+            $("#album-cover").attr("src", e.object.coverLocation)
+        }
+    </script>
+}

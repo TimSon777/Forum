@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header
+{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div style="display: grid;
+                grid-template-columns: 4fr 2fr;
+                height: 100vh;">
+    <div class="content-main" style="background-color: #727271;position: relative;overflow: hidden; display: flex; /*justify-content: center*/">
+        <img src="/images/main-background.jpg" alt="" style="position: absolute; height: 100%; opacity: 0.4;left: 50%; top: 50%; transform: translate(-50%, -50%);"/>
+        <div style="position:absolute; font-size: 48pt; height: auto; left: 5%; top: 5%; transform: translate(-5%, -5%); color: white">LiWiMus</div>
+        <div style="position:absolute; font-size: 72pt; height: auto; left: 50%; top: 50%; transform: translate(-50%, -50%); color: white">
+            Live<br/>
+            With<br/>
+            Music
+        </div>
+    </div>
+    <div class="about" style="background-color: #5F605D;position: relative">
+        <div class="about text-white" style="position: absolute; top: 25%; left: 20%;transform: translate(-20%, -25%); display: grid; grid-template-rows: 1fr 1fr">
+            <h3 style="padding-bottom: 10%; border-bottom: 2px solid #EF6817">Welcome to our site!</h3>
+            <a  class="text-link" style="padding-top: 1%; min-width: 100px" asp-area="Search" asp-controller="Track" asp-action="Index">Start exploring!</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/map.js"></script>
+}

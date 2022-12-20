@@ -154,3 +154,18 @@ services:
     environment:
       REDIS_PASSWORD: ${CACHE_PASSWORD}
       REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
+
+  legacy-liwimus-mvc:
+    ports:
+      - "8085:80"
+  
+  legacy-liwimus-db:
+    ports:
+      - "3306:3306"
+    volumes:
+      - ~/liwimus-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${LIWIMUS_DB_PASSWORD}
+      MYSQL_DATABASE: ${LIWIMUS_DB_NAME}
+      MYSQL_USER: ${LIWIMUS_DB_USER_NAME}
+      MYSQL_PASSWORD: ${LIWIMUS_DB_PASSWORD}

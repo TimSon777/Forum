@@ -1,0 +1,31 @@
+﻿@model LiWiMus.Web.MVC.Areas.User.ViewModels.CreatePlaylistViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<div class="editor-wrap">
+    <div>
+        <h2 class="your-profile-header">
+            Create playlist
+        </h2>
+    </div>
+    <section class="edit-inputs-group">
+        <form asp-formhelper="true" method="post" asp-action="Create" enctype="multipart/form-data">
+            <div class="label-input">
+                         <label asp-for="Name"></label>
+                         <input class="form-control" asp-for="Name">
+                         <span asp-validation-for="Name"></span>
+                     </div>
+
+            <div class="" style="text-align: center">
+                <button class="edit-button" type="submit" id="btn-edit-profile-info">Create</button>
+            </div>
+        </form>
+    </section>
+</div>

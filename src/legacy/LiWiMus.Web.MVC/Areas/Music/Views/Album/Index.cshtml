@@ -1,0 +1,94 @@
+@model LiWiMus.Web.MVC.Areas.Music.ViewModels.AlbumViewModel
+
+@{
+    ViewBag.Title = "Album";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<style>
+    .img-container img {
+      max-width: 100%;
+    }
+</style>
+<div class="p-0 album-profile">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                @Model.Title
+            </h2>
+        </div>
+        <div id="subscriptionDiv" style="margin: 0 2% 2%;">
+            <form asp-formhelper="true" asp-callback="" method="post" asp-action="SubscribeOrUnsubscribe">
+                <input name="albumId" type="hidden" value="@Model.Id">
+                @if (Model.IsSubscribed)
+                {
+                    <button class="subscribe-button subscribed" id="unsubscribtionButton">Unsubscribe</button>
+                }
+                else
+                {
+                    <button id="subscribtionButton" class="subscribe-button">Subscribe</button>
+                }
+            </form>
+        </div>
+
+        <section class="edit-inputs-group">
+            <div>
+                @{
+                    if (Model.CoverLocation.Equals("Location"))
+                    {
+                        <img style="margin: 2%; border-radius:100%; width: 120px; height: 120px" src="~/images/main-background.jpg" alt="album cover"/>
+                    }
+                    else
+                    {
+                        <img style="margin: 2%; border-radius:100%; width: 120px" src="/@Model.CoverLocation" alt="album cover">
+                    }
+                }
+            </div>
+
+            <div>
+                <p>Published at @Model.PublishedAt</p>
+
+            </div>
+        </section>
+        <div>
+            <h2 class="your-profile-header">
+                Artists
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            <div>
+                @foreach (var artist in Model.Owners)
+                {
+                    <div>
+                        <a class="text-link" asp-area="Music" asp-controller="Artist" asp-action="Index" asp-route-artistId="@artist.Id">@artist.Name</a>
+                    </div>
+                }
+            </div>
+        </section>
+        <div>
+            <h2 class="your-profile-header">
+                Tracks
+            </h2>
+        </div>
+        <section class="edit-inputs-group">
+            <div>
+                @foreach (var track in Model.Tracks)
+                {
+                    <div>
+                        <a class="text-link">@track.Name</a>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/2.0.0-alpha.2/cropper.min.js" integrity="sha512-IlZV3863HqEgMeFLVllRjbNOoh8uVj0kgx0aYxgt4rdBABTZCl/h5MfshHD9BrnVs6Rs9yNN7kUQpzhcLkNmHw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/subscribeUnsubscribe.js"></script>
+}

@@ -1,0 +1,15 @@
+@using LiWiMus.Web.MVC.Areas.User.ViewModels
+@model LiWiMus.Web.MVC.Areas.User.ViewModels.TracksPlaylistViewModel
+
+@foreach (var track in Model.Tracks)
+{
+    <div>
+        @track.Name
+        
+        <form class="form-add-track-to-playlist" method="post" asp-action="AddOrRemoveTrack">
+            <input type="hidden" name="@nameof(TrackPlaylistViewModel.TrackId)" value="@track.Id">
+            <input type="hidden" name="@nameof(TrackPlaylistViewModel.PlaylistId)" value="@Model.PlaylistId">
+            <input class="edit-button" type="submit" value="Add">
+        </form>
+    </div>
+}

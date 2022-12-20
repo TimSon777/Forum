@@ -1,0 +1,117 @@
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Options
+@using LiWiMus.Web.Shared
+@model LiWiMus.Web.MVC.Areas.Music.ViewModels.TrackViewModel
+@inject IOptions<PullUrls> Urls
+
+@{
+    ViewBag.Title = "Track";
+    Layout = "_LayoutSidebar";
+}
+
+@section Header{
+    <partial name="Partials/_PlainHeaderPartial"/>
+}
+
+<style>
+    .img-container img {
+      max-width: 100%;
+    }
+</style>
+
+
+<div class="p-0 album-profile" style="background-color: #727271">
+    <div class="editor-wrap">
+        <div>
+            <h2 class="your-profile-header">
+                @Model.Name
+            </h2>
+        </div>
+        <div id="subscriptionDiv" style="margin: 0 2% 2%;">
+                    <form asp-formhelper="true" asp-callback="" method="post" asp-area="User" asp-action="SubscribeOrUnsubscribeTrack" asp-controller="Following">
+                        <input name="trackId" type="hidden" value="@Model.Id">
+                        @if (Model.IsUserSubscribed)
+                        {
+                            <button class="subscribe-button subscribed" id="unsubscribtionButton" style="background-color: #21201F; max-width: none">Unsubscribe</button>
+                        }
+                        else
+                        {
+                            <button id="subscribtionButton" class="subscribe-button">Subscribe</button>
+                        }
+                    </form>
+                </div>
+        <div class="audio-container">
+            <figure>
+                <figcaption>@Model.Name</figcaption>
+                <audio
+                    @{
+                        var src = Urls.Value.FileServer + Model.FileLocation;
+                    }
+                    controls
+                    src="@src">
+                    Your browser does not support the
+                    <code>audio</code> element.
+                </audio>
+            </figure>
+
+            <div class="download-button-container">
+                <a class="download-button" asp-area="User" asp-controller="Track" asp-action="Download" asp-route-trackId="@Model.Id" download="@(Model.Name + ".mp3")">
+                    Download
+                </a>
+            </div>
+        </div>
+
+        
+
+        @*<section class="edit-inputs-group">
+            <div>
+                @{
+                    if (Model.FileLocation.Equals("Location"))
+                    {
+                        <img style="margin: 2%; border-radius:100%; width: 120px; height: 120px" src="~/images/main-background.jpg" alt="album cover"/>
+                    }
+                    else
+                    {
+                        <img style="margin: 2%; border-radius:100%; width: 120px" src="/@Model.FileLocation" alt="album cover">
+                    }
+                }
+            </div>
+        </section>*@
+        @if (Model.Owners.Count != 0)
+        {
+            <div>
+                <h2 class="your-profile-header">
+                    Artists
+                </h2>
+            </div>
+            <section class="edit-inputs-group">
+                <div>
+                    @foreach (var artist in Model.Owners)
+                    {
+                        <div>
+                            <a class="text-link" asp-area="Music" asp-controller="Artist" asp-action="Index" asp-route-artistId="@artist.Id">@artist.Name</a>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+        @if (Model.Genres.Count != 0)
+        {
+            <div>
+            <h2 class="your-profile-header">
+                Genres
+            </h2>
+        </div>
+            <section class="edit-inputs-group">
+                <div>
+                    @foreach (var genre in Model.Genres)
+                    {
+                        <div>
+                            <a class="text-link" asp-area="Music" asp-controller="Artist" asp-action="Index" asp-route-artistId="@genre.Id">@genre.Name</a>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+    </div>
+</div>

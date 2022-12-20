@@ -1,0 +1,15 @@
+@using System.Net
+@model LiWiMus.Web.MVC.ViewModels.ErrorViewModel
+
+@{
+    var statusCode = Model.StatusCode.ToString();
+    ViewData["Title"] = $"Error {statusCode}";
+    if (Enum.TryParse<HttpStatusCode>(statusCode, out var statusCodeName))
+    {
+        statusCode += $" - {statusCodeName}";
+    }
+}
+
+<div class="container text-center">
+    <h1 style="color: white;">@statusCode</h1>
+</div>

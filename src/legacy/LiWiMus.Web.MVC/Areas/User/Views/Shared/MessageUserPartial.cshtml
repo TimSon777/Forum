@@ -1,0 +1,41 @@
+﻿@model (LiWiMus.Web.MVC.Areas.User.ViewModels.MessageViewModel message, bool isForOwner)
+
+
+    @if (Model.isForOwner)
+    {
+        <div class="d-flex justify-content-between m-3 mb-4 flex-row-reverse" >
+            <div class="card mask-custom" style="background-color: rgba(0,0,0,0.15)">
+                <div class="card-header d-flex justify-content-between p-3"
+                     style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                    <p class="fw-bold mb-0" style="color: #EF6817">You</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 text-white">
+                        @Model.message.Text
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between m-3 mb-4" >
+            <div class="card mask-custom" style="background-color: rgba(0,0,0,0.15)">
+                <div class="card-header d-flex justify-content-between p-3"
+                     style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                    <p class="fw-bold mb-0" style="color: #EF6817">@Model.message.Owner.UserName</p>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 text-white">
+                        @Model.message.Text
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+@*<p>
+    @(Model.isForOwner 
+        ? "Your message: " + Model.message.Text 
+        : $"{Model.message.Owner.UserName} message: " + Model.message.Text)
+</p>*@
+

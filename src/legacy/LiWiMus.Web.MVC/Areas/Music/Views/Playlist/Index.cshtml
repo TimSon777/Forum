@@ -1,0 +1,83 @@
+﻿@model LiWiMus.Web.MVC.Areas.Music.ViewModels.PlaylistViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_LayoutSidebar";
+}
+
+<div class="editor-wrap">
+    
+    <div class="subscribe-container" id="subscriptionDiv" style="margin: 0 2% 2%;">
+        <form class="subscribe-form" asp-formhelper="true" asp-area="User" asp-controller="Playlist" asp-action="SubscribeOrUnsubscribe">
+            @if (Model.IsSubscribed)
+            {
+                <input name="playlistId" type="hidden" value="@Model.Id">
+                <button class="subscribe-button subscribed" id="unsubscribtionButton">Unsubscribe</button>
+            }
+            else
+            {
+                <input name="playlistId" type="hidden" value="@Model.Id">
+                <button class="subscribe-button" id="subscribtionButton">Subscribe</button>
+            }
+        </form>
+    </div>
+    
+    <input type="hidden" id="playlist-id" value="@Model.Id">
+    <div class="wrapper">
+        <div class="top-bar">
+            <i id="song-lyrics-btn" class="material-icons ">
+                article
+            </i>
+            <div class="song-lyrics">
+                <div class="header">
+                    <i id="close-lyrics" class="material-icons">highlight_off</i>
+                </div>
+                <p>
+                    текст песни
+                </p>
+            </div>
+
+            <i class="material-icons">more_horiz</i>
+        </div>
+        <div class="img-area">
+            <img src="" alt="">
+        </div>
+        <div class="song-details">
+            <p class="name"></p>
+            <p class="artist"></p>
+        </div>
+        <div class="progress-area">
+            <div class="progress-bar">
+                <audio id="main-audio" src=""></audio>
+            </div>
+            <div class="song-timer">
+                <span class="current-time">0:00</span>
+                <span class="max-duration">0:00</span>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="fav-btn">
+                <i class="material-icons favorite-button" style="font-size: 36px">favorite_border</i>
+            </div>
+            <i id="prev" class="material-icons">skip_previous</i>
+            <div class="play-pause">
+                <i class="material-icons play">play_arrow</i>
+            </div>
+            <i id="next" class="material-icons">skip_next</i>
+            <i id="more-music" class="material-icons">queue_music</i>
+        </div>
+
+        <div class="music-list">
+            <div class="header">
+                <i id="close" class="material-icons">highlight_off</i>
+            </div>
+            <ul>
+            </ul>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+     <script src="/js/subscribeUnsubscribe.js"></script>
+    <script src="~/js/player.js"></script>
+}
