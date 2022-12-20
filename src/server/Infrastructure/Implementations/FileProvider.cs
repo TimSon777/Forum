@@ -26,7 +26,7 @@ public class FileProvider : IFileProvider
     {
         var response = await _amazonS3.GetObjectAsync(_fileServerSettings.PersistenceBucketName, key, token);
 
-        if (response is null)
+        if (!response.IsSuccess())
         {
             return Result<GetFileItem>.WithError($"File by key {key} was not found");
         }

@@ -1,6 +1,5 @@
-﻿using System.Net;
+﻿using Amazon.Runtime;
 using Amazon.S3;
-using Amazon.S3.Model;
 using Infrastructure.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -20,28 +19,17 @@ public sealed class FileMover : IFileMover
 
     public async Task<bool> MoveToPersistenceAsync(Guid fileKey)
     {
-        var getResponse = await _amazonS3.GetObjectAsync(_fileServerSettings.TemporaryBucketName, fileKey.ToString());
+        var response = await _amazonS3.CopyObjectAsync(
+            _fileServerSettings.TemporaryBucketName, fileKey.ToString(),
+            _fileServerSettings.PersistenceBucketName, fileKey.ToString());
 
-        if (getResponse is null)
+        if (!response.IsSuccess())
         {
             return false;
         }
-
-        if (getResponse.HttpStatusCode != HttpStatusCode.OK)
-        {
-            return false;
-        }
-
-        var putRequest = new PutObjectRequest
-        {
-            Key = fileKey.ToString(),
-            BucketName = _fileServerSettings.PersistenceBucketName,
-            InputStream = getResponse.ResponseStream,
-            ContentType = getResponse.Headers.ContentType
-        };
-
-        var putResponse = await _amazonS3.PutObjectAsync(putRequest);
         
-        return putResponse.HttpStatusCode == HttpStatusCode.OK;
+        await _amazonS3.DeleteObjectAsync(_fileServerSettings.TemporaryBucketName, fileKey.ToString());
+
+        return true;
     }
 }

@@ -32,6 +32,7 @@ function Chat() {
                 });
 
                 connection.on("ReceiveFileUploadedNotification", (fileId) => {
+                    console.log("ReceiveFileUploadedNotification");
                     setKey(fileId);
                     setFileUploaded(true);
                 });

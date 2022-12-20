@@ -127,12 +127,13 @@ const ForumForm = ({connection, fileKey}: Props) => {
         
         e.preventDefault();
         
-        await handleUpload()
-            .then(async () => {
-                
+        if (!fileUploaded && isSend){
+            alert("File not uploaded");
+        }
+        else {
             setCustomAlert(false);
             const sendMessageItem: SendMessageItem = {iPAddress: ip, text: message.text, fileKey: fileKey};
-            
+
             await connection.invoke('SendMessage', sendMessageItem)
                 .catch(err => {
                     console.log(err);
@@ -140,10 +141,9 @@ const ForumForm = ({connection, fileKey}: Props) => {
                 });
 
             setMessage({text: '', fileKey: null});
-       //     setKey('');
             setIsSend(false);
             setFileUploaded(false);
-            });
+        }
     }
     
     const handleOnChange = (val: HTMLInputElement) => {
@@ -266,8 +266,9 @@ const ForumForm = ({connection, fileKey}: Props) => {
                             
                                 <Box display="flex" justifyContent={"space-between"} padding={1}>
                                     
-                                <Button type={"submit"} color="primary" onClick={(e) => {
+                                <Button type={"submit"} color="primary" onClick={async (e) => {
                                     setModalActive(false);
+                                    await handleUpload();
                                 }}>
                                     Submit
                                 </Button>

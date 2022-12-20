@@ -44,7 +44,7 @@ const MessageBox = (props: MessageBoxProps) => {
                             <p className={"file-icon"}>
                                 <FaFileDownload />
                             </p>
-                            <a className={"file-link"} href={process.env.REACT_APP_FILE_API + "/file" + `/${props.message.fileKey}`} 
+                            <a className={"file-link"} href={process.env.REACT_APP_FILE_API + `/${props.message.fileKey}`} 
                                download={props.message.name}>
                                 {props.message.fileKey} 
                             </a>
