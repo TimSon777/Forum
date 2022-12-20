@@ -25,13 +25,15 @@ public static class IServiceCollectionExtensions
         {
             configure?.Invoke(configurator);
 
-            configurator.UsingRabbitMq((_, brokerConfigurator) =>
+            configurator.UsingRabbitMq((ctx, brokerConfigurator) =>
             {
                 brokerConfigurator.Host(settings.Host, "/", hostConfigurator =>
                 {
                     hostConfigurator.Password(settings.Password);
                     hostConfigurator.Username(settings.UserName);
                 });
+                
+                brokerConfigurator.ConfigureEndpoints(ctx);
             });
         });
 

@@ -14,6 +14,7 @@ await Host
         
         services.AddCache(configuration);
         services.AddCachingService();
+        services.AddMetadataDatabase(configuration);
     })
     .Build()
     .RunAsync();

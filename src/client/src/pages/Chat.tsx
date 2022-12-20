@@ -14,7 +14,7 @@ function Chat() {
     const [fileUploaded, setFileUploaded] = useState(false);
 
     useEffect(() => {
-        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_API + '/api/history/20')
+        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20')
             .then(value => {
                 setMessages(value.data);
             });
@@ -22,7 +22,7 @@ function Chat() {
 
     const configureConnection = () => {
         const connection = new HubConnectionBuilder()
-            .withUrl(process.env.REACT_APP_ORIGIN_API + '/forum')
+            .withUrl(process.env.REACT_APP_ORIGIN_FORUM_API + '/forum')
             .build();
 
         try {

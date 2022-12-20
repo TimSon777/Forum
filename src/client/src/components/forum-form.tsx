@@ -83,8 +83,8 @@ const ForumForm = ({connection, fileKey}: Props) => {
                 let metadata = createMetadata(requestId)
                 
                 let requests = [];
-                requests.push(axios.post("http://localhost:8083/file", formData));
-                requests.push(axios.post("http://localhost:8082/metadata", metadata, {
+                requests.push(axios.post(process.env.REACT_APP_FILE_API as string, formData));
+                requests.push(axios.post(process.env.REACT_APP_METADATA_API as string, metadata, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -131,7 +131,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
             .then(async () => {
                 
             setCustomAlert(false);
-            const sendMessageItem: SendMessageItem = {iPv4: ip, text: message.text, fileKey: fileKey};
+            const sendMessageItem: SendMessageItem = {iPAddress: ip, text: message.text, fileKey: fileKey};
             
             await connection.invoke('SendMessage', sendMessageItem)
                 .catch(err => {
