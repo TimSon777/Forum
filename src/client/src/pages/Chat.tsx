@@ -5,12 +5,14 @@ import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {GetMessageItem} from "../components/message-box";
 import ForumForm from "../components/forum-form";
 import MessageArea from "../components/message-area";
+import swal from 'sweetalert2'
 
 interface ChatProprs {
     username: string;
+    isAdmin: boolean;
 }
 
-function Chat({username}: ChatProprs) {
+function Chat({username, isAdmin}: ChatProprs) {
     const [messages, setMessages] = useState<GetMessageItem[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
     const [fileKey, setKey] = useState<string | null>(null);
@@ -22,13 +24,32 @@ function Chat({username}: ChatProprs) {
             });
     }, []);
 
+    const ConnectionAlert = (connection: HubConnection, userName: string) => {
+        connection.on("ConnectionUp", () => {
+            swal.fire(
+                `The ${userName} has joined`,
+                'Connection Up',
+                'success'
+            )
+        })
+
+        connection.on("ConnectionDown", () => {
+            swal.fire(
+                `Oh no... The ${userName} has left`,
+                'Connection Down',
+                'error'
+            )
+        })
+    }
+    
     const configureConnection = () => {
         const connection = new HubConnectionBuilder()
             .withUrl(process.env.REACT_APP_ORIGIN_FORUM_API + '/forum', {
                 accessTokenFactory: () =>  localStorage.getItem("access_token") ?? ''
             })
             .build();
-
+        
+        
         try {
             connection.start().then(async () => {
                 connection.on('ReceiveMessage', (message: GetMessageItem) => {
@@ -39,6 +60,14 @@ function Chat({username}: ChatProprs) {
                     console.log("ReceiveFileUploadedNotification");
                     setKey(fileId);
                 });
+                
+                if (isAdmin) {
+                    ConnectionAlert(connection, username);
+                }
+                else {
+                    ConnectionAlert(connection, "Admin");
+                }
+                
             });
 
         } catch (err) {

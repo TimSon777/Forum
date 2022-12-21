@@ -27,6 +27,7 @@
     "react-notifications-hook": "^0.4.0",
     "react-router-dom": "^6.5.0",
     "react-scripts": "5.0.1",
+    "sweetalert2": "^11.6.16",
     "ts-guid": "^1.0.14",
     "typescript": "^4.8.3",
     "web-vitals": "^2.1.4"
