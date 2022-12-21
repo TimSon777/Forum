@@ -112,7 +112,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
         }
         else {
             setCustomAlert(false);
-            const sendMessageItem: SendMessageItem = {iPAddress: ip, text: message.text, fileKey: fileKey};
+            const sendMessageItem: SendMessageItem = {text: message.text, fileKey: fileKey};
 
             await connection.invoke('SendMessage', sendMessageItem)
                 .catch(err => {

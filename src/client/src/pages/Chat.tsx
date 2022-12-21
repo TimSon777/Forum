@@ -6,6 +6,7 @@ import {GetMessageItem} from "../components/message-box";
 import ForumForm from "../components/forum-form";
 import MessageArea from "../components/message-area";
 import swal from 'sweetalert2'
+import { Spinner } from '@patternfly/react-core';
 
 interface ChatProprs {
     username: string;
@@ -16,6 +17,7 @@ function Chat({username, isAdmin}: ChatProprs) {
     const [messages, setMessages] = useState<GetMessageItem[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
     const [fileKey, setKey] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username, {
@@ -64,6 +66,10 @@ function Chat({username, isAdmin}: ChatProprs) {
                     console.log("ReceiveFileUploadedNotification");
                     setKey(fileId);
                 });
+
+                connection.on("MateNotFound", () => {
+                    setIsLoading(true);
+                });
                 
                 if (isAdmin) {
                     ConnectionAlert(connection, username);
@@ -88,6 +94,8 @@ function Chat({username, isAdmin}: ChatProprs) {
         cnct();
     }, [])
 
+    {isLoading ? <Spinner size="xl" /> : <div>User didn't connect yet</div>}
+    
     if (!connection)
         return <div>Loading...</div>
     

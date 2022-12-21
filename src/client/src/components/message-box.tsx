@@ -13,7 +13,6 @@ export interface GetMessageItem {
 }
 
 export interface SendMessageItem {
-    iPAddress: number;
     text: string;
     fileKey: string | null;
 }
