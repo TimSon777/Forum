@@ -17,7 +17,7 @@ interface AuthResponse {
 
 interface Claims {
     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
-    "admin": string;
+    "admin": boolean;
 }
 
 
@@ -53,7 +53,7 @@ const AdminPage: React.FC = () => {
         let jwtToken = localStorage.getItem("access_token") as string;
         let decode = jwt_decode(jwtToken) as Claims;
         let username = decode["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-        let isAdmin = !!decode["admin"];
+        let isAdmin = decode["admin"];
         console.log("User name:" + username);
         console.log("Is admin:" + isAdmin);
         return(<Chat username={username} isAdmin={isAdmin}></Chat>);
