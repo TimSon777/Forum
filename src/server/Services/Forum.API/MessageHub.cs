@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Forum.Handler;
 using Forum.Handler.Data;
 using Infrastructure.Abstractions;
 using MassTransit;

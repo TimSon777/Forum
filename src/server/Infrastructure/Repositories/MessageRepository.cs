@@ -3,7 +3,7 @@ using Application.Abstractions;
 using Dapper;
 using Domain.Entities;
 
-namespace Infrastructure.Implementations;
+namespace Infrastructure.Repositories;
 
 public sealed class MessageRepository : IMessageRepository
 {

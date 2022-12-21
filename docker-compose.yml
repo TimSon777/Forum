@@ -81,6 +81,15 @@ services:
         project_name: FileMetadata.Consumer
     container_name: file-metadata-queue-listener
 
+  auth-server:
+    restart: always
+    build:
+      context: src/server
+      dockerfile: Services/Dockerfile
+      args:
+        project_name: Auth.Server
+    container_name: auth-server
+
   web-front:
     restart: always
     build:

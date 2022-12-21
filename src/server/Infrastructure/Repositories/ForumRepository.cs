@@ -2,7 +2,7 @@
 using Domain.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Implementations;
+namespace Infrastructure.Repositories;
 
 public sealed class ForumRepository : IForumRepository
 {

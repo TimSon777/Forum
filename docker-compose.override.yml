@@ -120,6 +120,14 @@ services:
       FILE_SERVER_SETTINGS__USER: ${S3_USER}
       FILE_SERVER_SETTINGS__PASSWORD: ${S3_PASSWORD}
 
+  auth-server:
+    ports:
+      - "8086:80"
+    environment:
+      ORIGIN__FRONT: ${FRONTEND_ORIGIN_FRONT}
+      
+      AUTH_SETTINGS__SECRET_KEY: ${AUTH_SECRET_KEY}
+
   web-front:
     ports:
       - "3000:80"
