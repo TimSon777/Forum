@@ -36,7 +36,6 @@ const ForumForm = ({connection, fileKey}: Props) => {
     const [customAlert, setCustomAlert] = useState(false);
     
     let [ip, setIp] = useState(1);
-    let [isLoaded, setLoaded] = useState(false);
 
     const filePicker = useRef<any>(null);
     const [selectedFile, setSelectedFile] = useState<UploadedFile>();
@@ -187,7 +186,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
     
     return (
         <>
-            {isLoaded && <form className="custom-text-area-form" onSubmit={onFormSubmit}>
+            <form className="custom-text-area-form" onSubmit={onFormSubmit}>
                 <CustomInput
                     {...{ required: true, maxLength: 500}}
                     value={message.text}
@@ -270,7 +269,7 @@ const ForumForm = ({connection, fileKey}: Props) => {
                     <BsFillCursorFill size={25} ></BsFillCursorFill>
                 </Button>
                 
-            </form> }
+            </form>
 
             <CustomAlert isAlert={fileUploaded} color={"white"}>
                 File is loading...

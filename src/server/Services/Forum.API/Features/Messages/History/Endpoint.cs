@@ -7,15 +7,14 @@ namespace Forum.API.Features.Messages.History;
 public sealed class Endpoint : IEndpoint<IResult, Request>
 {
     private readonly IValidator<Request> _validator;
-    private readonly IMessageRepository _messageRepository;
+    private IMessageRepository MessageRepository { get; set; } = default!;
 
-    public Endpoint(IValidator<Request> validator, IMessageRepository messageRepository)
+    public Endpoint(IValidator<Request> validator)
     {
         _validator = validator;
-        _messageRepository = messageRepository;
     }
 
-    public async Task<IResult> HandleAsync([AsParameters]Request request)
+    public async Task<IResult> HandleAsync(Request request)
     {
         var validationResult = await _validator.ValidateAsync(request);
 
@@ -24,7 +23,7 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
             return Results.ValidationProblem(validationResult.ToDictionary());
         }
 
-        var messages = await _messageRepository.GetMessagesAsync(request.UserName, request.CountMessages);
+        var messages = await MessageRepository.GetMessagesAsync(request.UserName, request.CountMessages);
 
         var result = messages.Select(Mapping.Map);
         return Results.Ok(result);
@@ -32,6 +31,10 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/history/{CountMessages}/{UserName}", HandleAsync);
+        app.MapGet("api/history/{CountMessages}/{UserName}", async (IMessageRepository messageRepository, [AsParameters] Request request) =>
+        {
+            MessageRepository = messageRepository;
+            return await HandleAsync(request);
+        });
     }
 }

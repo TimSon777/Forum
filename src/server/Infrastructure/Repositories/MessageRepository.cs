@@ -12,6 +12,15 @@ public sealed class MessageRepository : RepositoryBase<Message>, IMessageReposit
 
     public async Task<IEnumerable<Message>> GetMessagesAsync(string userName, int count)
     {
+        var user = await Context.Users
+            .Include(u => u.Mate)
+            .FirstAsync(u => u.Name == userName);
+
+        if (user.IsAdmin && user.Mate is not null)
+        {
+            userName = user.Mate.Name;
+        }
+        
         return await Set
             .Where(m => m.UserFrom.Name == userName || m.UserTo != null && m.UserTo.Name == userName)
             .Include(m => m.UserFrom)

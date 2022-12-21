@@ -108,7 +108,7 @@ public sealed class ChatConnector : IChatConnector
         var user = await _userRepository.GetUserAsync(userName);
         
         await _hub.Clients
-            .User(user.Mate!.Name)
+            .Users(user.Mate!.Name, user.Name)
             .SendAsync("ReceiveMessage", message);
     }
 }

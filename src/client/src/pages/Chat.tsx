@@ -18,7 +18,11 @@ function Chat({username, isAdmin}: ChatProprs) {
     const [fileKey, setKey] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username)
+        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+        })
             .then(value => {
                 setMessages(value.data);
             });

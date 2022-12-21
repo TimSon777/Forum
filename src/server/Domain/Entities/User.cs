@@ -1,7 +1,9 @@
-﻿using SharedKernel.Data;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using SharedKernel.Data;
 
 namespace Domain.Entities;
 
+[Table("Users")]
 public sealed class User : BaseEntity<int>
 {
     public string Name { get; set; } = default!;

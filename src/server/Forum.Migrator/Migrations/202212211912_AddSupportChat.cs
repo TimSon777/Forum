@@ -13,13 +13,14 @@ public sealed class AddSupportChat : ForwardOnlyMigration
 
         Create
             .Table("Connections")
-            .WithColumn("ConnectionId").AsString().NotNullable()
+            .WithColumn("ConnectionId").AsString().PrimaryKey()
             .WithColumn("UserId").AsInt32().ForeignKey().Indexed();
 
         Create
             .Column("MateId")
             .OnTable("Users")
             .AsInt32()
+            .Nullable()
             .ForeignKey()
             .Indexed();
 

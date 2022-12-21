@@ -30,6 +30,9 @@ app.UseCors(options => options
     .AllowAnyMethod()
     .WithOrigins(configuration.GetString("ORIGIN:FRONT")));
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
