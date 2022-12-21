@@ -6,14 +6,17 @@ import {GetMessageItem} from "../components/message-box";
 import ForumForm from "../components/forum-form";
 import MessageArea from "../components/message-area";
 
+interface ChatProprs {
+    username: string;
+}
 
-function Chat() {
+function Chat({username}: ChatProprs) {
     const [messages, setMessages] = useState<GetMessageItem[]>([]);
     const [connection, setConnection] = useState<HubConnection>();
     const [fileKey, setKey] = useState<string | null>(null);
 
     useEffect(() => {
-        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20')
+        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username)
             .then(value => {
                 setMessages(value.data);
             });

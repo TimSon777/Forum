@@ -8,7 +8,7 @@ import Chat from "./pages/Chat";
 function App() {
   return (
               <div>
-                  <Chat></Chat>
+                  <AdminPage></AdminPage>
               </div>
   );
 }
