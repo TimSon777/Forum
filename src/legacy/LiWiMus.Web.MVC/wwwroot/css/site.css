@@ -117,3 +117,19 @@ body {
 .custom-toggler .navbar-toggler {
     border-color: #f5deb3;
 }
+
+.help-button {
+    background: inherit;
+    border-color: #de6315;
+    border-bottom: 1px solid red;
+    border-radius: 31px; 
+    color: #ffffff; 
+    margin-top: 1rem; 
+    margin-left: 1rem; 
+    padding: 0.5rem;
+}
+
+.help-button:hover {
+    color: #ff6732;
+    border-color: #fafafa;
+}

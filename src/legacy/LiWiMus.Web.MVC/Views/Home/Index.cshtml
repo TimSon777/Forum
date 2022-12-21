@@ -25,10 +25,18 @@
             <h3 style="padding-bottom: 10%; border-bottom: 2px solid #EF6817">Welcome to our site!</h3>
             <a  class="text-link" style="padding-top: 1%; min-width: 100px" asp-area="Search" asp-controller="Track" asp-action="Index">Start exploring!</a>
         </div>
+        <div>
+            <button class="help-button" 
+                    onclick="redirect()">NEED HELP?</button>
+        </div>
     </div>
 </div>
 
 @section Scripts
 {
-    <script src="~/js/map.js"></script>
+    <script>
+       function redirect() {
+         window.location.replace("http://localhost:3000")
+       }
+    </script>
 }

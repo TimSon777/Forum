@@ -23,7 +23,7 @@
     "react-hook-form": "^7.37.0",
     "react-icons": "^4.6.0",
     "react-notifications-hook": "^0.4.0",
-    "react-router-dom": "^6.4.1",
+    "react-router-dom": "^6.5.0",
     "react-scripts": "5.0.1",
     "ts-guid": "^1.0.14",
     "typescript": "^4.8.3",
