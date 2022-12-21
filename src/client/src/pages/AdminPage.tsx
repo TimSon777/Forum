@@ -55,6 +55,7 @@ const AdminPage: React.FC = () => {
         let username = decode["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
         let isAdmin = !!decode["admin"];
         console.log("User name:" + username);
+        console.log("Is admin:" + isAdmin);
         return(<Chat username={username} isAdmin={isAdmin}></Chat>);
     }
     

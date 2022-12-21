@@ -290,3 +290,9 @@ div::-webkit-scrollbar-thumb {
   align-items: center;
   width: fit-content;
 }
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}

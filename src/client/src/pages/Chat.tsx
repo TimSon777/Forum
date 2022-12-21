@@ -7,6 +7,7 @@ import ForumForm from "../components/forum-form";
 import MessageArea from "../components/message-area";
 import swal from 'sweetalert2'
 import { Spinner } from '@patternfly/react-core';
+import { CircularProgress } from '@mui/material';
 
 interface ChatProprs {
     username: string;
@@ -74,6 +75,7 @@ function Chat({username, isAdmin}: ChatProprs) {
                 if (isAdmin) {
                     ConnectionAlert(connection, username);
                 }
+                
                 else {
                     ConnectionAlert(connection, "Admin");
                 }
@@ -95,7 +97,9 @@ function Chat({username, isAdmin}: ChatProprs) {
     }, [])
 
     {isLoading &&
-        <Spinner size="xl" />
+        <div className={"spinner"}>        
+            <CircularProgress color="secondary" />
+        </div>
         console.log("Spinner..")
     }
     
