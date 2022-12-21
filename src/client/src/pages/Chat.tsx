@@ -31,19 +31,20 @@ function Chat({username, isAdmin}: ChatProprs) {
             });
     }, []);
 
-    const ConnectionAlert = (connection: HubConnection, userName: string) => {
-        setIsLoading(false);
+    const ConnectionAlert = (connection: HubConnection) => {
         connection.on("ConnectionUp", () => {
+            setIsLoading(false);
             swal.fire(
-                `The ${userName} has joined`,
+                `The mate has joined`,
                 'Connection Up',
                 'success'
             )
         })
 
         connection.on("ConnectionDown", () => {
+            setIsLoading(true);
             swal.fire(
-                `Oh no... The ${userName} has left`,
+                `Oh no... The mate has left`,
                 'Connection Down',
                 'error'
             )
@@ -73,13 +74,7 @@ function Chat({username, isAdmin}: ChatProprs) {
                     setIsLoading(true);
                 });
                 
-                if (isAdmin) {
-                    ConnectionAlert(connection, username);
-                }
-                else {
-                    ConnectionAlert(connection, "Admin");
-                }
-                
+                ConnectionAlert(connection);
             });
 
         } catch (err) {
