@@ -12,6 +12,7 @@ public sealed class ChatConnector : IChatConnector
 
     private const string ConnectionUpMethod = "ConnectionUp";
     private const string ConnectionDownMethod = "ConnectionDown";
+    private const string MateNotFound = "MateNotFound";
 
     public ChatConnector(IUserRepository userRepository, IHubContext<SupportChat> hub)
     {
@@ -48,6 +49,7 @@ public sealed class ChatConnector : IChatConnector
 
         if (mate is null)
         {
+            await _hub.Clients.User(userName).SendAsync(MateNotFound);
             return;
         }
 
@@ -95,6 +97,10 @@ public sealed class ChatConnector : IChatConnector
                 
                 mate.Mate = newUser;
                 newUser.Mate = mate;
+            }
+            else
+            {
+                await _hub.Clients.User(mate.Name).SendAsync(MateNotFound);
             }
         }
 
