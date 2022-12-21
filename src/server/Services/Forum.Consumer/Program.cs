@@ -8,7 +8,7 @@ await Host
         services.AddRabbitMq(configuration,
             configurator => configurator.AddConsumer<MessageSaverConsumer>());
         services.AddForumDatabase(configuration);
-        services.AddForumRepository();
+        services.AddForumRepositories();
     })
     .Build()
     .RunAsync();

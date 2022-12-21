@@ -24,7 +24,7 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
             return Results.ValidationProblem(validationResult.ToDictionary());
         }
 
-        var messages = await _messageRepository.GetMessagesAsync(request.CountMessages);
+        var messages = await _messageRepository.GetMessagesAsync(request.UserName, request.CountMessages);
 
         var result = messages.Select(Mapping.Map);
         return Results.Ok(result);
@@ -32,6 +32,6 @@ public sealed class Endpoint : IEndpoint<IResult, Request>
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/history/{CountMessages}", HandleAsync);
+        app.MapGet("api/history/{CountMessages}/{UserName}", HandleAsync);
     }
 }

@@ -8,6 +8,6 @@ public static class Mapping
     {
         Text = message.Text,
         FileKey = message.FileKey,
-        UserName = message.User.Name
+        UserName = message.UserFrom.Name
     };
 }

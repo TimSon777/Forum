@@ -2,5 +2,6 @@
 
 public sealed class Request
 {
+    public string UserName { get; set; } = default!;
     public int CountMessages { get; set; }
 }

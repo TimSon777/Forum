@@ -1,8 +1,12 @@
-﻿namespace Domain.Entities;
+﻿using SharedKernel.Data;
 
-public sealed class Message
+namespace Domain.Entities;
+
+public sealed class Message : BaseEntity<int>
 {
     public string Text { get; set; } = default!;
     public string? FileKey { get; set; }
-    public User User { get; set; } = default!;
+
+    public User UserFrom { get; set; } = default!;
+    public User? UserTo { get; set; }
 }

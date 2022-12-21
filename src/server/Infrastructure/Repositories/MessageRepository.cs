@@ -1,38 +1,42 @@
-﻿using System.Data;
-using Application.Abstractions;
-using Dapper;
+﻿using Application.Abstractions;
+using Domain.Data;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public sealed class MessageRepository : IMessageRepository
+public sealed class MessageRepository : RepositoryBase<Message>, IMessageRepository
 {
-    private readonly IDbConnection _connection;
+    public MessageRepository(ForumDbContext context) : base(context)
+    { }
 
-    public MessageRepository(IDbConnection connection)
+    public async Task<IEnumerable<Message>> GetMessagesAsync(string userName, int count)
     {
-        _connection = connection;
+        return await Set
+            .Where(m => m.UserFrom.Name == userName || m.UserTo != null && m.UserTo.Name == userName)
+            .Include(m => m.UserFrom)
+            .Include(m => m.UserTo)
+            .OrderByDescending(message => message.Id)
+            .Take(count)
+            .ToListAsync();
     }
 
-    public async Task<IEnumerable<Message>> GetMessagesAsync(int count)
+    public async Task SaveMessageAsync(SaveMessageItem saveMessageItem)
     {
-        const string query = 
-            @"
-                SELECT *
-                FROM (
-                    SELECT m.""Text"" MessageText, m.""FileKey"" FileKey, m.""Id"" ""Id"", u.""Name"" UserName
-                    FROM ""Messages"" m JOIN ""Users"" u 
-                        ON u.""Id"" = m.""UserId""
-                    ORDER BY m.""Id"" DESC 
-                    LIMIT @count
-                ) sub
-                ORDER BY ""Id""
-            ";
+        var userFrom = await Context.Users
+            .Include(u => u.Mate)
+            .FirstAsync(u => u.Name == saveMessageItem.UserName);
 
-        return await _connection.QueryAsync<Message, User, Message>(query, (m, u) =>
-        { 
-            m.User = u;
-            return m;
-        }, new { count }, splitOn: @"Id");
+        var message = new Message
+        {
+            Text = saveMessageItem.Text,
+            FileKey = saveMessageItem.FileId,
+            UserFrom = userFrom,
+            UserTo = userFrom.Mate
+        };
+        
+        Set.Add(message);
+
+        await CommitAsync();
     }
 }

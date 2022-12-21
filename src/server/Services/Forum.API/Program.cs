@@ -8,11 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddChat();
 services.AddAuth(configuration);
 services.AddEndpoints();
 services.AddSwaggerGen();
 services.AddForumDatabase(configuration);
-services.AddMessageRepository();
+services.AddForumRepositories();
 services.AddEndpointsApiExplorer();
 services.AddSignalR();
 services.AddCors();

@@ -6,16 +6,16 @@ namespace Forum.Consumer;
 
 public class MessageSaverConsumer : IConsumer<MessageEvent>
 {
-    private readonly IForumRepository _forumRepository;
+    private readonly IMessageRepository _messageRepository;
 
-    public MessageSaverConsumer(IForumRepository forumRepository)
+    public MessageSaverConsumer(IMessageRepository messageRepository)
     {
-        _forumRepository = forumRepository;
+        _messageRepository = messageRepository;
     }
 
     public async Task Consume(ConsumeContext<MessageEvent> context)
     {
         var message = context.Message.Map();
-        await _forumRepository.SaveMessageAsync(message);
+        await _messageRepository.SaveMessageAsync(message);
     }
 }
