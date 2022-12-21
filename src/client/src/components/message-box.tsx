@@ -7,7 +7,7 @@ import { FaFileDownload } from 'react-icons/fa';
 
 
 export interface GetMessageItem {
-    name: string;
+    userName: string;
     text: string;
     fileKey: string | null;
 }
@@ -31,7 +31,7 @@ const MessageBox = (props: MessageBoxProps) => {
                 
                 <div className={"message-box-text-container"}>
                     <div className={"message-box-user-name"}>
-                        {props.message.name}  
+                        {props.message.userName}  
                     </div>
                     
                     <div className={"message-box-text"}>
@@ -44,7 +44,7 @@ const MessageBox = (props: MessageBoxProps) => {
                                 <FaFileDownload />
                             </p>
                             <a className={"file-link"} href={process.env.REACT_APP_FILE_API + `/${props.message.fileKey}`} 
-                               download={props.message.name}>
+                               download={props.message.userName}>
                                 {props.message.fileKey} 
                             </a>
                         </div>
