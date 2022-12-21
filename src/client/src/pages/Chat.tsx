@@ -32,6 +32,7 @@ function Chat({username, isAdmin}: ChatProprs) {
     }, []);
 
     const ConnectionAlert = (connection: HubConnection, userName: string) => {
+        setIsLoading(false);
         connection.on("ConnectionUp", () => {
             swal.fire(
                 `The ${userName} has joined`,
@@ -75,7 +76,6 @@ function Chat({username, isAdmin}: ChatProprs) {
                 if (isAdmin) {
                     ConnectionAlert(connection, username);
                 }
-                
                 else {
                     ConnectionAlert(connection, "Admin");
                 }
