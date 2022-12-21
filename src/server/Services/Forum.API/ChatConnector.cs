@@ -10,8 +10,8 @@ public sealed class ChatConnector : IChatConnector
     private readonly IUserRepository _userRepository;
     private readonly IHubContext<SupportChat> _hub;
 
-    private const string ConnectionUpMessage = "ConnectionUp";
-    private const string ConnectionDownMessage = "ConnectionDown";
+    private const string ConnectionUpMethod = "ConnectionUp";
+    private const string ConnectionDownMethod = "ConnectionDown";
 
     public ChatConnector(IUserRepository userRepository, IHubContext<SupportChat> hub)
     {
@@ -56,15 +56,11 @@ public sealed class ChatConnector : IChatConnector
 
         var commitTask = _userRepository.CommitAsync();
 
-        var userTask = _hub.Clients
-            .User(user.Name)
-            .SendAsync(ConnectionUpMessage);
+        var eventTask = _hub.Clients
+            .Users(user.Name, mate.Name)
+            .SendAsync(ConnectionUpMethod);
         
-        var mateTask = _hub.Clients
-            .User(mate.Name)
-            .SendAsync(ConnectionUpMessage);
-
-        await Task.WhenAll(commitTask, userTask, mateTask);
+        await Task.WhenAll(commitTask, eventTask);
     }
     
     public async Task DisconnectAsync(string userName, string connectionId, bool isAdmin)
@@ -83,7 +79,7 @@ public sealed class ChatConnector : IChatConnector
         {
             await _hub.Clients
                 .User(user.Mate.Name)
-                .SendAsync(ConnectionDownMessage);
+                .SendAsync(ConnectionDownMethod);
 
             user.Mate.Mate = null;
             
@@ -94,10 +90,11 @@ public sealed class ChatConnector : IChatConnector
             if (newUser is not null)
             {
                 await _hub.Clients
-                    .User(mate.Name)
-                    .SendAsync(ConnectionUpMessage);
-
+                    .Users(newUser.Name, mate.Name)
+                    .SendAsync(ConnectionUpMethod);
+                
                 mate.Mate = newUser;
+                newUser.Mate = mate;
             }
         }
 
