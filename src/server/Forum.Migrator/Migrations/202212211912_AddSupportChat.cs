@@ -39,5 +39,9 @@ public sealed class AddSupportChat : ForwardOnlyMigration
             .Nullable()
             .ForeignKey()
             .Indexed();
+
+        Delete
+            .Column("UserId")
+            .FromTable("Messages");
     }
 }

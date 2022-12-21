@@ -1,8 +1,7 @@
-﻿namespace Forum.Handler.Data;
+﻿namespace Forum.API.Data;
 
 public class GetMessageHubItem
 {
-    public long IpAddress { get; set; } = default;
     public string Text { get; set; } = default!;
     public string? FileKey { get; set; } = default!;
 }

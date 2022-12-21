@@ -1,4 +1,4 @@
-﻿namespace Forum.Handler.Data;
+﻿namespace Forum.API.Data;
 
 public class SendMessageHubItem
 {

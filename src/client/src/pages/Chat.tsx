@@ -96,11 +96,11 @@ function Chat({username, isAdmin}: ChatProprs) {
         cnct();
     }, [])
 
-    {isLoading &&
-        <div className={"spinner"}>        
-            <CircularProgress color="secondary" />
-        </div>
-        console.log("Spinner..")
+    if (isLoading){
+        return (
+            <div className={"spinner"}>
+                <CircularProgress color="secondary" />
+            </div>);
     }
     
     if (!connection)

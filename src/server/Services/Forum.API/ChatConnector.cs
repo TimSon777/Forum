@@ -1,6 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Entities;
-using Forum.Handler.Data;
+using Forum.API.Data;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Forum.API;

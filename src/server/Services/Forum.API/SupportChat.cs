@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using FluentValidation;
-using Forum.Handler.Data;
+using Forum.API.Data;
 using Infrastructure.Abstractions;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
@@ -24,12 +24,12 @@ public class SupportChat : Hub
 
     public override async Task OnConnectedAsync()
     {
-        await _chatConnector.ConnectAsync(Context.UserIdentifier!, Context.ConnectionId, Context.User!.IsAdmin());
+        await _chatConnector.ConnectAsync(Context.User!.UserName(), Context.ConnectionId, Context.User!.IsAdmin());
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _chatConnector.DisconnectAsync(Context.UserIdentifier!, Context.ConnectionId, Context.User!.IsAdmin());
+        await _chatConnector.DisconnectAsync(Context.User!.UserName(), Context.ConnectionId, Context.User!.IsAdmin());
     }
 
     // ReSharper disable once UnusedMember.Global
@@ -37,12 +37,12 @@ public class SupportChat : Hub
     {
         await _validator.ValidateAndThrowAsync(messageHubItem);
 
-        var consumerMessage = messageHubItem.Map();
+        var consumerMessage = messageHubItem.Map(Context.User!.UserName());
         var sendMessage = consumerMessage.Map();
         
         var publishTask = _bus.Publish(consumerMessage);
 
-        var sendTask = _chatConnector.SendMessageAsync(Context.UserIdentifier!, sendMessage);
+        var sendTask = _chatConnector.SendMessageAsync(Context.User!.UserName(), sendMessage);
 
         await Task.WhenAll(publishTask, sendTask);
     }

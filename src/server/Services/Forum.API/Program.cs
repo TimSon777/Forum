@@ -30,11 +30,11 @@ app.UseCors(options => options
     .AllowAnyMethod()
     .WithOrigins(configuration.GetString("ORIGIN:FRONT")));
 
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseRouting();
 app.MapHub<SupportChat>("/forum");
 app.MapEndpoints();

@@ -1,15 +1,15 @@
 ﻿using Domain.Events;
-using Forum.Handler.Data;
+using Forum.API.Data;
 
 namespace Forum.API;
 
 public static class Mapping
 {
-    public static MessageEvent Map(this GetMessageHubItem item) => new()
+    public static MessageEvent Map(this GetMessageHubItem item, string userName) => new()
     {
         Text = item.Text,
         FileId = item.FileKey,
-        UserName = item.IpAddress.ToString()
+        UserName = userName
     };
     
     public static SendMessageHubItem Map(this MessageEvent item) => new()

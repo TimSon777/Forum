@@ -8,4 +8,9 @@ public static class ClaimsPrincipalExtensions
         var claim = principal.FindFirst("admin");
         return bool.Parse(claim!.Value);
     }
+
+    public static string UserName(this ClaimsPrincipal principal)
+    {
+        return principal.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+    }
 }
