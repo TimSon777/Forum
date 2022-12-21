@@ -94,7 +94,10 @@ function Chat({username, isAdmin}: ChatProprs) {
         cnct();
     }, [])
 
-    {isLoading ? <Spinner size="xl" /> : <div>User didn't connect yet</div>}
+    {isLoading &&
+        <Spinner size="xl" />
+        console.log("Spinner..")
+    }
     
     if (!connection)
         return <div>Loading...</div>
