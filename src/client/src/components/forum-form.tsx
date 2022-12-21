@@ -23,10 +23,6 @@ interface Props {
     fileKey: string | null;
 }
 
-interface Ip {
-    IPv4: string;
-}
-
 interface UploadedFile {
     name: string;
     type: string;
@@ -105,20 +101,6 @@ const ForumForm = ({connection, fileKey}: Props) => {
     function handlePick() {
         filePicker.current.click();
     };
-    
-    useEffect(() => {
-        axios.get<Ip>('https://geolocation-db.com/json/')
-            .then(value => {
-                const ipInArr = value.data.IPv4.split(".").map(x => parseInt(x));
-                setIp(ipInArr[0] * 256 * 256 * 256 + ipInArr[1] * 256 * 256 + ipInArr[2] * 256 + ipInArr[3]);
-                setLoaded(true);
-                console.log("IP hello", ip, value.data.IPv4);
-            })
-            .catch(err => {
-                console.log(err);
-                setLoaded(true);
-            });
-    }, []);
 
     const [message, setMessage] = useState<{text: '', fileKey: string | null}>({text: '', fileKey: null});
 

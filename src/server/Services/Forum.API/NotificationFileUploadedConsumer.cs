@@ -7,10 +7,10 @@ namespace Forum.API;
 
 public class NotificationFileUploadedConsumer : IConsumer<FileUploadedEvent>
 {
-    private readonly IHubContext<MessageHub> _hubContext;
+    private readonly IHubContext<SupportChat> _hubContext;
     private readonly ICachingService _cachingService;
 
-    public NotificationFileUploadedConsumer(IHubContext<MessageHub> hubContext, ICachingService cachingService)
+    public NotificationFileUploadedConsumer(IHubContext<SupportChat> hubContext, ICachingService cachingService)
     {
         _hubContext = hubContext;
         _cachingService = cachingService;

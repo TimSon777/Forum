@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddAuth(configuration);
 services.AddEndpoints();
 services.AddSwaggerGen();
 services.AddForumDatabase(configuration);
@@ -31,7 +32,7 @@ app.UseCors(options => options
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
-app.MapHub<MessageHub>("/forum");
+app.MapHub<SupportChat>("/forum");
 app.MapEndpoints();
 
 app.Run();

@@ -21,7 +21,9 @@ function Chat() {
 
     const configureConnection = () => {
         const connection = new HubConnectionBuilder()
-            .withUrl(process.env.REACT_APP_ORIGIN_FORUM_API + '/forum')
+            .withUrl(process.env.REACT_APP_ORIGIN_FORUM_API + '/forum', {
+                accessTokenFactory: () =>  localStorage.getItem("access_token") ?? ''
+            })
             .build();
 
         try {

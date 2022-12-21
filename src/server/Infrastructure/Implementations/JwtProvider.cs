@@ -27,7 +27,7 @@ public sealed class JwtProvider : IJwtProvider
             notBefore: utcNow,
             claims: new List<Claim>
             {
-                new("name", jwtRequest.UserName),
+                new(ClaimTypes.NameIdentifier, jwtRequest.UserName),
                 new("admin", jwtRequest.IsAdmin.ToString())
             },
             expires: utcNow.AddYears(1),

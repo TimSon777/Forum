@@ -21,6 +21,8 @@ services:
       CACHE_SETTINGS__HOST: cache
       CACHE_SETTINGS__PORT: 6379
       CACHE_SETTINGS__PASSWORD: ${CACHE_PASSWORD}
+      
+      AUTH_SETTINGS__SECRET_KEY: ${AUTH_SECRET_KEY}
   
   forum-migrator:
     environment:
