@@ -20,25 +20,22 @@ function Chat({username, isAdmin}: ChatProprs) {
     const [fileKey, setKey] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-            }
-        })
-            .then(value => {
-                setMessages(value.data);
-            });
-    }, []);
-
     const ConnectionAlert = (connection: HubConnection) => {
-        connection.on("ConnectionUp", () => {
+        connection.on("ConnectionUp", async () => {
             setIsLoading(false);
             swal.fire(
                 `The mate has joined`,
                 'Connection Up',
                 'success'
             )
+
+            await axios.get<GetMessageItem[]>(process.env.REACT_APP_ORIGIN_FORUM_API + '/api/history/20/' + username, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }).then(value => {
+                setMessages(value.data);
+            });
         })
 
         connection.on("ConnectionDown", () => {
@@ -74,7 +71,7 @@ function Chat({username, isAdmin}: ChatProprs) {
                     setIsLoading(true);
                 });
                 
-                ConnectionAlert(connection);
+                await ConnectionAlert(connection);
             });
 
         } catch (err) {

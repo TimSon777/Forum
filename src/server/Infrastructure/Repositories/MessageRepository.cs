@@ -25,8 +25,9 @@ public sealed class MessageRepository : RepositoryBase<Message>, IMessageReposit
             .Where(m => m.UserFrom.Name == userName || m.UserTo != null && m.UserTo.Name == userName)
             .Include(m => m.UserFrom)
             .Include(m => m.UserTo)
-            .OrderByDescending(message => message.Id)
+            .OrderByDescending(m => m.Id)
             .Take(count)
+            .OrderBy(m => m.Id)
             .ToListAsync();
     }
 

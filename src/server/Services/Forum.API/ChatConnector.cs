@@ -87,7 +87,7 @@ public sealed class ChatConnector : IChatConnector
             
             var mate = user.Mate;
 
-            var newUser = await _userRepository.FindActiveUserWithoutMateAsync(!isAdmin);
+            var newUser = await _userRepository.FindActiveUserWithoutMateAsync(isAdmin);
 
             if (newUser is not null)
             {
